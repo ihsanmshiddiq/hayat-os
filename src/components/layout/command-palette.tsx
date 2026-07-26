@@ -39,9 +39,9 @@ export function CommandPalette() {
 
   return (
     <CommandDialog open={commandOpen} onOpenChange={setCommandOpen}>
-      <CommandInput placeholder="Search sections, surahs, actions…" />
+      <CommandInput placeholder="Cari bagian, surah, tindakan…" />
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandEmpty>Tidak ada hasil ditemukan.</CommandEmpty>
 
         <CommandGroup heading="Navigate">
           {NAV_ITEMS.map((item) => {
@@ -66,7 +66,7 @@ export function CommandPalette() {
 
         <CommandSeparator />
 
-        <CommandGroup heading="Quick actions">
+        <CommandGroup heading="Tindakan Cepat">
           <CommandItem
             value="toggle dark light theme"
             onSelect={() => {
@@ -135,7 +135,7 @@ export function CommandPalette() {
             </CommandItem>
             <CommandItem
               value={`streak ${data.today.streak} days`}
-              onSelect={() => { setActiveView("analytics"); setCommandOpen(false); }}
+              onSelect={() => { setActiveView("analitik"); setCommandOpen(false); }}
               className="gap-3"
             >
               <CornerDownLeft className="h-4 w-4 text-primary" />

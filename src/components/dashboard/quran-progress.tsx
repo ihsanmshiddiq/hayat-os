@@ -39,8 +39,8 @@ export function QuranProgress() {
             <BookOpen className="h-[18px] w-[18px]" />
           </span>
           <div>
-            <h3 className="text-display text-lg font-medium tracking-tight">Quran Progress</h3>
-            <p className="text-sm text-muted-foreground mt-0.5">Today's reading</p>
+            <h3 className="text-display text-lg font-medium tracking-tight">Progres Al-Quran</h3>
+            <p className="text-sm text-muted-foreground mt-0.5">Bacaan hari ini</p>
           </div>
         </div>
         <ProgressRing value={pct} size={64} strokeWidth={6}>
@@ -51,7 +51,7 @@ export function QuranProgress() {
       {/* Page counter */}
       <div className="flex items-center justify-between rounded-xl border border-border/60 bg-muted/40 p-3.5 mb-4">
         <div>
-          <p className="text-xs text-muted-foreground">Pages read today</p>
+          <p className="text-xs text-muted-foreground">Halaman dibaca hari ini</p>
           <p className="text-display text-2xl font-semibold tabular-nums">{pagesToday}</p>
         </div>
         <div className="flex items-center gap-2">
@@ -74,14 +74,14 @@ export function QuranProgress() {
       <div className="grid grid-cols-2 gap-2.5 mb-4">
         <div className="rounded-xl border border-border/60 p-3">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-            <Bookmark className="h-3.5 w-3.5" /> Last surah
+            <Bookmark className="h-3.5 w-3.5" /> Surah terakhir
           </div>
           <p className="text-sm font-medium truncate">{lastSurah?.name ?? quran?.lastSurah ?? "—"}</p>
           {lastSurah ? <p className="text-arabic text-base text-primary leading-none mt-0.5">{lastSurah.arabic}</p> : null}
         </div>
         <div className="rounded-xl border border-border/60 p-3">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-            <Target className="h-3.5 w-3.5" /> Memorized
+            <Target className="h-3.5 w-3.5" /> Terhafal
           </div>
           <p className="text-sm font-medium tabular-nums">{quran?.memorizedAyahs ?? 0} ayahs</p>
         </div>
@@ -90,7 +90,7 @@ export function QuranProgress() {
       {/* Mini trend */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">14-day trend</span>
+          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Tren 14 hari</span>
           <span className="text-[11px] text-muted-foreground flex items-center gap-1">
             <Clock className="h-3 w-3" /> {(history.reduce((a, h) => a + h.minutesSpent, 0))} min
           </span>
@@ -117,7 +117,7 @@ export function QuranProgress() {
         onClick={() => setActiveView("quran")}
         className="w-full text-sm text-primary font-medium hover:underline underline-offset-4"
       >
-        Open Quran workspace →
+        Buka ruang kerja Al-Quran →
       </button>
     </motion.div>
   );

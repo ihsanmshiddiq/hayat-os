@@ -120,7 +120,7 @@ export function FocusView() {
           } else {
             // Istirahat complete
             toast("Istirahat finished. Siap for another round?", {
-              description: "Press Start to begin a new focus session.",
+              description: "Tekan Mulai untuk memulai sesi fokus baru.",
             });
             setPhase("done");
             setSessionId(null);
@@ -505,7 +505,7 @@ export function FocusView() {
               <StatTile label="Today" value={Math.round((stats?.todaySeconds ?? 0) / 60)} suffix="min" tint="text-emerald-600 dark:text-emerald-400" bg="bg-emerald-500/10" animate />
               <StatTile label="Streak" value={stats?.streak ?? 0} suffix="days" tint="text-amber-600 dark:text-amber-400" bg="bg-amber-500/10" animate icon={<Flame className="h-3.5 w-3.5" />} />
               <StatTile label="Lifetime" value={stats?.totalSessions ?? 0} suffix="total" tint="text-rose-600 dark:text-rose-400" bg="bg-rose-500/10" animate />
-              <StatTile label="Completed" value={stats?.completedSessions ?? 0} suffix="done" tint="text-teal-600 dark:text-teal-400" bg="bg-teal-500/10" animate />
+              <StatTile label="Selesai" value={stats?.completedSessions ?? 0} suffix="done" tint="text-teal-600 dark:text-teal-400" bg="bg-teal-500/10" animate />
               <StatTile label="Avg" value={stats?.avgMinutesPerSession ?? 0} suffix="min/sess" tint="text-slate-600 dark:text-slate-400" bg="bg-slate-500/10" animate />
             </div>
           </SectionCard>
@@ -520,7 +520,7 @@ export function FocusView() {
               <div className="py-6 text-center">
                 <TimerIcon className="h-8 w-8 text-muted-foreground/40 mx-auto mb-2" />
                 <p className="text-sm text-muted-foreground">Belum ada sesi hari ini.</p>
-                <p className="text-xs text-muted-foreground/70 mt-0.5">Press Mulai Fokus to start your first.</p>
+                <p className="text-xs text-muted-foreground/70 mt-0.5">Tekan Mulai Fokus untuk memulai sesi pertamamu.</p>
               </div>
             ) : (
               <ul className="space-y-2 max-h-80 overflow-y-auto scroll-slim pr-1">

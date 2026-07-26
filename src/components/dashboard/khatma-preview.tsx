@@ -46,7 +46,7 @@ export function KhatmaPreview() {
             </div>
             <p className="text-sm font-medium mb-1">Begin Your Khatma</p>
             <p className="text-[11px] text-muted-foreground leading-relaxed">
-              Set a Quran reading goal and build a daily habit.
+              Tetapkan target baca Al-Quran dan bangun kebiasaan harian.
             </p>
           </div>
         ) : (

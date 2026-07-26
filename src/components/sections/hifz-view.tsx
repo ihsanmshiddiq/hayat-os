@@ -132,7 +132,7 @@ export function HifzView() {
                 <p className="text-display text-2xl font-semibold tabular-nums">
                   <AnimatedNumber value={stats?.percentQuran ?? 0} decimals={1} />
                 </p>
-                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">of Quran</p>
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">dari Al-Quran</p>
               </div>
             </ProgressRing>
             <div className="flex-1 space-y-3 w-full">
@@ -560,7 +560,7 @@ function SurahDetailModal({
               <Sparkles className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
               <div>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  The Prophet ﷺ said: <span className="italic">"The one who is proficient in the Quran is with the honourable and obedient scribes (angels), and the one who recites the Quran and finds it difficult to do so, but still tries, will have a double reward."</span>
+                  Nabi ﷺ bersabda: <span className="italic">"Orang yang mahir dalam Al-Quran akan bersama para malaikat yang mulia dan taat, dan orang yang membaca Al-Quran dengan kesulitan tapi terus berusaha, akan mendapatkan dua pahala."</span>
                 </p>
                 <p className="text-[10px] text-muted-foreground mt-1">— Sahih al-Bukhari & Muslim</p>
               </div>

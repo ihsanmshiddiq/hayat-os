@@ -92,7 +92,7 @@ function EmptyState() {
         <h3 className="text-display text-2xl font-medium mb-2">Mulai Perjalanan Khatma</h3>
         <p className="text-sm text-muted-foreground max-w-md mx-auto mb-6">
           A <span className="font-medium text-foreground">Khatma</span> is a complete reading of the
-          Quran from cover to cover. Tetapkan target, choose your pace, and build a daily relationship
+          Al-Quran dari awal sampai akhir. Tetapkan target, pilih ritmemu, dan bangun hubungan harian
           with the words of Allah ﷻ.
         </p>
         <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground mb-8">
@@ -104,7 +104,7 @@ function EmptyState() {
 
       <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
         {[
-          { icon: Target, title: "Tetapkan target", text: "Choose full Quran, Juz Amma, or a specific surah" },
+          { icon: Target, title: "Tetapkan target", text: "Pilih Al-Quran penuh, Juz Amma, atau surah tertentu" },
           { icon: TrendingUp, title: "Lacak kecepatan harian", text: "Visualize your reading streak and projected completion" },
           { icon: Trophy, title: "Selesaikan dengan barakah", text: "Finish with a beautiful 30-Juz progress map" },
         ].map((f, i) => {
@@ -280,7 +280,7 @@ function JuzProgressGrid({ plan }: { plan: KhatmaActive }) {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-display text-lg font-medium">Memorization Map</h3>
-          <p className="text-xs text-muted-foreground mt-0.5">30 Juz · visual progress through the Quran</p>
+          <p className="text-xs text-muted-foreground mt-0.5">30 Juz · progres visual melalui Al-Quran</p>
         </div>
         <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
           <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-muted" /> Not read</span>
@@ -370,7 +370,7 @@ function DailyPaceCard({ plan }: { plan: KhatmaActive }) {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-display text-lg font-medium">Daily Pace</h3>
-          <p className="text-xs text-muted-foreground mt-0.5">Last {history.length} days vs target</p>
+          <p className="text-xs text-muted-foreground mt-0.5">{history.length} hari terakhir vs target</p>
         </div>
         {plan.streak > 0 ? (
           <div className="flex items-center gap-1.5 rounded-lg bg-rose-500/10 px-2 py-1 text-rose-600 dark:text-rose-400">
@@ -480,7 +480,7 @@ function PlanHistory({ history }: { history: KhatmaHistoryItem[] }) {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-display text-lg font-medium">Riwayat Rencana</h3>
-          <p className="text-xs text-muted-foreground mt-0.5">Previous and alternate Khatma plans</p>
+          <p className="text-xs text-muted-foreground mt-0.5">Rencana Khatma sebelumnya dan alternatif</p>
         </div>
       </div>
 

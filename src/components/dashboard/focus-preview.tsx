@@ -20,7 +20,7 @@ export function FocusPreview() {
   const weekSessions = (data?.trend ?? []).reduce((a, d) => a + d.count, 0);
 
   return (
-    <SectionCard interactive className="relative overflow-hidden cursor-pointer" {...({ onClick: () => setActiveView("focus") } as object)}>
+    <SectionCard interactive className="relative overflow-hidden cursor-pointer" {...({ onClick: () => setActiveView("fokus") } as object)}>
       <IslamicPatternHexagram className="text-primary" opacity={0.04} />
       <div className="relative">
         <div className="flex items-center justify-between mb-4">
@@ -86,7 +86,7 @@ export function FocusPreview() {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            setActiveView("focus");
+            setActiveView("fokus");
           }}
           className="mt-4 w-full flex items-center justify-center gap-2 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-colors py-2 text-sm font-medium"
         >

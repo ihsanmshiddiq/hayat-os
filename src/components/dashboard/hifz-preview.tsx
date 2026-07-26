@@ -39,7 +39,7 @@ export function HifzPreview() {
             <div>
               <h3 className="text-display text-base font-medium">Hifz Progress</h3>
               <p className="text-[11px] text-muted-foreground">
-                {stats?.memorizedSurahs ?? 0} surahs memorized · {stats?.percentQuran.toFixed(1) ?? "0.0"}% of Quran
+                {stats?.memorizedSurahs ?? 0} surah terhafal · {stats?.percentQuran.toFixed(1) ?? "0.0"}% dari Al-Quran
               </p>
             </div>
           </div>

@@ -36,7 +36,7 @@ export function HabitTracker() {
           </p>
         </div>
         <button
-          onClick={() => setActiveView("habits")}
+          onClick={() => setActiveView("kebiasaan")}
           className="flex h-8 w-8 items-center justify-center rounded-lg border border-border hover:bg-muted text-muted-foreground hover:text-foreground"
         >
           <Plus className="h-4 w-4" />

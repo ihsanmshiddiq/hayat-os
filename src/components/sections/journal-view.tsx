@@ -91,8 +91,8 @@ export function JournalView() {
   return (
     <div>
       <ViewHeader
-        title="Daily Journal"
-        subtitle="Gratitude, reflection, lessons, and dua — a few minutes a day."
+        title="Jurnal Harian"
+        subtitle="Rasa syukur, renungan, pelajaran, dan doa — beberapa menit sehari."
         icon={<PenLine className="h-5 w-5" />}
       />
 
@@ -114,7 +114,7 @@ export function JournalView() {
               <button
                 onClick={() => setShuffleIdx((i) => i + 1)}
                 className="flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-[11px] font-medium hover:bg-muted transition-colors"
-                title="Shuffle prompt"
+                title="Acak pertanyaan"
               >
                 <Shuffle className="h-3 w-3" /> Shuffle
               </button>
@@ -192,10 +192,10 @@ export function JournalView() {
             </div>
 
             <div className="space-y-4">
-              <JournalField icon={<Heart className="h-3.5 w-3.5 text-rose-500" />} label="Gratitude" value={gratitude} onChange={setGratitude} placeholder="What are you grateful for today?" />
-              <JournalField icon={<Sparkles className="h-3.5 w-3.5 text-amber-500" />} label="Reflection" value={reflection} onChange={setReflection} placeholder="How was your day? What did you learn?" multiline />
-              <JournalField icon={<BookOpen className="h-3.5 w-3.5 text-emerald-500" />} label="Lessons learned" value={lessons} onChange={setLessons} placeholder="What will you do differently tomorrow?" multiline />
-              <JournalField icon={<Sparkles className="h-3.5 w-3.5 text-sky-500" />} label="Dua" value={dua} onChange={setDua} placeholder="What are you asking Allah for?" multiline />
+              <JournalField icon={<Heart className="h-3.5 w-3.5 text-rose-500" />} label="Rasa Syukur" value={gratitude} onChange={setGratitude} placeholder="Apa yang kamu syukuri hari ini?" />
+              <JournalField icon={<Sparkles className="h-3.5 w-3.5 text-amber-500" />} label="Renungan" value={reflection} onChange={setReflection} placeholder="Bagaimana harimu? Apa yang kamu pelajari?" multiline />
+              <JournalField icon={<BookOpen className="h-3.5 w-3.5 text-emerald-500" />} label="Pelajaran" value={lessons} onChange={setLessons} placeholder="Apa yang akan kamu lakukan berbeda besok?" multiline />
+              <JournalField icon={<Sparkles className="h-3.5 w-3.5 text-sky-500" />} label="Doa" value={dua} onChange={setDua} placeholder="Apa yang kamu pohonkan kepada Allah?" multiline />
             </div>
           </SectionCard>
         </div>

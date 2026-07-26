@@ -76,7 +76,7 @@ export function AchievementsPreview() {
     <SectionCard
       interactive
       className="h-full cursor-pointer relative overflow-hidden"
-      onClick={() => setActiveView("achievements")}
+      onClick={() => setActiveView("pencapaian")}
     >
       <div className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
 
@@ -145,7 +145,7 @@ export function AchievementsPreview() {
       )}
 
       <button
-        onClick={() => setActiveView("achievements")}
+        onClick={() => setActiveView("pencapaian")}
         className="mt-3 flex items-center justify-center gap-1 w-full text-xs font-medium text-primary hover:underline"
       >
         View all achievements <ChevronRight className="h-3 w-3" />

@@ -71,13 +71,13 @@ export function SettingsView() {
   const save = async () => {
     const lat = parseFloat(formLat);
     const lng = parseFloat(formLng);
-    if (formLat && Number.isNaN(lat)) return toast.error("Lintang must be a number");
-    if (formLng && Number.isNaN(lng)) return toast.error("Bujur must be a number");
+    if (formLat && Number.isNaN(lat)) return toast.error("Lintang harus berupa angka");
+    if (formLng && Number.isNaN(lng)) return toast.error("Bujur harus berupa angka");
     updateSettings.mutate(
       { name: formName, location: formLokasi, latitude: lat, longitude: lng, method: formMethod },
       {
         onSuccess: () => {
-          toast.success("Settings saved — prayer times recalculated.");
+          toast.success("Pengaturan tersimpan — waktu shalat dihitung ulang.");
           setDirty(false);
         },
         onError: () => toast.error("Could not save settings."),
@@ -101,7 +101,7 @@ export function SettingsView() {
     <div>
       <ViewHeader
         title="Pengaturan"
-        subtitle="Personalize your Hayat experience. Settings persist to your local profile."
+        subtitle="Personalisasi pengalaman Hayat. Pengaturan disimpan ke profil lokal Anda."
         icon={<SettingsIcon className="h-5 w-5" />}
         action={
           dirty ? (
@@ -180,7 +180,7 @@ export function SettingsView() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">Tema</p>
-                <p className="text-xs text-muted-foreground">Light or dark mode</p>
+                <p className="text-xs text-muted-foreground">Mode terang atau gelap</p>
               </div>
               <div className="flex items-center gap-1 rounded-lg border border-border p-1">
                 <button onClick={() => setTheme("light")} className={cn("flex h-8 w-8 items-center justify-center rounded-md", mounted && theme === "light" ? "bg-primary text-primary-foreground" : "hover:bg-muted")}>
@@ -195,7 +195,7 @@ export function SettingsView() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">Pixel Companion</p>
-                <p className="text-xs text-muted-foreground">Show Nur, your companion</p>
+                <p className="text-xs text-muted-foreground">Tampilkan Nur, pendampingmu</p>
               </div>
               <Switch checked={pixelCompanionEnabled} onCheckedChange={togglePixelCompanion} />
             </div>
@@ -216,11 +216,11 @@ export function SettingsView() {
         <SectionCard>
           <div className="flex items-center gap-2 mb-5">
             <Clock className="h-4 w-4 text-muted-foreground" />
-            <h3 className="text-display text-lg font-medium">Prayer Times</h3>
+            <h3 className="text-display text-lg font-medium">Waktu Shalat</h3>
           </div>
           <div className="space-y-4">
             <div>
-              <Label>Calculation method</Label>
+              <Label>Metode perhitungan</Label>
               <select
                 value={formMethod}
                 onChange={(e) => onField(setFormMethod, e.target.value)}
@@ -234,24 +234,24 @@ export function SettingsView() {
                 ))}
               </select>
               <p className="text-[11px] text-muted-foreground mt-1.5">
-                Calculated for {formLokasi || "your location"} ({formLat}, {formLng}).
+                Calculated for {formLokasi || "lokasi Anda"} ({formLat}, {formLng}).
                 Saved method: <span className="font-medium text-foreground/80">{settings?.method ?? "Kemenag"}</span>
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="rounded-lg border border-border/60 p-3">
-                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Fajr angle</p>
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Sudut Imsak</p>
                 <p className="text-sm font-medium tabular-nums">{CALC_METHODS[formMethod as keyof typeof CALC_METHODS]?.fajr ?? 20}°</p>
               </div>
               <div className="rounded-lg border border-border/60 p-3">
-                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Isha angle</p>
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Sudut Isya</p>
                 <p className="text-sm font-medium tabular-nums">{CALC_METHODS[formMethod as keyof typeof CALC_METHODS]?.isha ?? 18}°</p>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium">Prayer reminders</p>
-                <p className="text-xs text-muted-foreground">Notify before each prayer</p>
+                <p className="text-sm font-medium">Pengingat shalat</p>
+                <p className="text-xs text-muted-foreground">Notifikasi sebelum setiap waktu shalat</p>
               </div>
               <Switch checked={prayerReminders} onCheckedChange={setPrayerReminders} />
             </div>
@@ -262,26 +262,26 @@ export function SettingsView() {
         <SectionCard>
           <div className="flex items-center gap-2 mb-5">
             <Bell className="h-4 w-4 text-muted-foreground" />
-            <h3 className="text-display text-lg font-medium">Notifications</h3>
+            <h3 className="text-display text-lg font-medium">Notifikasi</h3>
           </div>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium">All notifications</p>
-                <p className="text-xs text-muted-foreground">Master switch</p>
+                <p className="text-sm font-medium">Semua notifikasi</p>
+                <p className="text-xs text-muted-foreground">Sakelar utama</p>
               </div>
               <Switch checked={notifications} onCheckedChange={setNotifications} />
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium">Streak reminders</p>
-                <p className="text-xs text-muted-foreground">Don't break your streak</p>
+                <p className="text-sm font-medium">Pengingat streak</p>
+                <p className="text-xs text-muted-foreground">Jangan putus rangkaianmu</p>
               </div>
               <Switch checked={streakReminders} onCheckedChange={setStreakReminders} />
             </div>
             <div className="rounded-xl bg-muted/40 p-3.5 flex items-start gap-2">
               <Sparkles className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-              <p className="text-xs text-muted-foreground">Hayat keeps your data locally on this device. Your worship is between you and Allah.</p>
+              <p className="text-xs text-muted-foreground">Hayat menyimpan data Anda secara lokal di perangkat ini. Ibadahmu antara kamu dan Allah.</p>
             </div>
           </div>
         </SectionCard>

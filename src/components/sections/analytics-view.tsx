@@ -60,7 +60,7 @@ export function AnalyticsView() {
     <div>
       <ViewHeader
         title="Analitik"
-        subtitle="Beautiful insights into your consistency over time."
+        subtitle="Wawasan indah tentang konsistensimu dari waktu ke waktu."
         icon={<BarChart3 className="h-5 w-5" />}
       />
 

@@ -25,9 +25,9 @@ export function AnalyticsPreview() {
   const habitPct = habitLogs.length ? Math.round((habitDone / habitLogs.length) * 100) : 0;
 
   const stats = [
-    { label: "Prayer consistency", value: prayerPct, tint: "bg-emerald-500" },
-    { label: "Quran days", value: quranPct, tint: "bg-amber-500" },
-    { label: "Habit completion", value: habitPct, tint: "bg-sky-500" },
+    { label: "Konsistensi shalat", value: prayerPct, tint: "bg-emerald-500" },
+    { label: "Hari baca Al-Quran", value: quranPct, tint: "bg-amber-500" },
+    { label: "Penyelesaian kebiasaan", value: habitPct, tint: "bg-sky-500" },
   ];
 
   return (
@@ -43,12 +43,12 @@ export function AnalyticsPreview() {
             <BarChart3 className="h-[18px] w-[18px]" />
           </span>
           <div>
-            <h3 className="text-display text-lg font-medium tracking-tight">Weekly Analytics</h3>
-            <p className="text-sm text-muted-foreground mt-0.5">Your consistency at a glance</p>
+            <h3 className="text-display text-lg font-medium tracking-tight">Analitik Mingguan</h3>
+            <p className="text-sm text-muted-foreground mt-0.5">Konsistensimu dalam sekilas</p>
           </div>
         </div>
         <button
-          onClick={() => setActiveView("analytics")}
+          onClick={() => setActiveView("analitik")}
           className="flex h-8 w-8 items-center justify-center rounded-lg border border-border hover:bg-muted text-muted-foreground hover:text-foreground"
         >
           <ArrowRight className="h-4 w-4" />
@@ -77,7 +77,7 @@ export function AnalyticsPreview() {
       <div className="mt-5 flex items-center gap-2 rounded-xl bg-muted/40 p-3">
         <TrendingUp className="h-4 w-4 text-primary shrink-0" />
         <p className="text-xs text-muted-foreground">
-          {prayerPct >= 70 ? "Strong week. Keep the momentum." : prayerPct >= 40 ? "Steady progress. Push for one more prayer." : "Start small. One prayer at a time."}
+          {prayerPct >= 70 ? "Minggu yang kuat. Pertahankan momentum." : prayerPct >= 40 ? "Progres stabil. Tambah satu shalat lagi." : "Mulai dari kecil. Satu shalat pada satu waktu."}
         </p>
       </div>
     </motion.div>

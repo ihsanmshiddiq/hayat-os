@@ -112,7 +112,7 @@ export function AsmaView() {
     <div>
       <ViewHeader
         title="Asma'ul Husna"
-        subtitle="The 99 Names of Allah \u2014 each a doorway to knowing Him. Refleksi on one each day."
+        subtitle="99 Nama Allah \u2014 setiap nama adalah pintu untuk mengenal-Nya. Renungkan satu nama setiap hari."
         icon={<Gem className="h-5 w-5" />}
         badge={
           <span className="flex items-center gap-1 rounded-full bg-primary/10 border border-primary/20 px-2.5 py-1 text-xs font-medium text-primary tabular-nums">
@@ -271,7 +271,7 @@ export function AsmaView() {
                     "absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full transition-all",
                     isMem ? "text-primary opacity-100" : "text-muted-foreground opacity-0 group-hover:opacity-100 hover:bg-muted"
                   )}
-                  aria-label="Memorized"
+                  aria-label="Dihafal"
                 >
                   <CheckCircle2 className={cn("h-3.5 w-3.5", isMem && "fill-current")} />
                 </button>

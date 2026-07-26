@@ -38,7 +38,7 @@ export function GoalsPreview() {
           </div>
         </div>
         <button
-          onClick={() => setActiveView("goals")}
+          onClick={() => setActiveView("tujuan")}
           className="flex h-8 w-8 items-center justify-center rounded-lg border border-border hover:bg-muted text-muted-foreground hover:text-foreground"
         >
           <ArrowRight className="h-4 w-4" />

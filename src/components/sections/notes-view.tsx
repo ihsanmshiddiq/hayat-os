@@ -110,7 +110,7 @@ export function NotesView() {
     <div>
       <ViewHeader
         title="Catatan"
-        subtitle="Capture knowledge, reflections, and reminders in markdown."
+        subtitle="Tangkap ilmu, renungan, dan pengingat dalam markdown."
         icon={<StickyNote className="h-5 w-5" />}
         action={
           <div className="flex items-center gap-2">
@@ -220,7 +220,7 @@ export function NotesView() {
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-1.5 min-w-0 flex-1">
-                      {n.pinned ? <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" aria-label="Pinned" /> : null}
+                      {n.pinned ? <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" aria-label="Disematkan" /> : null}
                       <p className="text-sm font-medium truncate flex-1">{n.title || "Untitled"}</p>
                     </div>
                     {n.pinned ? <Pin className="h-3.5 w-3.5 text-primary shrink-0" /> : null}
@@ -294,20 +294,20 @@ function NoteEditor({
     <SectionCard className="flex flex-col">
       <div className="flex items-center gap-2 mb-3">
         <Input value={title} onChange={(e) => setTitle(e.target.value)} className="text-display font-medium border-0 px-0 h-8 focus-visible:ring-0" />
-        <button onClick={() => onExport(note)} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-primary transition-colors" title="Export as Markdown" aria-label="Export as Markdown">
+        <button onClick={() => onExport(note)} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-primary transition-colors" title="Ekspor sebagai Markdown" aria-label="Ekspor sebagai Markdown">
           <Download className="h-4 w-4" />
         </button>
         <button onClick={() => onUpdate({ id: note.id, body: { pinned: !note.pinned } })} className={cn("p-1.5 rounded-lg hover:bg-muted", note.pinned && "text-primary")} title={note.pinned ? "Unpin" : "Pin"} aria-label={note.pinned ? "Unpin note" : "Pin note"}>
           <Pin className={cn("h-4 w-4", note.pinned && "fill-current")} />
         </button>
-        <button onClick={() => onDelete(note.id)} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-rose-500 transition-colors" title="Delete" aria-label="Delete note">
+        <button onClick={() => onDelete(note.id)} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-rose-500 transition-colors" title="Hapus" aria-label="Hapus catatan">
           <Trash2 className="h-4 w-4" />
         </button>
       </div>
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Write in markdown… # Heading, **bold**, - list"
+        placeholder="Tulis dalam markdown… # Judul, **tebal**, - daftar"
         className="flex-1 min-h-[300px] resize-none rounded-lg border border-border bg-background/60 px-3 py-2.5 text-sm font-mono leading-relaxed focus:bg-background focus:border-primary/40 outline-none transition-colors scroll-slim"
       />
       <div className="flex items-center gap-2 mt-3">

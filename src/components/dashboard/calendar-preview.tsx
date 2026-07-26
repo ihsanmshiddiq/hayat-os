@@ -109,7 +109,7 @@ export function CalendarPreview() {
           return (
             <button
               key={day}
-              onClick={() => setActiveView("calendar")}
+              onClick={() => setActiveView("kalender")}
               className={cn(
                 "relative aspect-square flex flex-col items-center justify-center rounded-lg text-xs transition-colors",
                 today_ ? "bg-primary text-primary-foreground font-semibold" : "hover:bg-muted",

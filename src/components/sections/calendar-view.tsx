@@ -101,7 +101,7 @@ export function CalendarView() {
     <div>
       <ViewHeader
         title="Kalender"
-        subtitle="Your schedule, reminders, fasting days, and Peristiwa Islamis — in one place."
+        subtitle="Jadwal, pengingat, hari puasa, dan peristiwa Islami — dalam satu tempat."
         icon={<CalendarDays className="h-5 w-5" />}
         action={
           <Dialog open={open} onOpenChange={setOpen}>
@@ -109,7 +109,7 @@ export function CalendarView() {
             <DialogContent className="sm:max-w-md">
               <DialogHeader><DialogTitle className="text-display">Tambah acara{selectedDay ? ` · ${monthName} ${selectedDay}` : ""}</DialogTitle></DialogHeader>
               <div className="space-y-4 pt-2">
-                <div><Label>Judul</Label><Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Quran halaqah" className="mt-1.5" /></div>
+                <div><Label>Judul</Label><Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Contoh: Halaqah Quran" className="mt-1.5" /></div>
                 <div className="grid grid-cols-2 gap-3">
                   <div><Label>Waktu</Label><Input value={time} onChange={(e) => setTime(e.target.value)} placeholder="19:30" className="mt-1.5" /></div>
                   <div>

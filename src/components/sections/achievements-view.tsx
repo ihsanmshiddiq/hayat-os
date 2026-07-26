@@ -92,7 +92,7 @@ export function AchievementsView() {
     <div>
       <ViewHeader
         title="Pencapaian"
-        subtitle="Your milestones on the path. Every small deed, consistently done, becomes great."
+        subtitle="Pencapaianmu di jalan ini. Setiap amal kecil, dilakukan secara konsisten, menjadi besar."
         icon={<Crown className="h-5 w-5" />}
       />
 

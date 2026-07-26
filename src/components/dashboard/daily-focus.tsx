@@ -42,8 +42,8 @@ export function DailyFocus() {
       <div className="h-full rounded-2xl border border-border/70 bg-card shadow-soft p-5 sm:p-6">
         <div className="flex items-start justify-between gap-4 mb-6">
           <div>
-            <h3 className="text-display text-lg font-medium tracking-tight">Daily Focus</h3>
-            <p className="text-sm text-muted-foreground mt-0.5">Your checklist for today</p>
+            <h3 className="text-display text-lg font-medium tracking-tight">Fokus Hari Ini</h3>
+            <p className="text-sm text-muted-foreground mt-0.5">Daftar tugas harianmu</p>
           </div>
           <ProgressRing value={completion.percent} size={72} strokeWidth={7}>
             <span className="text-display text-base font-semibold">{completion.percent}%</span>
@@ -52,7 +52,7 @@ export function DailyFocus() {
 
         <div className="space-y-5">
           {/* Prayers */}
-          <FocusGroup title="Prayers" subtitle="Five daily prayers">
+          <FocusGroup title="Shalat" subtitle="Lima waktu shalat">
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
               {prayerItems.map((p) => (
                 <FocusToggle
@@ -72,8 +72,8 @@ export function DailyFocus() {
               icon={<BookOpen className="h-4 w-4" />}
               tint="text-emerald-600 dark:text-emerald-400"
               bg="bg-emerald-500/10"
-              label="Quran"
-              value={quran ? `${quran.pagesRead}/${quran.targetPages} pages` : "0/2 pages"}
+              label="Al-Quran"
+              value={quran ? `${quran.pagesRead}/${quran.targetPages} halaman` : "0/2 halaman"}
               done={quranDone}
               onClick={() => setActiveView("quran")}
             />
@@ -81,8 +81,8 @@ export function DailyFocus() {
               icon={<Sparkles className="h-4 w-4" />}
               tint="text-amber-600 dark:text-amber-400"
               bg="bg-amber-500/10"
-              label="Dhikr"
-              value={`${dhikrDone ? "Complete" : `${dhikr.length}/${DHIKR_PHRASES.length - 2} phrases`}`}
+              label="Dzikir"
+              value={`${dhikrDone ? "Selesai" : `${dhikr.length}/${DHIKR_PHRASES.length - 2} lafadz`}`}
               done={dhikrDone}
               onClick={() => setActiveView("dashboard")}
             />
@@ -90,18 +90,18 @@ export function DailyFocus() {
               icon={<PenLine className="h-4 w-4" />}
               tint="text-sky-600 dark:text-sky-400"
               bg="bg-sky-500/10"
-              label="Journal"
-              value={journalDone ? "Written" : "Not yet"}
+              label="Jurnal"
+              value={journalDone ? "Sudah ditulis" : "Belum"}
               done={journalDone}
-              onClick={() => setActiveView("journal")}
+              onClick={() => setActiveView("jurnal")}
             />
           </div>
 
           {/* Quick dhikr counter */}
           <div className="rounded-xl border border-border/60 bg-muted/40 p-3.5">
             <div className="flex items-center justify-between mb-2.5">
-              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Quick dhikr</span>
-              <span className="text-[11px] text-muted-foreground">tap to count</span>
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Dzikir Cepat</span>
+              <span className="text-[11px] text-muted-foreground">ketuk untuk menghitung</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {DHIKR_PHRASES.slice(0, 3).map((p) => {
@@ -134,8 +134,8 @@ export function DailyFocus() {
           {/* Sunnah counter */}
           <div className="flex items-center justify-between rounded-xl border border-border/60 bg-muted/40 p-3.5">
             <div>
-              <p className="text-sm font-medium">Sunnah prayers today</p>
-              <p className="text-xs text-muted-foreground">Reward beyond the obligatory</p>
+              <p className="text-sm font-medium">Shalat sunnah hari ini</p>
+              <p className="text-xs text-muted-foreground">Pahala di luar shalat wajib</p>
             </div>
             <div className="flex items-center gap-2">
               <button

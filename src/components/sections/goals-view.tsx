@@ -49,7 +49,7 @@ export function GoalsView() {
     <div>
       <ViewHeader
         title="Tujuan"
-        subtitle="What you're building toward — in ibadah, knowledge, health, and life."
+        subtitle="Apa yang kamu bangun — dalam ibadah, ilmu, kesehatan, dan kehidupan."
         icon={<Target className="h-5 w-5" />}
         action={
           <Dialog open={open} onOpenChange={setOpen}>
@@ -59,7 +59,7 @@ export function GoalsView() {
               <div className="space-y-4 pt-2">
                 <div>
                   <Label>Judul tujuan</Label>
-                  <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Memorize Juz Amma" className="mt-1.5" />
+                  <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Contoh: Hafal Juz Amma" className="mt-1.5" />
                 </div>
                 <div>
                   <Label>Category</Label>
@@ -73,7 +73,7 @@ export function GoalsView() {
                 </div>
                 <div>
                   <Label>Current milestone</Label>
-                  <Input value={milestone} onChange={(e) => setMilestone(e.target.value)} placeholder="e.g. Halfway through An-Naba" className="mt-1.5" />
+                  <Input value={milestone} onChange={(e) => setMilestone(e.target.value)} placeholder="Contoh: Setengah jalan An-Naba" className="mt-1.5" />
                 </div>
                 <Button onClick={submit} className="w-full">Buat tujuan</Button>
               </div>
@@ -85,9 +85,9 @@ export function GoalsView() {
       {/* Summary */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
         <SummaryCard label="Aktif" value={active.length} tint="text-primary" />
-        <SummaryCard label="Completed" value={done.length} tint="text-emerald-500" />
-        <SummaryCard label="Avg progress" value={`${active.length ? Math.round(active.reduce((a, g) => a + g.progress, 0) / active.length) : 0}%`} tint="text-amber-500" />
-        <SummaryCard label="Categories" value={new Set(goals.map((g) => g.category)).size} tint="text-sky-500" />
+        <SummaryCard label="Selesai" value={done.length} tint="text-emerald-500" />
+        <SummaryCard label="Rata-rata progres" value={`${active.length ? Math.round(active.reduce((a, g) => a + g.progress, 0) / active.length) : 0}%`} tint="text-amber-500" />
+        <SummaryCard label="Kategori" value={new Set(goals.map((g) => g.category)).size} tint="text-sky-500" />
       </div>
 
       {active.length === 0 && done.length === 0 ? (
@@ -138,7 +138,7 @@ export function GoalsView() {
                       <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/50">
                         <span className="text-[10px] text-muted-foreground flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
-                          {g.progress >= 100 ? "Completed" : g.progress >= 75 ? "Almost done" : g.progress >= 50 ? "Halfway there" : g.progress >= 25 ? "Making progress" : "Just started"}
+                          {g.progress >= 100 ? "Selesai" : g.progress >= 75 ? "Hampir selesai" : g.progress >= 50 ? "Setengah jalan" : g.progress >= 25 ? "Sedang berjalan" : "Baru mulai"}
                         </span>
                         <span className="text-[10px] font-medium text-primary">{100 - g.progress}% to go</span>
                       </div>
@@ -153,7 +153,7 @@ export function GoalsView() {
 
       {done.length > 0 ? (
         <div className="mt-8">
-          <p className="text-display text-sm font-medium text-muted-foreground mb-3">Completed · {done.length}</p>
+          <p className="text-display text-sm font-medium text-muted-foreground mb-3">Selesai · {done.length}</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {done.map((g) => (
               <div key={g.id} className="rounded-xl border border-border/60 bg-card p-4 opacity-70">
