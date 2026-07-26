@@ -1,0 +1,331 @@
+// Hayat — Islamic LifeOS Prisma schema
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// A single demo user (auth is mocked for this LifeOS preview).
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  avatar    String?
+  location  String?  @default("Jakarta, Indonesia")
+  latitude  Float?   @default(-6.2088)
+  longitude Float?   @default(106.8456)
+  method    String?  @default("Kemenag") // prayer calc method key (see CALC_METHODS)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  prayers   PrayerLog[]
+  quran     QuranLog[]
+  habits    Habit[]
+  habitLogs HabitLog[]
+  journals  Journal[]
+  notes     Note[]
+  goals     Goal[]
+  events    CalendarEvent[]
+  dhikrs    DhikrLog[]
+  fasts     SunnahFast[]
+  focus     FocusSession[]
+  hifz      HifzSurah[]
+  sadaqah   SadaqahEntry[]
+  zakat     ZakatCalculation[]
+  khatma    KhatmaPlan[]
+}
+
+/// Quran Khatma (reading cycle) plan — a goal to read the entire Quran
+/// (or a portion) in a set number of days. Tracks start date, daily target,
+/// pages read, and completion.
+model KhatmaPlan {
+  id            String   @id @default(cuid())
+  userId        String
+  name          String   @default("Full Quran Khatma")
+  scope         String   @default("full_quran") // full_quran | juz_amma | last_30 | first_5_juz | custom
+  startPage     Int      @default(1) // 1..604
+  endPage       Int      @default(604) // 1..604
+  totalPages    Int      @default(604)
+  startDate     DateTime
+  targetDays    Int      @default(30)
+  dailyTarget   Int      @default(20) // pages per day
+  completedPages Int     @default(0)
+  isActive      Boolean  @default(true)
+  completedAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isActive])
+}
+
+/// Zakat calculation snapshot — saved each time the user computes their zakat.
+/// Tracks the asset breakdown, nisab standard, due date, and paid status.
+model ZakatCalculation {
+  id            String   @id @default(cuid())
+  userId        String
+  calculationDate DateTime
+  hawlStartDate DateTime
+  hawlEndDate   DateTime // 1 lunar year after hawlStartDate — zakat due date
+  nisabStandard String   @default("gold") // gold | silver
+  nisabThresholdIDR Float
+  totalAssetsIDR Float
+  totalLiabilitiesIDR Float @default(0)
+  zakatableBaseIDR Float // totalAssets - totalLiabilities
+  zakatDueIDR   Float
+  isPaid        Boolean  @default(false)
+  paidDate      DateTime?
+  note          String?
+  // JSON-serialized breakdown of asset values per type (for historical record)
+  breakdown     String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, calculationDate])
+}
+
+/// Quran memorization (Hifz) tracker — one row per user per surah.
+/// Tracks memorization status and last-reviewed date for Murajaah schedule.
+model HifzSurah {
+  id            String   @id @default(cuid())
+  userId        String
+  surahNumber   Int      // 1..114
+  status        String   @default("not_started") // not_started | in_progress | memorized | needs_review
+  memorizedFrom Int      @default(0) // first ayah memorized (usually 1)
+  memorizedTo   Int      @default(0) // last ayah memorized
+  lastReviewed  DateTime?
+  note          String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, surahNumber])
+  @@index([userId, status])
+}
+
+/// Sadaqah / charity log entry.
+model SadaqahEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime
+  amount    Float    @default(0) // numerical amount (currency or hours or count)
+  unit      String   @default("idr") // idr | usd | hour | item
+  type      String   @default("sadaqah") // zakat | sadaqah | waqf | fitr
+  recipient String?
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@index([userId, type])
+}
+
+/// Focus / Pomodoro session log — tracks deep work sessions with optional Islamic break activity.
+model FocusSession {
+  id          String   @id @default(cuid())
+  userId      String
+  startedAt   DateTime
+  endedAt     DateTime?
+  durationSec Int      // planned duration (e.g. 1500 = 25min)
+  elapsedSec  Int      @default(0) // actual elapsed when stopped
+  mode        String   @default("deep") // deep | study | quran | reading
+  breakActivity String? // dhikr | stretch | water | walk | none
+  completed   Boolean  @default(false) // did the session reach full duration?
+  intention   String?  // user-set intention for the session
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, startedAt])
+}
+
+/// Daily prayer tracking — one row per user per day.
+model PrayerLog {
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime
+  fajr      Boolean  @default(false)
+  dhuhr     Boolean  @default(false)
+  asr       Boolean  @default(false)
+  maghrib   Boolean  @default(false)
+  isha      Boolean  @default(false)
+  sunnah    Int      @default(0) // count of sunnah prayed
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+/// Daily Quran reading log — one row per user per day.
+model QuranLog {
+  id              String   @id @default(cuid())
+  userId          String
+  date            DateTime
+  pagesRead       Int      @default(0)
+  ayahsRead       Int      @default(0)
+  lastSurah       String?
+  lastAyah        Int?
+  memorizedAyahs  Int      @default(0)
+  targetPages     Int      @default(2)
+  minutesSpent    Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+/// A habit definition.
+model Habit {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  icon      String   @default("CheckCircle")
+  color     String   @default("emerald")
+  category  String   @default("general")
+  cue       String?
+  reward    String?
+  schedule  String   @default("daily") // daily | weekdays | weekends | custom
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  logs HabitLog[]
+  user User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+/// Completion log for a habit on a given day.
+model HabitLog {
+  id        String   @id @default(cuid())
+  habitId   String
+  userId    String
+  date      DateTime
+  done      Boolean  @default(true)
+  note      String?
+  createdAt DateTime @default(now())
+
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([habitId, date])
+  @@index([userId, date])
+}
+
+/// A daily journal entry.
+model Journal {
+  id           String   @id @default(cuid())
+  userId       String
+  date         DateTime
+  gratitude    String?
+  reflection   String?
+  lessons      String?
+  dua          String?
+  mood         Int?     // 1..5
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+/// A markdown note.
+model Note {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  content   String   @default("")
+  folder    String   @default("Inbox")
+  tags      String   @default("")
+  pinned    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, folder])
+}
+
+/// A goal.
+model Goal {
+  id          String   @id @default(cuid())
+  userId      String
+  title       String
+  category    String   @default("ibadah") // ibadah | knowledge | health | wealth | relationships | dakwah
+  progress    Int      @default(0) // 0..100
+  targetDate  DateTime?
+  milestone   String?
+  done        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, category])
+}
+
+/// A calendar event (reminder, fasting, Islamic event, goal).
+model CalendarEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  date      DateTime
+  time      String?
+  type      String   @default("reminder") // reminder | fasting | islamic | goal | salah
+  note      String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+}
+
+/// Daily dhikr counter.
+model DhikrLog {
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime
+  phrase    String   @default("Subhanallah")
+  count     Int      @default(0)
+  target    Int      @default(33)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date, phrase])
+  @@index([userId, date])
+}
+
+/// Sunnah fast log — tracks voluntary fasts (Mondays, Thursdays, White Days, Arafah, Ashura, etc.).
+model SunnahFast {
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime
+  fastType  String   // e.g. "monday", "thursday", "ayyam_beed", "arafah", "ashura", "david"
+  note      String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date, fastType])
+  @@index([userId, date])
+}

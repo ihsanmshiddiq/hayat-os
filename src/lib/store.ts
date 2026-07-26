@@ -1,0 +1,59 @@
+"use client";
+
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+export type ViewKey =
+  | "dashboard"
+  | "kalender"
+  | "jurnal"
+  | "kebiasaan"
+  | "quran"
+  | "khatma"
+  | "shalat"
+  | "dzikr"
+  | "doa"
+  | "asma"
+  | "hifz"
+  | "catatan"
+  | "tujuan"
+  | "pencapaian"
+  | "analitik"
+  | "fokus"
+  | "pengaturan";
+
+interface AppState {
+  activeView: ViewKey;
+  sidebarCollapsed: boolean;
+  mobileSidebarOpen: boolean;
+  commandOpen: boolean;
+  setActiveView: (v: ViewKey) => void;
+  toggleSidebar: () => void;
+  setSidebarCollapsed: (v: boolean) => void;
+  setMobileSidebarOpen: (v: boolean) => void;
+  setCommandOpen: (v: boolean) => void;
+}
+
+export const useAppStore = create<AppState>()(
+  persist(
+    (set) => ({
+      activeView: "dashboard",
+      sidebarCollapsed: false,
+      mobileSidebarOpen: false,
+      commandOpen: false,
+      setActiveView: (v) => set({ activeView: v, mobileSidebarOpen: false }),
+      toggleSidebar: () =>
+        set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
+      setSidebarCollapsed: (v) => set({ sidebarCollapsed: v }),
+      setMobileSidebarOpen: (v) => set({ mobileSidebarOpen: v }),
+      setCommandOpen: (v) => set({ commandOpen: v }),
+    }),
+    {
+      name: "hayat-app-store",
+      partialize: (s) => ({
+        activeView: s.activeView,
+        sidebarCollapsed: s.sidebarCollapsed,
+      }),
+    }
+  )
+);

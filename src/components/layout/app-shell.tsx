@@ -1,0 +1,98 @@
+"use client";
+
+import * as React from "react";
+import dynamic from "next/dynamic";
+import { AnimatePresence } from "framer-motion";
+import { Sidebar } from "@/components/layout/sidebar";
+import { Topbar } from "@/components/layout/topbar";
+import { BottomNav } from "@/components/layout/bottom-nav";
+import { CommandPalette } from "@/components/layout/command-palette";
+import { KeyboardShortcutsOverlay, useGlobalKeyboardShortcuts } from "@/components/layout/keyboard-shortcuts";
+import { PageTransition } from "@/components/shared/page-transition";
+import { useAppStore } from "@/lib/store";
+import { useDashboard } from "@/lib/hooks";
+import { DashboardView } from "@/components/dashboard/dashboard-view";
+
+// Lazy-load setiap section agar compile hanya yang aktif
+const CalendarView = dynamic(() => import("@/components/sections/calendar-view").then(m => ({ default: m.CalendarView })), { ssr: false });
+const JournalView = dynamic(() => import("@/components/sections/journal-view").then(m => ({ default: m.JournalView })), { ssr: false });
+const HabitsView = dynamic(() => import("@/components/sections/habits-view").then(m => ({ default: m.HabitsView })), { ssr: false });
+const QuranView = dynamic(() => import("@/components/sections/quran-view").then(m => ({ default: m.QuranView })), { ssr: false });
+const KhatmaView = dynamic(() => import("@/components/sections/khatma-view").then(m => ({ default: m.KhatmaView })), { ssr: false });
+const SalahView = dynamic(() => import("@/components/sections/salah-view").then(m => ({ default: m.SalahView })), { ssr: false });
+const DhikrView = dynamic(() => import("@/components/sections/dhikr-view").then(m => ({ default: m.DhikrView })), { ssr: false });
+const DuasView = dynamic(() => import("@/components/sections/duas-view").then(m => ({ default: m.DuasView })), { ssr: false });
+const AsmaView = dynamic(() => import("@/components/sections/asma-view").then(m => ({ default: m.AsmaView })), { ssr: false });
+const HifzView = dynamic(() => import("@/components/sections/hifz-view").then(m => ({ default: m.HifzView })), { ssr: false });
+const NotesView = dynamic(() => import("@/components/sections/notes-view").then(m => ({ default: m.NotesView })), { ssr: false });
+const GoalsView = dynamic(() => import("@/components/sections/goals-view").then(m => ({ default: m.GoalsView })), { ssr: false });
+const AchievementsView = dynamic(() => import("@/components/sections/achievements-view").then(m => ({ default: m.AchievementsView })), { ssr: false });
+const AnalyticsView = dynamic(() => import("@/components/sections/analytics-view").then(m => ({ default: m.AnalyticsView })), { ssr: false });
+const FocusView = dynamic(() => import("@/components/sections/focus-view").then(m => ({ default: m.FocusView })), { ssr: false });
+const SettingsView = dynamic(() => import("@/components/sections/settings-view").then(m => ({ default: m.SettingsView })), { ssr: false });
+
+export function AppShell() {
+  const { activeView } = useAppStore();
+  const { data } = useDashboard();
+  const userName = data?.user.name;
+  useGlobalKeyboardShortcuts();
+
+  return (
+    <div className="flex min-h-screen bg-background">
+      <Sidebar userName={userName} />
+      <div className="flex-1 flex flex-col min-w-0 lg:pb-0 pb-16">
+        <Topbar userName={userName} />
+        <main className="flex-1 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-[1400px] w-full mx-auto">
+          <AnimatePresence mode="wait">
+            <PageTransition key={activeView}>
+              {renderView(activeView)}
+            </PageTransition>
+          </AnimatePresence>
+        </main>
+        <footer className="mt-auto border-t border-border/60 bg-background/60 hidden lg:block">
+          <div className="max-w-[1400px] mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <span className="flex h-5 w-5 items-center justify-center rounded-md bg-primary text-primary-foreground text-[10px] font-semibold">ح</span>
+              <span className="font-medium">Hayat</span>
+              <span>· Sistem Operasi Islami</span>
+            </div>
+            <p className="text-center sm:text-right">
+              <span className="text-arabic">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</span>
+              <span className="mx-2 hidden sm:inline">·</span>
+              <span className="block sm:inline">Dibuat dengan penuh perhatian · {new Date().getFullYear()}</span>
+            </p>
+          </div>
+        </footer>
+      </div>
+
+      {/* Bottom Nav untuk Mobile */}
+      <BottomNav />
+
+      <CommandPalette />
+      <KeyboardShortcutsOverlay />
+    </div>
+  );
+}
+
+function renderView(view: string) {
+  switch (view) {
+    case "dashboard": return <DashboardView />;
+    case "kalender": return <CalendarView />;
+    case "jurnal": return <JournalView />;
+    case "kebiasaan": return <HabitsView />;
+    case "quran": return <QuranView />;
+    case "khatma": return <KhatmaView />;
+    case "shalat": return <SalahView />;
+    case "dzikr": return <DhikrView />;
+    case "doa": return <DuasView />;
+    case "asma": return <AsmaView />;
+    case "hifz": return <HifzView />;
+    case "catatan": return <NotesView />;
+    case "tujuan": return <GoalsView />;
+    case "pencapaian": return <AchievementsView />;
+    case "analitik": return <AnalyticsView />;
+    case "fokus": return <FocusView />;
+    case "pengaturan": return <SettingsView />;
+    default: return <DashboardView />;
+  }
+}
