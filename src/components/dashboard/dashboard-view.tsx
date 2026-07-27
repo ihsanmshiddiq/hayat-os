@@ -38,7 +38,7 @@ export function DashboardView() {
         </div>
         <h2 className="text-display text-xl font-medium mb-2">Gagal memuat dasbor</h2>
         <p className="text-sm text-muted-foreground max-w-md mb-6">
-          Terjadi kesalahan saat mengambil data. Kemungkinan database belum terkonfigurasi untuk lingkungan production.
+          Terjadi kesalahan saat mengambil data. Database tidak tersedia di lingkungan ini.
         </p>
         <button
           onClick={() => refetch()}
@@ -48,7 +48,7 @@ export function DashboardView() {
           Muat ulang
         </button>
         <p className="text-xs text-muted-foreground/60 mt-4 max-w-sm">
-          {error?.message || "Pastikan DATABASE_URL sudah dikonfigurasi dengan benar di Vercel Environment Variables."}
+          {error?.message || "Untuk production, pastikan database sudah terkonfigurasi di Environment Variables."}
         </p>
       </motion.div>
     );
