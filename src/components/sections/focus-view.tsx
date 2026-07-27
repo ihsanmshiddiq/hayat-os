@@ -111,7 +111,7 @@ export function FocusView() {
               stopFocus.mutate({ id: sessionId, elapsedSec: focusSec, completed: true });
             }
             setCompletedToday((n) => n + 1);
-            toast.success("Masha'Allah! Focus session complete.", {
+            toast.success("Masha'Allah! Sesi fokus selesai.", {
               description: `Take a ${breakMin}-minute ${FOCUS_BREAKS.find(b => b.id === breakId)?.label.toLowerCase()} break.`,
             });
             // Move to break phase
@@ -119,8 +119,8 @@ export function FocusView() {
             return breakSec;
           } else {
             // Istirahat complete
-            toast("Istirahat finished. Siap for another round?", {
-              description: "Tekan Mulai untuk memulai sesi fokus baru.",
+            toast("Istirahat selesai. Siap untuk ronde berikutnya?", {
+              description: "Tekan Mulai untuk memulai sesi baru.",
             });
             setPhase("done");
             setSessionId(null);
