@@ -11,7 +11,8 @@ import { KeyboardShortcutsOverlay, useGlobalKeyboardShortcuts } from "@/componen
 import { PageTransition } from "@/components/shared/page-transition";
 import { useAppStore } from "@/lib/store";
 import { useDashboard } from "@/lib/hooks";
-import { useSession } from "next-auth/react";
+import { createClient } from "@/lib/supabase/client";
+import type { User } from "@supabase/supabase-js";
 import { DashboardView } from "@/components/dashboard/dashboard-view";
 
 // Lazy-load setiap section agar compile hanya yang aktif
@@ -35,12 +36,16 @@ const SettingsView = dynamic(() => import("@/components/sections/settings-view")
 export function AppShell() {
   const { activeView } = useAppStore();
   const { data } = useDashboard();
-  const { data: session } = useSession();
+  const [user, setUser] = React.useState<User | null>(null);
 
-  // Prefer Google session name, fallback to database user name
-  const sessionUser = session?.user;
-  const userName = sessionUser?.name ?? data?.user.name;
-  const userImage = sessionUser?.image ?? null;
+  React.useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
+  }, []);
+
+  // Prefer Supabase user name, fallback to database user name
+  const userName = user?.user_metadata?.full_name ?? user?.user_metadata?.name ?? data?.user.name;
+  const userImage = user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture ?? null;
   useGlobalKeyboardShortcuts();
 
   return (

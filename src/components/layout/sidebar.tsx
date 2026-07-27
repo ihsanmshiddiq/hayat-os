@@ -37,7 +37,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useMounted } from "@/hooks/use-now";
-import { signOut } from "next-auth/react";
+import { createClient } from "@/lib/supabase/client";
 import { LogOut } from "lucide-react";
 
 interface NavItem {
@@ -94,6 +94,7 @@ export function Sidebar({ userName, userImage }: { userName?: string | null; use
   const { theme, setTheme } = useTheme();
   const mounted = useMounted();
   const [profileOpen, setProfileOpen] = React.useState(false);
+  const supabase = createClient();
 
   const userEmail = "hayat@app";
 
@@ -282,7 +283,7 @@ export function Sidebar({ userName, userImage }: { userName?: string | null; use
                     <Settings className="h-4 w-4" /> Profil & preferensi
                   </button>
                   <button
-                    onClick={() => signOut({ callbackUrl: "/landing" })}
+                    onClick={async () => { await supabase.auth.signOut(); window.location.href = "/landing"; }}
                     className="w-full flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-rose-500 hover:bg-rose-500/10 hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
                   >
                     <LogOut className="h-4 w-4" /> Keluar

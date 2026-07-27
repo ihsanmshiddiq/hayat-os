@@ -2,15 +2,23 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
   const [loading, setLoading] = React.useState(false);
+  const [emailLoading, setEmailLoading] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [isSignUp, setIsSignUp] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [success, setSuccess] = React.useState<string | null>(null);
   const router = useRouter();
+  const supabase = createClient();
 
   React.useEffect(() => {
     setMounted(true);
@@ -18,11 +26,52 @@ export default function LoginPage() {
 
   const handleGoogleLogin = async () => {
     setLoading(true);
+    setError(null);
     try {
-      await signIn("google", { callbackUrl: "/" });
-    } catch (error) {
-      console.error("Login error:", error);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) throw error;
+    } catch (err: any) {
+      setError(err.message || "Gagal masuk dengan Google");
       setLoading(false);
+    }
+  };
+
+  const handleEmailAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setEmailLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      if (isSignUp) {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+          },
+        });
+        if (error) throw error;
+        setSuccess("Akun berhasil dibuat! Silakan masuk.");
+        setIsSignUp(false);
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) throw error;
+        router.push("/");
+        router.refresh();
+      }
+    } catch (err: any) {
+      setError(err.message || "Terjadi kesalahan");
+    } finally {
+      setEmailLoading(false);
     }
   };
 
@@ -44,15 +93,16 @@ export default function LoginPage() {
             </div>
           </Link>
           <h1 className="text-display text-3xl font-semibold tracking-tight mb-2">
-            Selamat Datang
+            {isSignUp ? "Buat Akun" : "Selamat Datang"}
           </h1>
           <p className="text-muted-foreground">
-            Masuk untuk melanjutkan ke Hayat
+            {isSignUp ? "Daftar untuk memulai perjalanan" : "Masuk untuk melanjutkan ke Hayat"}
           </p>
         </div>
 
         {/* Login Card */}
         <div className="rounded-2xl border border-border/70 bg-card p-8 shadow-soft">
+          {/* Google Sign-In Button */}
           <button
             onClick={handleGoogleLogin}
             disabled={loading}
@@ -86,9 +136,105 @@ export default function LoginPage() {
             )}
           </button>
 
+          {/* Divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="bg-card px-2 text-muted-foreground">atau</span>
+            </div>
+          </div>
+
+          {/* Email/Password Form */}
+          <form onSubmit={handleEmailAuth} className="space-y-4">
+            <div>
+              <label className="text-sm font-medium text-foreground">Email</label>
+              <div className="relative mt-1.5">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="email@contoh.com"
+                  required
+                  className="w-full rounded-xl border border-border bg-background pl-10 pr-4 py-3 text-sm focus:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-foreground">Password</label>
+              <div className="relative mt-1.5">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  minLength={6}
+                  className="w-full rounded-xl border border-border bg-background pl-10 pr-12 py-3 text-sm focus:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Error/Success Messages */}
+            {error && (
+              <div className="rounded-xl bg-rose-500/10 border border-rose-500/20 p-3 text-sm text-rose-600 dark:text-rose-400">
+                {error}
+              </div>
+            )}
+            {success && (
+              <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3 text-sm text-emerald-600 dark:text-emerald-400">
+                {success}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={emailLoading}
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {emailLoading ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                <>
+                  {isSignUp ? "Buat Akun" : "Masuk"}
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* Toggle Sign In/Sign Up */}
           <div className="mt-6 text-center">
+            <p className="text-sm text-muted-foreground">
+              {isSignUp ? "Sudah punya akun?" : "Belum punya akun?"}{" "}
+              <button
+                onClick={() => {
+                  setIsSignUp(!isSignUp);
+                  setError(null);
+                  setSuccess(null);
+                }}
+                className="text-primary hover:underline font-medium"
+              >
+                {isSignUp ? "Masuk" : "Daftar sekarang"}
+              </button>
+            </p>
+          </div>
+
+          {/* Terms */}
+          <div className="mt-4 text-center">
             <p className="text-xs text-muted-foreground">
-              Dengan masuk, kamu menyetujui{" "}
+              Dengan {isSignUp ? "mendaftar" : "masuk"}, kamu menyetujui{" "}
               <a href="#" className="text-primary hover:underline">Syarat Penggunaan</a>
               {" "}dan{" "}
               <a href="#" className="text-primary hover:underline">Kebijakan Privasi</a>
