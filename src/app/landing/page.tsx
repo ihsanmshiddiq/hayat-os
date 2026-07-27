@@ -19,10 +19,11 @@ import {
   Crown,
   Gem,
   Timer,
-  Moon,
-  Sun,
 } from "lucide-react";
 import Link from "next/link";
+import GlareHover from "@/components/ui/glare-hover";
+import SlideTextButton from "@/components/ui/slide-text-button";
+import FloatingLines from "@/components/ui/floating-lines";
 
 const features = [
   {
@@ -135,13 +136,25 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        {/* Gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/10" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl" />
+      {/* Hero Section with FloatingLines Background */}
+      <section className="relative overflow-hidden min-h-[80vh] flex items-center">
+        {/* FloatingLines Background */}
+        <div className="absolute inset-0 opacity-30">
+          <FloatingLines
+            linesGradient={["#E945F5", "#2F4BC0", "#E945F5", "#0cf600"]}
+            animationSpeed={0.5}
+            interactive={false}
+            bendRadius={5}
+            bendStrength={-0.5}
+            parallax={true}
+            parallaxStrength={0.2}
+          />
+        </div>
         
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-32 relative">
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
+        
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-32 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={mounted ? { opacity: 1, y: 0 } : {}}
@@ -171,13 +184,11 @@ export default function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
+              <SlideTextButton
+                text="Mulai Perjalananmu"
+                hoverText="Daftar Gratis →"
                 href="/login"
-                className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground hover:opacity-90 transition-all shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30"
-              >
-                Mulai Perjalananmu
-                <ArrowRight className="h-5 w-5" />
-              </Link>
+              />
               <Link
                 href="#fitur"
                 className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3.5 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all"
@@ -213,7 +224,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Features Section with GlareHover Cards */}
       <section id="fitur" className="py-20 sm:py-28 border-t border-border/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <motion.div
@@ -238,14 +249,29 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={mounted ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.1 * index }}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className={`group rounded-2xl border ${feature.border} bg-card p-6 hover:shadow-lg transition-all`}
               >
-                <div className={`inline-flex items-center justify-center rounded-xl ${feature.bg} p-3 mb-4 group-hover:scale-110 transition-transform`}>
-                  <feature.icon className={`h-6 w-6 ${feature.color}`} />
-                </div>
-                <h3 className="text-display text-lg font-medium mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
+                <GlareHover
+                  width="100%"
+                  height="auto"
+                  background="hsl(var(--card))"
+                  borderRadius="16px"
+                  borderColor="hsl(var(--border))"
+                  glareColor="#ffffff"
+                  glareOpacity={0.1}
+                  glareAngle={-30}
+                  glareSize={200}
+                  transitionDuration={600}
+                  playOnce={false}
+                  className="!h-auto"
+                >
+                  <div className="p-6 text-left w-full">
+                    <div className={`inline-flex items-center justify-center rounded-xl ${feature.bg} p-3 mb-4`}>
+                      <feature.icon className={`h-6 w-6 ${feature.color}`} />
+                    </div>
+                    <h3 className="text-display text-lg font-medium mb-2">{feature.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
+                  </div>
+                </GlareHover>
               </motion.div>
             ))}
           </div>
@@ -276,30 +302,45 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={mounted ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.5 + i * 0.1 }}
-                className="rounded-2xl border border-border/70 bg-card p-6"
               >
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-amber-500 text-amber-500" />
-                  ))}
-                </div>
-                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">&ldquo;{t.text}&rdquo;</p>
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <span className="text-primary font-semibold text-sm">{t.name[0]}</span>
+                <GlareHover
+                  width="100%"
+                  height="auto"
+                  background="hsl(var(--card))"
+                  borderRadius="16px"
+                  borderColor="hsl(var(--border))"
+                  glareColor="#E945F5"
+                  glareOpacity={0.15}
+                  glareAngle={-45}
+                  glareSize={150}
+                  transitionDuration={500}
+                  className="!h-auto"
+                >
+                  <div className="p-6 text-left w-full">
+                    <div className="flex items-center gap-1 mb-4">
+                      {[...Array(5)].map((_, j) => (
+                        <Star key={j} className="h-4 w-4 fill-amber-500 text-amber-500" />
+                      ))}
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed">&ldquo;{t.text}&rdquo;</p>
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <span className="text-primary font-semibold text-sm">{t.name[0]}</span>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">{t.name}</p>
+                        <p className="text-xs text-muted-foreground">{t.role}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium">{t.name}</p>
-                    <p className="text-xs text-muted-foreground">{t.role}</p>
-                  </div>
-                </div>
+                </GlareHover>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Quran Quote */}
+      {/* Quran Quote with GlareHover */}
       <section className="py-20 sm:py-28 border-t border-border/60">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <motion.div
@@ -307,23 +348,53 @@ export default function LandingPage() {
             animate={mounted ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <div className="inline-flex items-center justify-center rounded-full bg-primary/10 p-4 mb-6">
-              <BookOpen className="h-8 w-8 text-primary" />
-            </div>
-            <p className="text-arabic text-3xl sm:text-4xl text-primary mb-6 leading-relaxed">
-              وَأَن لَّيْسَ لِلْإِنسَانِ إِلَّا مَا سَعَىٰ
-            </p>
-            <p className="text-lg text-muted-foreground italic mb-4">
-              &ldquo;Dan bahwa manusia hanya memperoleh apa yang telah ia usahakan.&rdquo;
-            </p>
-            <p className="text-sm text-muted-foreground/70">— An-Najm 53:39</p>
+            <GlareHover
+              width="100%"
+              height="auto"
+              background="hsl(var(--primary) / 0.05)"
+              borderRadius="24px"
+              borderColor="hsl(var(--primary) / 0.2)"
+              glareColor="#E945F5"
+              glareOpacity={0.2}
+              glareAngle={-30}
+              glareSize={300}
+              transitionDuration={800}
+              className="!h-auto"
+            >
+              <div className="p-12 sm:p-16 text-center w-full">
+                <div className="inline-flex items-center justify-center rounded-full bg-primary/10 p-4 mb-6">
+                  <BookOpen className="h-8 w-8 text-primary" />
+                </div>
+                <p className="text-arabic text-3xl sm:text-4xl text-primary mb-6 leading-relaxed">
+                  وَأَن لَّيْسَ لِلْإِنسَانِ إِلَّا مَا سَعَىٰ
+                </p>
+                <p className="text-lg text-muted-foreground italic mb-4">
+                  &ldquo;Dan bahwa manusia hanya memperoleh apa yang telah ia usahakan.&rdquo;
+                </p>
+                <p className="text-sm text-muted-foreground/70">— An-Najm 53:39</p>
+              </div>
+            </GlareHover>
           </motion.div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 sm:py-28 border-t border-border/60 bg-gradient-to-br from-primary/5 via-background to-primary/10">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      {/* CTA Section with FloatingLines */}
+      <section className="relative py-20 sm:py-28 border-t border-border/60 overflow-hidden">
+        {/* FloatingLines Background */}
+        <div className="absolute inset-0 opacity-20">
+          <FloatingLines
+            linesGradient={["#2F4BC0", "#E945F5", "#0cf600", "#2F4BC0"]}
+            animationSpeed={0.3}
+            interactive={false}
+            bendRadius={8}
+            bendStrength={-0.3}
+            parallax={true}
+            parallaxStrength={0.15}
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/90 to-background/80" />
+        
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={mounted ? { opacity: 1, y: 0 } : {}}
@@ -335,13 +406,13 @@ export default function LandingPage() {
             <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
               Gratis, privat, dan selamanya. Data kamu tersimpan di perangkatmu.
             </p>
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-medium text-primary-foreground hover:opacity-90 transition-all shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30"
-            >
-              Daftar dengan Google
-              <ArrowRight className="h-5 w-5" />
-            </Link>
+            <div className="flex justify-center">
+              <SlideTextButton
+                text="Daftar dengan Google"
+                hoverText="Mulai Sekarang →"
+                href="/login"
+              />
+            </div>
           </motion.div>
         </div>
       </section>
