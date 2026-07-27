@@ -21,7 +21,7 @@ export function AnalyticsView() {
   }));
 
   const quranHistory = (data?.quranHistory ?? []).map((q) => ({
-    day: new Date(q.date).toLocaleDateString("en-US", { weekday: "short" }),
+    day: new Date(q.date).toLocaleDateString("id-ID", { weekday: "short" }),
     pages: q.pagesRead,
     target: q.targetPages,
     minutes: q.minutesSpent,

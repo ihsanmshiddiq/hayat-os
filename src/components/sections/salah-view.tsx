@@ -168,7 +168,7 @@ export function SalahView() {
                 <div />
                 {history.map((p, i) => (
                   <div key={i} className="text-center text-[10px] text-muted-foreground">
-                    {new Date(p.date).toLocaleDateString("en-US", { weekday: "narrow" })}
+                    {new Date(p.date).toLocaleDateString("id-ID", { weekday: "narrow" })}
                   </div>
                 ))}
               </div>

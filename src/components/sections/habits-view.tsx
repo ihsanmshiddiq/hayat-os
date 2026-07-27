@@ -253,7 +253,7 @@ export function HabitsView() {
                       : intensity < 0.75
                         ? "bg-primary/70"
                         : "bg-primary";
-                const label = `${day.date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })} — ${day.done}/${day.total} done`;
+                const label = `${day.date.toLocaleDateString("id-ID", { weekday: "short", month: "short", day: "numeric" })} — ${day.done}/${day.total} done`;
                 return (
                   <motion.div
                     key={i}
@@ -274,7 +274,7 @@ export function HabitsView() {
                 <Flame className="h-3 w-3 text-amber-500" />
                 Hari terbaik: <span className="font-medium text-foreground">{heatmapStats.bestDay.done} habits</span>
                 <span className="text-muted-foreground/70">·</span>
-                <span>{heatmapStats.bestDay.date.toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
+                <span>{heatmapStats.bestDay.date.toLocaleDateString("id-ID", { month: "short", day: "numeric" })}</span>
               </span>
               <span className="text-primary font-medium">
                 {Math.round((heatmapStats.completedDays / 90) * 100)}% of last 90 days
@@ -351,7 +351,7 @@ export function HabitsView() {
                     <div key={i} className="flex-1">
                       <div className={cn("h-8 rounded-md", l.done ? clr.dot : "bg-muted")} />
                       <p className="text-[9px] text-center text-muted-foreground mt-1">
-                        {new Date(l.date).toLocaleDateString("en-US", { weekday: "narrow" })}
+                        {new Date(l.date).toLocaleDateString("id-ID", { weekday: "narrow" })}
                       </p>
                     </div>
                   ))}

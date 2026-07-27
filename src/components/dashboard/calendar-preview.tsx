@@ -35,7 +35,7 @@ export function CalendarPreview() {
     return map;
   }, [cal]);
 
-  const monthName = new Date(cursor.year, cursor.month, 1).toLocaleDateString("en-US", {
+  const monthName = new Date(cursor.year, cursor.month, 1).toLocaleDateString("id-ID", {
     month: "long",
     year: "numeric",
   });
@@ -143,7 +143,7 @@ export function CalendarPreview() {
             <div key={e.id} className="flex items-center gap-3">
               <div className="flex flex-col items-center w-10 shrink-0">
                 <span className="text-[10px] text-muted-foreground uppercase">
-                  {new Date(e.date).toLocaleDateString("en-US", { month: "short" })}
+                  {new Date(e.date).toLocaleDateString("id-ID", { month: "short" })}
                 </span>
                 <span className="text-display text-base font-semibold leading-none">
                   {new Date(e.date).getDate()}

@@ -388,7 +388,7 @@ function DhikrHistoryHeatmap({
                       level(day.total),
                       isToday && "ring-2 ring-primary"
                     )}
-                    title={`${d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}: ${day.total} counts`}
+                    title={`${d.toLocaleDateString("id-ID", { weekday: "short", month: "short", day: "numeric" })}: ${day.total} counts`}
                   >
                     {day.total > 0 && (
                       <span className="absolute inset-0 flex items-center justify-center text-[9px] font-bold text-white">

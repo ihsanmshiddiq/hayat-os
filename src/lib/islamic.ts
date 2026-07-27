@@ -219,7 +219,7 @@ export function getLocationTimezoneHours(lng: number | null | undefined): number
 /** Format a Date instant as a wall-clock time in a given timezone offset (hours). */
 export function formatTimeInZone(date: Date, tzHours: number): string {
   const shifted = new Date(date.getTime() + tzHours * 3600000);
-  return shifted.toLocaleTimeString("en-US", {
+  return shifted.toLocaleTimeString("id-ID", {
     hour: "numeric",
     minute: "2-digit",
     hour12: true,
@@ -290,7 +290,7 @@ export function formatCountdown(ms: number): string {
 }
 
 export function formatTime(date: Date): string {
-  return date.toLocaleTimeString("en-US", {
+  return date.toLocaleTimeString("id-ID", {
     hour: "numeric",
     minute: "2-digit",
     hour12: true,
@@ -391,7 +391,7 @@ export function getHijriDate(date = new Date()): HijriDate {
 }
 
 export function getGregorianDate(date = new Date()) {
-  return date.toLocaleDateString("en-US", {
+  return date.toLocaleDateString("id-ID", {
     weekday: "long",
     day: "numeric",
     month: "long",

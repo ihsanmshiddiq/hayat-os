@@ -245,11 +245,11 @@ export function JournalView() {
                             "bg-emerald-500/80",
                             isToday && "ring-2 ring-primary/40 ring-offset-1 ring-offset-background"
                           )}
-                          title={`${new Date(e.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}: ${moodObj?.label ?? "No mood"}`}
+                          title={`${new Date(e.date).toLocaleDateString("id-ID", { month: "short", day: "numeric" })}: ${moodObj?.label ?? "Tanpa mood"}`}
                         />
                       </div>
                       <span className="text-[9px] text-muted-foreground/70">
-                        {new Date(e.date).toLocaleDateString("en-US", { day: "numeric" })}
+                        {new Date(e.date).toLocaleDateString("id-ID", { day: "numeric" })}
                       </span>
                     </div>
                   );
@@ -288,7 +288,7 @@ export function JournalView() {
                       className={cn("w-full text-left rounded-xl p-3 transition-colors", selected ? "bg-primary/8" : "hover:bg-muted/50")}
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs font-medium">{d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</span>
+                        <span className="text-xs font-medium">{d.toLocaleDateString("id-ID", { weekday: "short", month: "short", day: "numeric" })}</span>
                         {moodObj ? <span className="text-base">{moodObj.emoji}</span> : null}
                       </div>
                       <p className="text-xs text-muted-foreground line-clamp-2 mt-1">

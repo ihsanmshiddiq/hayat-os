@@ -134,8 +134,8 @@ function EmptyState() {
 function ActivePlanHero({ plan }: { plan: KhatmaActive }) {
   const completionPct = plan.completionPct;
   const onPace = plan.onPace;
-  const startDateStr = new Date(plan.startDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-  const projectedEndStr = new Date(plan.projectedEndDate).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  const startDateStr = new Date(plan.startDate).toLocaleDateString("id-ID", { month: "short", day: "numeric", year: "numeric" });
+  const projectedEndStr = new Date(plan.projectedEndDate).toLocaleDateString("id-ID", { month: "short", day: "numeric" });
 
   return (
     <motion.section
@@ -406,7 +406,7 @@ function DailyPaceCard({ plan }: { plan: KhatmaActive }) {
                 {/* tooltip on hover */}
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-border bg-popover px-2 py-1 text-[10px] shadow-soft pointer-events-none">
                   <p className="font-medium tabular-nums">{h.pagesRead} / {h.target} pages</p>
-                  <p className="text-muted-foreground">{new Date(h.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p>
+                  <p className="text-muted-foreground">{new Date(h.date).toLocaleDateString("id-ID", { month: "short", day: "numeric" })}</p>
                 </div>
               </div>
             );
@@ -415,13 +415,13 @@ function DailyPaceCard({ plan }: { plan: KhatmaActive }) {
       </div>
 
       <div className="flex items-center justify-between text-[10px] text-muted-foreground">
-        <span>{history.length > 0 ? new Date(history[0].date).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—"}</span>
+        <span>{history.length > 0 ? new Date(history[0].date).toLocaleDateString("id-ID", { month: "short", day: "numeric" }) : "—"}</span>
         <div className="flex items-center gap-1.5">
           <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-primary/80" /> Met</span>
           <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-primary/40" /> Below</span>
           <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm border border-dashed border-amber-500/60" /> Target</span>
         </div>
-        <span>{history.length > 0 ? new Date(history[history.length - 1].date).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—"}</span>
+        <span>{history.length > 0 ? new Date(history[history.length - 1].date).toLocaleDateString("id-ID", { month: "short", day: "numeric" }) : "—"}</span>
       </div>
 
       {/* Today's quick log */}
@@ -510,7 +510,7 @@ function PlanHistory({ history }: { history: KhatmaHistoryItem[] }) {
             <div className="flex items-center gap-3 text-[11px] text-muted-foreground mb-3">
               <span className="flex items-center gap-1"><BookMarked className="h-3 w-3" /> {p.totalPages} pages</span>
               <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {p.targetDays}d</span>
-              <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {new Date(p.startDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
+              <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {new Date(p.startDate).toLocaleDateString("id-ID", { month: "short", day: "numeric" })}</span>
             </div>
 
             <div className="flex items-center gap-2">

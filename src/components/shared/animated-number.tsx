@@ -55,7 +55,7 @@ export function AnimatedNumber({
     typeof format === "function"
       ? format(display)
       : format
-      ? display.toLocaleString("en-US", {
+      ? display.toLocaleString("id-ID", {
           minimumFractionDigits: decimals,
           maximumFractionDigits: decimals,
         })

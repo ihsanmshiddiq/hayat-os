@@ -85,7 +85,7 @@ export function JournalQuickEntry() {
           <div>
             <h3 className="text-display text-lg font-medium tracking-tight">Jurnal Harian</h3>
             <p className="text-sm text-muted-foreground mt-0.5">
-              {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+              {new Date().toLocaleDateString("id-ID", { weekday: "long", month: "long", day: "numeric" })}
             </p>
           </div>
         </div>

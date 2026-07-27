@@ -67,7 +67,7 @@ export function CalendarView() {
 
   const daysInMonth = new Date(cursor.year, cursor.month + 1, 0).getDate();
   const firstDay = new Date(cursor.year, cursor.month, 1).getDay();
-  const monthName = new Date(cursor.year, cursor.month, 1).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+  const monthName = new Date(cursor.year, cursor.month, 1).toLocaleDateString("id-ID", { month: "long", year: "numeric" });
   const hijriMonth = getHijriDate(new Date(cursor.year, cursor.month, 1));
 
   const eventsByDay = React.useMemo(() => {
