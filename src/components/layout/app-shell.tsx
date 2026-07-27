@@ -11,6 +11,7 @@ import { KeyboardShortcutsOverlay, useGlobalKeyboardShortcuts } from "@/componen
 import { PageTransition } from "@/components/shared/page-transition";
 import { useAppStore } from "@/lib/store";
 import { useDashboard } from "@/lib/hooks";
+import { useSession } from "next-auth/react";
 import { DashboardView } from "@/components/dashboard/dashboard-view";
 
 // Lazy-load setiap section agar compile hanya yang aktif
@@ -34,14 +35,19 @@ const SettingsView = dynamic(() => import("@/components/sections/settings-view")
 export function AppShell() {
   const { activeView } = useAppStore();
   const { data } = useDashboard();
-  const userName = data?.user.name;
+  const { data: session } = useSession();
+
+  // Prefer Google session name, fallback to database user name
+  const sessionUser = session?.user;
+  const userName = sessionUser?.name ?? data?.user.name;
+  const userImage = sessionUser?.image ?? null;
   useGlobalKeyboardShortcuts();
 
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar userName={userName} />
+      <Sidebar userName={userName} userImage={userImage} />
       <div className="flex-1 flex flex-col min-w-0 lg:pb-0 pb-16">
-        <Topbar userName={userName} />
+        <Topbar userName={userName} userImage={userImage} />
         <main className="flex-1 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-[1400px] w-full mx-auto">
           <AnimatePresence mode="wait">
             <PageTransition key={activeView}>

@@ -12,7 +12,7 @@ import {
   Keyboard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   Sheet,
   SheetContent,
@@ -42,9 +42,10 @@ type CalcMethodKey = keyof typeof CALC_METHODS;
 
 interface TopbarProps {
   userName?: string | null;
+  userImage?: string | null;
 }
 
-export function Topbar({ userName }: TopbarProps) {
+export function Topbar({ userName, userImage }: TopbarProps) {
   const { setCommandOpen, setActiveView, activeView, toggleSidebar } = useAppStore();
   const now = useNow(1000);
   const { data } = useDashboard();
@@ -227,6 +228,9 @@ export function Topbar({ userName }: TopbarProps) {
             className="rounded-full ring-2 ring-transparent hover:ring-border transition-all"
           >
             <Avatar className="h-9 w-9 border border-border">
+              {userImage && (
+                <AvatarImage src={userImage} alt={userName ?? "Pengguna"} loading="lazy" />
+              )}
               <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
                 {initials}
               </AvatarFallback>

@@ -29,7 +29,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 import { useAppStore, type ViewKey } from "@/lib/store";
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   Tooltip,
   TooltipContent,
@@ -89,11 +89,13 @@ const NAV_GROUPS: NavGroup[] = [
 
 const NAV_ITEMS: NavItem[] = NAV_GROUPS.flatMap((g) => g.items);
 
-export function Sidebar({ userName }: { userName?: string | null }) {
+export function Sidebar({ userName, userImage }: { userName?: string | null; userImage?: string | null }) {
   const { activeView, setActiveView, sidebarCollapsed, toggleSidebar } = useAppStore();
   const { theme, setTheme } = useTheme();
   const mounted = useMounted();
   const [profileOpen, setProfileOpen] = React.useState(false);
+
+  const userEmail = "hayat@app";
 
   const badgeToneClass: Record<string, string> = {
     primary: "bg-primary/10 text-primary",
@@ -242,6 +244,9 @@ export function Sidebar({ userName }: { userName?: string | null }) {
               className="w-full flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-sidebar-accent transition-colors"
             >
               <Avatar className="h-8 w-8 border border-sidebar-border">
+                {userImage && (
+                  <AvatarImage src={userImage} alt={userName ?? "Pengguna"} loading="lazy" />
+                )}
                 <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
                   {initials}
                 </AvatarFallback>
@@ -250,7 +255,7 @@ export function Sidebar({ userName }: { userName?: string | null }) {
                 <>
                   <div className="min-w-0 flex-1 text-left">
                     <p className="truncate text-sm font-medium">{userName ?? "Anda"}</p>
-                    <p className="truncate text-[11px] text-muted-foreground">hayat@app</p>
+                    <p className="truncate text-[11px] text-muted-foreground">{userEmail}</p>
                   </div>
                   <ChevronDown
                     className={cn(
