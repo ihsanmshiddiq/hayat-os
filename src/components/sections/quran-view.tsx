@@ -87,7 +87,7 @@ export function QuranView() {
         <div className="flex items-center gap-2 mb-4">
           <Headphones className="h-4 w-4 text-primary" />
           <h3 className="text-display text-base font-medium">Dengarkan bacaan</h3>
-          <span className="text-[11px] text-muted-foreground">· Stream from Islamic Network CDN</span>
+          <span className="text-[11px] text-muted-foreground">· Stream dari CDN Islamic Network</span>
         </div>
         <RecitationPlayer initialSurah={currentSurah.number} />
       </SectionCard>
@@ -99,7 +99,7 @@ export function QuranView() {
             <div>
               <h3 className="text-display text-lg font-medium">Pembacaan Hari Ini</h3>
               <p className="text-sm text-muted-foreground mt-0.5">
-                {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+                {new Date().toLocaleDateString("id-ID", { weekday: "long", month: "long", day: "numeric" })}
               </p>
             </div>
             <ProgressRing value={pct} size={80} strokeWidth={8}>
@@ -133,21 +133,21 @@ export function QuranView() {
           <div className="grid sm:grid-cols-3 gap-3 mb-4">
             <Stat icon={<Bookmark className="h-3.5 w-3.5" />} label="Surah terakhir" value={quran?.lastSurah ?? "—"} />
             <Stat icon={<Target className="h-3.5 w-3.5" />} label="Terkhafal" value={`${quran?.memorizedAyahs ?? 0} ayahs`} />
-            <Stat icon={<Clock className="h-3.5 w-3.5" />} label="Waktu hari ini" value={`${quran?.minutesSpent ?? 0} min`} />
+            <Stat icon={<Clock className="h-3.5 w-3.5" />} label="Waktu hari ini" value={`${quran?.minutesSpent ?? 0} mnt`} />
           </div>
 
           {/* 14-day chart */}
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Halaman 14 hari</span>
-              <span className="text-[11px] text-muted-foreground tabular-nums">{totalPages} pages · {totalMinutes} min</span>
+              <span className="text-[11px] text-muted-foreground tabular-nums">{totalPages} halaman · {totalMinutes} mnt</span>
             </div>
             <div className="flex items-end justify-between gap-1 h-24">
               {history.slice(-14).map((h, i) => {
                 const max = Math.max(...history.map((x) => x.pagesRead), 1);
                 const p = (h.pagesRead / max) * 100;
                 return (
-                  <motion.div key={i} initial={{ height: 0 }} animate={{ height: `${p}%` }} transition={{ duration: 0.5, delay: i * 0.03 }} className={cn("flex-1 rounded-sm", h.pagesRead >= h.targetPages ? "bg-emerald-500/80" : "bg-emerald-500/30")} title={`${h.pagesRead} pages`} />
+                  <motion.div key={i} initial={{ height: 0 }} animate={{ height: `${p}%` }} transition={{ duration: 0.5, delay: i * 0.03 }} className={cn("flex-1 rounded-sm", h.pagesRead >= h.targetPages ? "bg-emerald-500/80" : "bg-emerald-500/30")} title={`${h.pagesRead} halaman`} />
                 );
               })}
             </div>
@@ -183,7 +183,7 @@ export function QuranView() {
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-muted-foreground">Terkhafal ayahs (today)</label>
+              <label className="text-xs font-medium text-muted-foreground">Terhafal ayahs (hari ini)</label>
               <input
                 type="number"
                 min={0}

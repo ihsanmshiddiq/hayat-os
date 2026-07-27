@@ -30,7 +30,7 @@ const TIERS = [
 function getMotivationalMessage(percent: number): string {
   if (percent >= 100) return "Alhamdulillah, selesai!";
   if (percent >= 75) return "Hampir sampai!";
-  if (percent >= 50) return "Subhan'Allah, halfway there!";
+  if (percent >= 50) return "Subhan'Allah, setengah jalan!";
   if (percent >= 25) return "Masha'Allah!";
   return "Teruskan!";
 }
@@ -413,7 +413,7 @@ export function AsmaView() {
                   )}
                 >
                   <CheckCircle2 className={cn("h-3.5 w-3.5", memorized.has(selected.number) && "fill-current")} />
-                  {memorized.has(selected.number) ? "Memorized" : "Tandai sudah dihafal"}
+                  {memorized.has(selected.number) ? "Sudah dihafal" : "Tandai sudah dihafal"}
                 </button>
                 <button
                   onClick={() => copyName(selected)}

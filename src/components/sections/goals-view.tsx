@@ -62,7 +62,7 @@ export function GoalsView() {
                   <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Contoh: Hafal Juz Amma" className="mt-1.5" />
                 </div>
                 <div>
-                  <Label>Category</Label>
+                  <Label>Kategori</Label>
                   <div className="mt-1.5 flex flex-wrap gap-2">
                     {CATEGORIES.map((c) => (
                       <button key={c.key} onClick={() => setCategory(c.key)} className={cn("rounded-lg px-3 py-1.5 text-xs font-medium border", category === c.key ? cn(c.bg, c.text, "border-transparent") : "border-border hover:bg-muted")}>
@@ -72,7 +72,7 @@ export function GoalsView() {
                   </div>
                 </div>
                 <div>
-                  <Label>Current milestone</Label>
+                  <Label>Milestone saat ini</Label>
                   <Input value={milestone} onChange={(e) => setMilestone(e.target.value)} placeholder="Contoh: Setengah jalan An-Naba" className="mt-1.5" />
                 </div>
                 <Button onClick={submit} className="w-full">Buat tujuan</Button>
@@ -91,7 +91,7 @@ export function GoalsView() {
       </div>
 
       {active.length === 0 && done.length === 0 ? (
-        <SectionCard><div className="text-center py-12"><p className="text-display text-lg font-medium">Belum ada tujuan</p><p className="text-sm text-muted-foreground mt-1">Set your first intention.</p></div></SectionCard>
+        <SectionCard><div className="text-center py-12"><p className="text-display text-lg font-medium">Belum ada tujuan</p><p className="text-sm text-muted-foreground mt-1">Tetapkan niat pertamamu.</p></div></SectionCard>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <AnimatePresence>
@@ -140,7 +140,7 @@ export function GoalsView() {
                           <Calendar className="h-3 w-3" />
                           {g.progress >= 100 ? "Selesai" : g.progress >= 75 ? "Hampir selesai" : g.progress >= 50 ? "Setengah jalan" : g.progress >= 25 ? "Sedang berjalan" : "Baru mulai"}
                         </span>
-                        <span className="text-[10px] font-medium text-primary">{100 - g.progress}% to go</span>
+                        <span className="text-[10px] font-medium text-primary">{100 - g.progress}% lagi</span>
                       </div>
                     </div>
                   </SectionCard>

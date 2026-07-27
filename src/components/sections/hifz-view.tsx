@@ -92,7 +92,7 @@ export function HifzView() {
       { surahNumber: surah.number, reviewed: true },
       {
         onSuccess: () => {
-          toast.success(`Marked ${surah.name} as reviewed today`);
+          toast.success(`${surah.name} ditandai sudah diulang hari ini`);
           setSelected((prev) =>
             prev && prev.number === surah.number
               ? { ...prev, lastReviewed: new Date().toISOString(), daysUntilReview: 30 }
@@ -193,8 +193,8 @@ export function HifzView() {
               </div>
               <p className="text-xs text-muted-foreground pt-2 border-t border-border/50">
                 {stats && stats.dueForReview > 0
-                  ? `${stats.dueForReview} surah${stats.dueForReview === 1 ? "" : "s"} need revision. Open one to begin.`
-                  : "Semua caught up. Maintain your review schedule — every 30 days per surah."}
+                  ? `${stats.dueForReview} surah${stats.dueForReview === 1 ? "" : "s"} perlu diulang. Buka salah satu untuk memulai.`
+                  : "Semua sudah diulang. Pertahankan jadwalmu — setiap 30 hari per surah."}
               </p>
             </div>
           </div>
@@ -265,7 +265,7 @@ export function HifzView() {
               </span>
               <div>
                 <h3 className="text-display text-sm font-medium">Peta Menghafal</h3>
-                <p className="text-[11px] text-muted-foreground">Semua 114 surahs at a glance</p>
+                <p className="text-[11px] text-muted-foreground">Semua 114 surah sekilas</p>
               </div>
             </div>
             <div className="hidden sm:flex items-center gap-3 text-[10px] text-muted-foreground">
@@ -344,8 +344,8 @@ export function HifzView() {
           {filtered.map((surah, i) => {
             const meta = HIFZ_STATUS_META[surah.status];
             const isMenghafal = surah.status === "in_progress";                const progress = isMenghafal ? (surah.memorizedAyahs / surah.ayahs) * 100 : surah.status === "memorized" ? 100 : 0;
-            const isOverdue = surah.status === "Memorized" && surah.daysUntilReview <= 0;
-            return (
+            const isOverdue =surah.status === "memorized" && surah.daysUntilReview <= 0;
+  return (
               <motion.button
                 key={surah.number}
                 initial={{ opacity: 0, y: 6 }}
@@ -431,8 +431,8 @@ function SurahDetailModal({
 }) {
   const meta = HIFZ_STATUS_META[surah.status];
   const progress = surah.status === "memorized" ? 100 : (surah.memorizedAyahs / surah.ayahs) * 100;
-  const isOverdue = surah.status === "Memorized" && surah.daysUntilReview <= 0;
-  const reviewDate = surah.lastReviewed ? new Date(surah.lastReviewed).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : null;
+  const isOverdue =surah.status === "memorized" && surah.daysUntilReview <= 0;
+  const reviewDate = surah.lastReviewed ? new Date(surah.lastReviewed).toLocaleDateString("id-ID", { month: "short", day: "numeric", year: "numeric" }) : null;
 
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -484,7 +484,7 @@ function SurahDetailModal({
         <div className="p-6 space-y-5">
           {/* Status pills */}
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Memorization Status</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Status Menghafal</p>
             <div className="grid grid-cols-2 gap-2">
               {(Object.keys(HIFZ_STATUS_META) as HifzStatus[]).map((s) => {
                 const m = HIFZ_STATUS_META[s];
@@ -515,15 +515,15 @@ function SurahDetailModal({
             <div className="rounded-xl border border-border/60 bg-muted/30 px-3 py-2.5 text-center">
               <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Terkhafal</p>
               <p className="text-display text-lg font-semibold tabular-nums">{surah.memorizedAyahs}</p>
-              <p className="text-[10px] text-muted-foreground">of {surah.ayahs}</p>
+              <p className="text-[10px] text-muted-foreground">dari {surah.ayahs}</p>
             </div>
             <div className="rounded-xl border border-border/60 bg-muted/30 px-3 py-2.5 text-center">
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Last Review</p>
+              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Terakhir Diulang</p>
               <p className="text-display text-sm font-semibold">{reviewDate ?? "—"}</p>
-              <p className="text-[10px] text-muted-foreground">{surah.lastReviewed ? "ago" : "not yet"}</p>
+              <p className="text-[10px] text-muted-foreground">{surah.lastReviewed ? "yang lalu" : "belum"}</p>
             </div>
             <div className="rounded-xl border border-border/60 bg-muted/30 px-3 py-2.5 text-center">
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Next Review</p>
+              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Ulangan Berikutnya</p>
               <p className={cn(
                 "text-display text-sm font-semibold tabular-nums",
                 isOverdue ? "text-rose-600 dark:text-rose-400" : "text-foreground"
@@ -534,7 +534,7 @@ function SurahDetailModal({
                     : `${surah.daysUntilReview}d`
                   : "—"}
               </p>
-              <p className="text-[10px] text-muted-foreground">{surah.lastReviewed ? (isOverdue ? "review now" : "until due") : "not started"}</p>
+              <p className="text-[10px] text-muted-foreground">{surah.lastReviewed ? (isOverdue ? "ulang sekarang" : "sampai jatuh tempo") : "belum dimulai"}</p>
             </div>
           </div>
 

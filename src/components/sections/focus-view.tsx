@@ -252,7 +252,7 @@ export function FocusView() {
               </div>
               {completedToday > 0 && (
                 <span className="text-xs text-muted-foreground">
-                  <span className="text-primary font-semibold">{completedToday}</span> completed today
+                  <span className="text-primary font-semibold">{completedToday}</span> selesai hari ini
                 </span>
               )}
             </div>
@@ -501,12 +501,12 @@ export function FocusView() {
               <TimerIcon className="h-4 w-4 text-muted-foreground" />
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <StatTile label="Today" value={stats?.todayCount ?? 0} suffix="sessions" tint="text-primary" bg="bg-primary/10" animate />
-              <StatTile label="Today" value={Math.round((stats?.todaySeconds ?? 0) / 60)} suffix="min" tint="text-emerald-600 dark:text-emerald-400" bg="bg-emerald-500/10" animate />
-              <StatTile label="Streak" value={stats?.streak ?? 0} suffix="days" tint="text-amber-600 dark:text-amber-400" bg="bg-amber-500/10" animate icon={<Flame className="h-3.5 w-3.5" />} />
-              <StatTile label="Lifetime" value={stats?.totalSessions ?? 0} suffix="total" tint="text-rose-600 dark:text-rose-400" bg="bg-rose-500/10" animate />
-              <StatTile label="Selesai" value={stats?.completedSessions ?? 0} suffix="done" tint="text-teal-600 dark:text-teal-400" bg="bg-teal-500/10" animate />
-              <StatTile label="Avg" value={stats?.avgMinutesPerSession ?? 0} suffix="min/sess" tint="text-slate-600 dark:text-slate-400" bg="bg-slate-500/10" animate />
+              <StatTile label="Hari ini" value={stats?.todayCount ?? 0} suffix="sesi" tint="text-primary" bg="bg-primary/10" animate />
+              <StatTile label="Hari ini" value={Math.round((stats?.todaySeconds ?? 0) / 60)} suffix="mnt" tint="text-emerald-600 dark:text-emerald-400" bg="bg-emerald-500/10" animate />
+              <StatTile label="Runtutan" value={stats?.streak ?? 0} suffix="hari" tint="text-amber-600 dark:text-amber-400" bg="bg-amber-500/10" animate icon={<Flame className="h-3.5 w-3.5" />} />
+              <StatTile label="Sepanjang waktu" value={stats?.totalSessions ?? 0} suffix="total" tint="text-rose-600 dark:text-rose-400" bg="bg-rose-500/10" animate />
+              <StatTile label="Selesai" value={stats?.completedSessions ?? 0} suffix="selesai" tint="text-teal-600 dark:text-teal-400" bg="bg-teal-500/10" animate />
+              <StatTile label="Rata-rata" value={stats?.avgMinutesPerSession ?? 0} suffix="mnt/sesi" tint="text-slate-600 dark:text-slate-400" bg="bg-slate-500/10" animate />
             </div>
           </SectionCard>
 
@@ -565,7 +565,7 @@ export function FocusView() {
                 </div>
               </div>
               <p className="text-xs text-muted-foreground mb-3">
-                Set your niyyah before you begin. Click to use one.
+                Tetapkan niatmu sebelum memulai. Klik untuk menggunakannya.
               </p>
               <div className="flex flex-col gap-1.5">
                 {FOCUS_INTENTIONS.slice(0, 6).map((intention_text) => (
@@ -573,7 +573,7 @@ export function FocusView() {
                     key={intention_text}
                     onClick={() => {
                       setIntention(intention_text);
-                      toast.success("Intention set", { description: intention_text });
+                      toast.success("Niat ditetapkan", { description: intention_text });
                     }}
                     className={cn(
                       "group flex items-start gap-2 rounded-lg border px-3 py-2 text-left text-xs transition-all",
@@ -600,7 +600,7 @@ export function FocusView() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-display text-lg font-medium">Tren fokus 14 hari</h3>
-            <p className="text-sm text-muted-foreground mt-0.5">Minutes spent in focused work each day.</p>
+            <p className="text-sm text-muted-foreground mt-0.5">Menit dihabiskan dalam fokus setiap hari.</p>
           </div>
           <Sparkles className="h-4 w-4 text-muted-foreground" />
         </div>

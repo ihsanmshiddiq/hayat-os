@@ -37,13 +37,13 @@ function downloadBlob(filename: string, content: string, type = "text/markdown;c
 function exportSingleNote(note: Note) {
   const filename = `${sanitizeFilename(note.title)}.md`;
   const body = note.tags.length > 0 ? `\n\n---\n**Tags:** ${note.tags.map((t) => `\#${t}`).join(" ")}\n` : "";
-  downloadBlob(filename, `# ${note.title || "Untitled"}\n\n${note.content}${body}`);
-  toast.success(`Exported “${note.title || "Untitled"}”`);
+  downloadBlob(filename, `# ${note.title || "Tanpa Judul"}\n\n${note.content}${body}`);
+  toast.success(`Exported “${note.title || "Tanpa Judul"}”`);
 }
 
 function exportAllNotes(notes: Note[]) {
   if (notes.length === 0) {
-    toast.error("No notes to export");
+    toast.error("Tidak ada catatan untuk diekspor");
     return;
   }
   const sorted = [...notes].sort((a, b) => {
@@ -55,12 +55,12 @@ function exportAllNotes(notes: Note[]) {
     .map((n) => {
       const tags = n.tags.length > 0 ? `\n\n**Tags:** ${n.tags.map((t) => `\#${t}`).join(" ")}` : "";
       const pinned = n.pinned ? " \u{1F4CC}" : "";
-      return `# ${n.title || "Untitled"}${pinned}\n\n${n.content}${tags}`;
+      return `# ${n.title || "Tanpa Judul"}${pinned}\n\n${n.content}${tags}`;
     })
     .join("\n\n---\n\n");
   const header = `<!-- Hayat Notes Export · ${date} · ${sorted.length} notes -->\n\n`;
   downloadBlob(`hayat-notes-${date}.md`, header + body);
-  toast.success(`Exported ${sorted.length} notes`);
+  toast.success(`Berhasil mengekspor ${sorted.length} catatan`);
 }
 
 export function NotesView() {
@@ -137,7 +137,7 @@ export function NotesView() {
                     <button
                       onClick={() => {
                         if (selected) exportSingleNote(selected);
-                        else toast.error("Select a note first");
+                        else toast.error("Pilih catatan terlebih dahulu");
                         setExportOpen(false);
                       }}
                       disabled={!selected}
@@ -146,7 +146,7 @@ export function NotesView() {
                       <FileText className="h-4 w-4 mt-0.5 text-primary shrink-0" />
                       <div className="min-w-0">
                         <p className="text-sm font-medium">Export current note</p>
-                        <p className="text-[11px] text-muted-foreground truncate">{(selected?.title || "No note selected").slice(0, 30)}</p>
+                        <p className="text-[11px] text-muted-foreground truncate">{(selected?.title || "Tidak ada catatan dipilih").slice(0, 30)}</p>
                       </div>
                     </button>
                     <button
@@ -221,7 +221,7 @@ export function NotesView() {
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-1.5 min-w-0 flex-1">
                       {n.pinned ? <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" aria-label="Disematkan" /> : null}
-                      <p className="text-sm font-medium truncate flex-1">{n.title || "Untitled"}</p>
+                      <p className="text-sm font-medium truncate flex-1">{n.title || "Tanpa Judul"}</p>
                     </div>
                     {n.pinned ? <Pin className="h-3.5 w-3.5 text-primary shrink-0" /> : null}
                   </div>
@@ -230,7 +230,7 @@ export function NotesView() {
                   </p>
                   <div className="flex items-center gap-2 mt-2">
                     <span className="text-[10px] text-muted-foreground">{n.folder}</span>
-                    <span className="text-[10px] text-muted-foreground/60">· {countWords(n.content)} words</span>
+                    <span className="text-[10px] text-muted-foreground/60">· {countWords(n.content)} kata</span>
                     {n.tags.slice(0, 2).map((t) => (
                       <span key={t} className="rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">#{t}</span>
                     ))}
@@ -314,11 +314,11 @@ function NoteEditor({
         <Tag className="h-3.5 w-3.5 text-muted-foreground" />
         <Input value={tags} onChange={(e) => setTags(e.target.value)} placeholder="tags, comma, separated" className="h-8 text-xs" />
         <span className="ml-auto flex items-center gap-2 text-[11px] text-muted-foreground tabular-nums">
-          <span className="text-foreground/70 font-medium">{wordCount}</span> words
+          <span className="text-foreground/70 font-medium">{wordCount}</span> kata
           <span className="text-muted-foreground/40">·</span>
-          <span>{charCount}</span> chars
+          <span>{charCount}</span> karakter
           <span className="text-muted-foreground/40">·</span>
-          <span>~{readMinutes} min read</span>
+          <span>~{readMinutes} mnt baca</span>
         </span>
       </div>
     </SectionCard>

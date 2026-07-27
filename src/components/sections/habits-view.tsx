@@ -124,7 +124,7 @@ export function HabitsView() {
                   <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Tahajjud" className="mt-1.5" />
                 </div>
                 <div>
-                  <Label>Category</Label>
+                  <Label>Kategori</Label>
                   <div className="mt-1.5 flex flex-wrap gap-2">
                     {HABIT_CATEGORIES.map((cat) => {
                       const CatIcon = CATEGORY_ICONS[cat.icon] ?? Circle;
@@ -166,11 +166,11 @@ export function HabitsView() {
                 </div>
                 <div>
                   <Label>Pemicu (kapan)</Label>
-                  <Input value={cue} onChange={(e) => setCue(e.target.value)} placeholder="After Fajr" className="mt-1.5" />
+                  <Input value={cue} onChange={(e) => setCue(e.target.value)} placeholder="Setelah Subuh" className="mt-1.5" />
                 </div>
                 <div>
                   <Label>Reward</Label>
-                  <Input value={reward} onChange={(e) => setReward(e.target.value)} placeholder="A moment of stillness" className="mt-1.5" />
+                  <Input value={reward} onChange={(e) => setReward(e.target.value)} placeholder="Seketika ketenangan" className="mt-1.5" />
                 </div>
                 <Button onClick={submit} className="w-full">Buat kebiasaan</Button>
               </div>

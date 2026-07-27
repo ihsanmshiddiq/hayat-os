@@ -7,6 +7,9 @@ import { ArrowRight, Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
+// Prevent prerender - Supabase env vars may not be available at build time
+export const dynamic = "force-dynamic";
+
 export default function LoginPage() {
   const [loading, setLoading] = React.useState(false);
   const [emailLoading, setEmailLoading] = React.useState(false);

@@ -15,7 +15,7 @@ export function AnalyticsView() {
   const { data } = useDashboard();
 
   const prayerHistory = (data?.prayerHistory ?? []).map((p) => ({
-    day: new Date(p.date).toLocaleDateString("en-US", { weekday: "short" }),
+    day: new Date(p.date).toLocaleDateString("id-ID", { weekday: "short" }),
     prayers: p.count,
     sunnah: p.sunnah,
   }));
@@ -43,13 +43,13 @@ export function AnalyticsView() {
 
   const streakDays = data?.today.streak ?? 0;
   const kpis = [
-    { label: "Konsistensi shalat", value: `${prayerPct}%`, sub: `${totalPrayers}/${totalPossible} prayers`, icon: Activity, tint: "text-emerald-500", bg: "bg-emerald-500/10" },
-    { label: "Hari baca Quran", value: `${quranPct}%`, sub: `${quranDays}/${quranHistory.length} days`, icon: BookOpen, tint: "text-amber-500", bg: "bg-amber-500/10" },
-    { label: "Penyelesaian kebiasaan", value: `${habitPct}%`, sub: `${habitLogs.filter((l) => l.done).length}/${habitLogs.length} logs`, icon: Flame, tint: "text-rose-500", bg: "bg-rose-500/10" },
+    { label: "Konsistensi shalat", value: `${prayerPct}%`, sub: `${totalPrayers}/${totalPossible} shalat`, icon: Activity, tint: "text-emerald-500", bg: "bg-emerald-500/10" },
+    { label: "Hari baca Quran", value: `${quranPct}%`, sub: `${quranDays}/${quranHistory.length} hari`, icon: BookOpen, tint: "text-amber-500", bg: "bg-amber-500/10" },
+    { label: "Penyelesaian kebiasaan", value: `${habitPct}%`, sub: `${habitLogs.filter((l) => l.done).length}/${habitLogs.length} catatan`, icon: Flame, tint: "text-rose-500", bg: "bg-rose-500/10" },
     {
       label: "Runtutan saat ini",
       value: streakDays > 0 ? `${streakDays}d` : "—",
-      sub: streakDays > 0 ? "prayer streak" : "start one today",
+      sub: streakDays > 0 ? "shalat berturut-turut" : "mulai hari ini",
       icon: TrendingUp,
       tint: streakDays > 0 ? "text-sky-500" : "text-muted-foreground",
       bg: streakDays > 0 ? "bg-sky-500/10" : "bg-muted",
@@ -109,7 +109,7 @@ export function AnalyticsView() {
 
         <SectionCard>
           <h3 className="text-display text-lg font-medium mb-1">Bacaan Al-Quran</h3>
-          <p className="text-sm text-muted-foreground mb-5">Pages read vs target</p>
+          <p className="text-sm text-muted-foreground mb-5">Halaman dibaca vs target</p>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={quranHistory} margin={{ left: -20, right: 8, top: 8 }}>
@@ -129,7 +129,7 @@ export function AnalyticsView() {
         {/* Habit radar */}
         <SectionCard>
           <h3 className="text-display text-lg font-medium mb-1">Konsistensi Kebiasaan</h3>
-          <p className="text-sm text-muted-foreground mb-5">Completion rate by habit</p>
+          <p className="text-sm text-muted-foreground mb-5">Tingkat penyelesaian per kebiasaan</p>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={radarData} outerRadius="75%">
@@ -145,7 +145,7 @@ export function AnalyticsView() {
         {/* Sunnah trend */}
         <SectionCard>
           <h3 className="text-display text-lg font-medium mb-1">Tren Sunnah</h3>
-          <p className="text-sm text-muted-foreground mb-5">Extra prayers per day</p>
+          <p className="text-sm text-muted-foreground mb-5">Shalat sunnah per hari</p>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={prayerHistory} margin={{ left: -20, right: 8, top: 8 }}>

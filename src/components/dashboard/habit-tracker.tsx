@@ -32,7 +32,7 @@ export function HabitTracker() {
         <div>
           <h3 className="text-display text-lg font-medium tracking-tight">Habit Tracker</h3>
           <p className="text-sm text-muted-foreground mt-0.5">
-            {doneToday}/{habits.length} done today
+            {doneToday}/{habits.length} selesai hari ini
           </p>
         </div>
         <button
@@ -80,10 +80,10 @@ export function HabitTracker() {
                   <div className="flex items-center gap-3 mt-1.5">
                     <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
                       <Flame className="h-3 w-3 text-amber-500" />
-                      <span className="tabular-nums">{h.streak}d streak</span>
+                      <span className="tabular-nums">{h.streak}d berturut-turut</span>
                     </span>
                     <span className="text-[11px] text-muted-foreground">
-                      {completed7}/7 this week
+                      {completed7}/7 minggu ini
                     </span>
                   </div>
                   {/* Weekly trend dots */}
@@ -107,7 +107,7 @@ export function HabitTracker() {
 
       {habits.length === 0 ? (
         <div className="text-center py-10 text-sm text-muted-foreground">
-          No habits yet. Build your first routine.
+          Belum ada kebiasaan. Bangun rutinitas pertamamu.
         </div>
       ) : null}
     </motion.div>

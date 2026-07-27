@@ -33,11 +33,11 @@ const SCOPE_OPTIONS: {
   arabic: string;
 }[] = [
   { key: "full_quran", label: "Al-Quran Penuh", description: "Semua 604 halaman, Khatma lengkap", pages: 604, recommendedDays: 30, arabic: "القرآن كاملاً" },
-  { key: "juz_amma", label: "Juz Amma", description: "The 30th Juz — short surahs", pages: 22, recommendedDays: 7, arabic: "جزء عمَّ" },
+  { key: "juz_amma", label: "Juz Amma", description: "Juz ke-30 — surah pendek", pages: 22, recommendedDays: 7, arabic: "جزء عمَّ" },
   { key: "last_30", label: "30 Halaman Terakhir", description: "Tahap akhir Al-Quran", pages: 30, recommendedDays: 10, arabic: "آخر ثلاثون صفحة" },
   { key: "first_5_juz", label: "5 Juz Pertama", description: "Dari Al-Fatihah sampai An-Nisa", pages: 100, recommendedDays: 14, arabic: "أول خمسة أجزاء" },
-  { key: "al_kahf", label: "Surah Al-Kahf", description: "The Cave — 12 pages", pages: 12, recommendedDays: 4, arabic: "سورة الكهف" },
-  { key: "al_mulk", label: "Surah Al-Mulk", description: "The Sovereignty — 3 pages", pages: 3, recommendedDays: 1, arabic: "سورة الملك" },
+  { key: "al_kahf", label: "Surah Al-Kahf", description: "Al-Kahf — 12 halaman", pages: 12, recommendedDays: 4, arabic: "سورة الكهف" },
+  { key: "al_mulk", label: "Surah Al-Mulk", description: "Al-Mulk — 3 halaman", pages: 3, recommendedDays: 1, arabic: "سورة الملك" },
 ];
 
 export function KhatmaView() {
@@ -91,21 +91,20 @@ function EmptyState() {
         </motion.div>
         <h3 className="text-display text-2xl font-medium mb-2">Mulai Perjalanan Khatma</h3>
         <p className="text-sm text-muted-foreground max-w-md mx-auto mb-6">
-          A <span className="font-medium text-foreground">Khatma</span> is a complete reading of the
+          <span className="font-medium text-foreground">Khatma</span> adalah pembacaan lengkap
           Al-Quran dari awal sampai akhir. Tetapkan target, pilih ritmemu, dan bangun hubungan harian
-          with the words of Allah ﷻ.
+          dengan kalamullah ﷻ.
         </p>
         <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground mb-8">
           <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-          <span>"Whoever reads a letter from the Book of Allah earns a good deed, and each is multiplied by ten." — Tirmidhi</span>
+          <span>"Siapa yang membaca satu huruf dari Kitabullah, maka baginya satu kebaikan, dan setiap kebaikan dilipatgandakan sepuluh kali." — Tirmidzi</span>
         </div>
         <NewPlanDialog triggerLabel="Buat Khatma pertamamu" />
       </div>
 
       <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
         {[
-          { icon: Target, title: "Tetapkan target", text: "Pilih Al-Quran penuh, Juz Amma, atau surah tertentu" },
-          { icon: TrendingUp, title: "Lacak kecepatan harian", text: "Visualize your reading streak and projected completion" },
+          { icon: Target, title: "Tetapkan target", text: "Pilih Al-Quran penuh, Juz Amma, atau surah tertentu" },{icon: TrendingUp, title: "Lacak kecepatan harian", text: "Lihat runtutan bacaan dan proyeksi penyelesaian" },
           { icon: Trophy, title: "Selesaikan dengan barakah", text: "Finish with a beautiful 30-Juz progress map" },
         ].map((f, i) => {
           const Icon = f.icon;
@@ -154,7 +153,7 @@ function ActivePlanHero({ plan }: { plan: KhatmaActive }) {
             <ProgressRing value={completionPct} size={132} strokeWidth={10}>
               <div className="text-center">
                 <AnimatedNumber value={completionPct} className="text-display text-3xl font-semibold tabular-nums" suffix="%" />
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wider mt-0.5">complete</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider mt-0.5">selesai</p>
               </div>
             </ProgressRing>
             <div className="mt-3 flex items-center gap-2">
@@ -184,9 +183,9 @@ function ActivePlanHero({ plan }: { plan: KhatmaActive }) {
               </span>
             </div>
             <p className="text-sm text-muted-foreground mb-5">
-              Started {startDateStr}
+              Dimulai {startDateStr}
               {" · "}
-              {plan.pagesReadSinceStart} / {plan.totalPages} pages read
+              {plan.pagesReadSinceStart} / {plan.totalPages} halaman dibaca
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -194,14 +193,14 @@ function ActivePlanHero({ plan }: { plan: KhatmaActive }) {
                 icon={<BookMarked className="h-3.5 w-3.5" />}
                 label="Target hari ini"
                 value={`${plan.dailyTarget}`}
-                unit="pages"
+                unit="halaman"
                 tone="primary"
               />
               <StatTile
                 icon={<TrendingUp className="h-3.5 w-3.5" />}
                 label="Rata-rata"
                 value={`${plan.avgPacePerDay}`}
-                unit="pages/day"
+                unit="halaman/hari"
                 tone={onPace ? "primary" : "amber"}
               />
               <StatTile
@@ -279,13 +278,13 @@ function JuzProgressGrid({ plan }: { plan: KhatmaActive }) {
     <SectionCard>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-display text-lg font-medium">Memorization Map</h3>
+          <h3 className="text-display text-lg font-medium">Peta Menghafal</h3>
           <p className="text-xs text-muted-foreground mt-0.5">30 Juz · progres visual melalui Al-Quran</p>
         </div>
         <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
-          <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-muted" /> Not read</span>
-          <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-primary/40" /> In progress</span>
-          <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-primary" /> Complete</span>
+          <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-muted" /> Belum dibaca</span>
+          <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-primary/40" /> Sedang berlangsung</span>
+          <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-primary" /> Selesai</span>
         </div>
       </div>
 
@@ -340,13 +339,13 @@ function JuzProgressGrid({ plan }: { plan: KhatmaActive }) {
           <p className="text-display text-xl font-semibold tabular-nums text-primary">
             {juz.filter(j => j.pct >= 100).length}
           </p>
-          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Juz complete</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Juz selesai</p>
         </div>
         <div>
           <p className="text-display text-xl font-semibold tabular-nums text-amber-600 dark:text-amber-400">
             {juz.filter(j => j.pct > 0 && j.pct < 100).length}
           </p>
-          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">In progress</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Sedang berlangsung</p>
         </div>
         <div>
           <p className="text-display text-xl font-semibold tabular-nums text-muted-foreground">
@@ -500,8 +499,7 @@ function PlanHistory({ history }: { history: KhatmaHistoryItem[] }) {
               </div>
               {p.completedAt ? (
                 <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
-                  <Trophy className="h-2.5 w-2.5" /> Complete
-                </span>
+                  <Trophy className="h-2.5 w-2.5" />Selesai</span>
               ) : (
                 <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                   Paused
