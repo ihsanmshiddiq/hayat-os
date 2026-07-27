@@ -530,7 +530,7 @@ function SurahDetailModal({
               )}>
                 {surah.lastReviewed
                   ? surah.daysUntilReview <= 0
-                    ? "Overdue"
+                    ? "Terlambat"
                     : `${surah.daysUntilReview}d`
                   : "—"}
               </p>
