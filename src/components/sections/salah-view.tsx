@@ -2,11 +2,11 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Check, Clock, MapPin, Flame, Navigation } from "lucide-react";
+import { Sparkles, Check, Clock, MapPin, Flame } from "lucide-react";
 import { ViewHeader } from "@/components/shared/view-header";
 import { SectionCard } from "@/components/shared/section-card";
 import { ProgressRing } from "@/components/shared/progress-ring";
-import { QiblaCompass } from "@/components/salah/qibla-compass";
+
 import { useDashboard, useTogglePrayer, useSunnah } from "@/lib/hooks";
 import {
   computePrayerTimes,
@@ -156,9 +156,9 @@ export function SalahView() {
         </SectionCard>
       </div>
 
-      {/* History heatmap + Qibla compass */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <SectionCard className="lg:col-span-2">
+      {/* History heatmap */}
+      <div className="grid grid-cols-1 gap-6">
+        <SectionCard>
           <h3 className="text-display text-lg font-medium mb-1">Riwayat Shalat</h3>
           <p className="text-sm text-muted-foreground mb-5">14 hari terakhir · hijau = selesai</p>
           <div className="overflow-x-auto scroll-slim">
@@ -191,23 +191,6 @@ export function SalahView() {
                 </div>
               ))}
             </div>
-          </div>
-        </SectionCard>
-
-        {/* Qibla compass */}
-        <SectionCard>
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center gap-2">
-              <Navigation className="h-4 w-4 text-primary" />
-              <h3 className="text-display text-lg font-medium">Arah Kiblat</h3>
-            </div>
-          </div>
-          <p className="text-sm text-muted-foreground mb-5">Menghadap Kabah di Makkah</p>
-          <QiblaCompass lat={lat} lng={lng} location={data?.user.location} />
-          <div className="mt-5 rounded-xl bg-primary/5 border border-primary/10 p-3">
-            <p className="text-[11px] text-muted-foreground leading-relaxed">
-              <span className="font-semibold text-foreground">Tips:</span> Untuk hasil terbaik, pegang ponsel datar dan jauh dari benda logam. Arah dihitung dari lokasi yang telah diatur.
-            </p>
           </div>
         </SectionCard>
       </div>

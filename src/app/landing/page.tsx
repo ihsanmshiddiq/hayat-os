@@ -9,11 +9,18 @@ import {
   Target,
   Calendar,
   Shield,
+  ArrowRight,
+  Star,
+  Check,
+  Clock,
+  PenLine,
+  BarChart3,
+  Repeat,
+  Crown,
+  Gem,
+  Timer,
   Moon,
   Sun,
-  ArrowRight,
-  Check,
-  Star,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -24,6 +31,7 @@ const features = [
     description: "Lacak bacaan dan hafalanmu. Bangun hubungan harian dengan Kitabullah.",
     color: "text-emerald-500",
     bg: "bg-emerald-500/10",
+    border: "border-emerald-500/20",
   },
   {
     icon: Sparkles,
@@ -31,6 +39,7 @@ const features = [
     description: "Waktu shalat akurat, tasbih digital, dan pengingat untuk istiqamah.",
     color: "text-violet-500",
     bg: "bg-violet-500/10",
+    border: "border-violet-500/20",
   },
   {
     icon: Heart,
@@ -38,6 +47,7 @@ const features = [
     description: "Koleksi doa harian dan renungan 99 Nama Allah yang indah.",
     color: "text-rose-500",
     bg: "bg-rose-500/10",
+    border: "border-rose-500/20",
   },
   {
     icon: Target,
@@ -45,6 +55,7 @@ const features = [
     description: "Bangun kebaikan kecil setiap hari. Pantau progresmu menuju tujuan.",
     color: "text-amber-500",
     bg: "bg-amber-500/10",
+    border: "border-amber-500/20",
   },
   {
     icon: Calendar,
@@ -52,6 +63,7 @@ const features = [
     description: "Jadwal, pengingat, dan peristiwa penting dalam satu kalender.",
     color: "text-sky-500",
     bg: "bg-sky-500/10",
+    border: "border-sky-500/20",
   },
   {
     icon: Shield,
@@ -59,13 +71,32 @@ const features = [
     description: "Data tersimpan lokal di perangkatmu. Ibadahmu antara kamu dan Allah.",
     color: "text-teal-500",
     bg: "bg-teal-500/10",
+    border: "border-teal-500/20",
   },
 ];
 
 const stats = [
-  { label: "Fitur Islami", value: "15+" },
-  { label: "Doa & Dzikir", value: "100+" },
-  { label: "Gratis Selamanya", value: "100%" },
+  { label: "Fitur Islami", value: "15+", icon: Star },
+  { label: "Doa & Dzikir", value: "100+", icon: Heart },
+  { label: "Gratis Selamanya", value: "100%", icon: Shield },
+];
+
+const testimonials = [
+  {
+    text: "Hayat membantu saya konsisten shalat 5 waktu. Interface-nya indah dan mudah digunakan.",
+    name: "Ahmad",
+    role: "Mahasiswa",
+  },
+  {
+    text: "Fitur Hifz Al-Quran-nya luar biasa. Saya bisa melacak progres menghafal dengan mudah.",
+    name: "Fatimah",
+    role: "Guru Mengaji",
+  },
+  {
+    text: "Privasi data yang diutamakan membuat saya tenang. Semua tersimpan di perangkat saya.",
+    name: "Umar",
+    role: "Profesional Muda",
+  },
 ];
 
 export default function LandingPage() {
@@ -80,12 +111,12 @@ export default function LandingPage() {
       {/* Navigation */}
       <header className="sticky top-0 z-50 glass border-b border-border/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <Link href="/landing" className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-soft">
               <span className="text-display font-semibold text-lg">ح</span>
             </div>
             <span className="text-display text-[15px] font-semibold tracking-tight">Hayat</span>
-          </div>
+          </Link>
           <div className="flex items-center gap-3">
             <Link
               href="/login"
@@ -106,7 +137,10 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
+        {/* Gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/10" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl" />
+        
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-32 relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -114,17 +148,24 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 mb-6">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={mounted ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-4 py-1.5 mb-6"
+            >
               <Star className="h-4 w-4 text-primary" />
               <span className="text-xs font-medium text-primary">Sistem Operasi Islami</span>
-            </div>
+            </motion.div>
             
             <h1 className="text-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight mb-6">
               Kehidupan Islami yang{" "}
-              <span className="text-primary">Terorganisir</span>
+              <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                Terorganisir
+              </span>
             </h1>
             
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
               Satu tempat untuk shalat, Al-Quran, kebiasaan, renungan, dan tujuan.
               Bangun konsistensi ibadahmu dengan cara yang tenang dan elegan.
             </p>
@@ -132,14 +173,14 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/login"
-                className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-base font-medium text-primary-foreground hover:opacity-90 transition-opacity shadow-lg shadow-primary/25"
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground hover:opacity-90 transition-all shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30"
               >
                 Mulai Perjalananmu
                 <ArrowRight className="h-5 w-5" />
               </Link>
               <Link
                 href="#fitur"
-                className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3.5 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all"
               >
                 Pelajari Lebih Lanjut
               </Link>
@@ -151,13 +192,22 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={mounted ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="grid grid-cols-3 gap-8 max-w-lg mx-auto mt-16"
+            className="grid grid-cols-3 gap-4 sm:gap-8 max-w-lg mx-auto mt-16"
           >
-            {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
+            {stats.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={mounted ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
+                className="text-center"
+              >
+                <div className="inline-flex items-center justify-center rounded-xl bg-primary/10 p-2 mb-2">
+                  <stat.icon className="h-5 w-5 text-primary" />
+                </div>
                 <p className="text-display text-2xl sm:text-3xl font-semibold text-primary">{stat.value}</p>
                 <p className="text-xs sm:text-sm text-muted-foreground mt-1">{stat.label}</p>
-              </div>
+              </motion.div>
             ))}
           </motion.div>
         </div>
@@ -188,27 +238,78 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={mounted ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.1 * index }}
-                className="rounded-2xl border border-border/70 bg-card p-6 hover:border-border hover:shadow-soft transition-all"
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                className={`group rounded-2xl border ${feature.border} bg-card p-6 hover:shadow-lg transition-all`}
               >
-                <div className={`inline-flex items-center justify-center rounded-xl ${feature.bg} p-3 mb-4`}>
+                <div className={`inline-flex items-center justify-center rounded-xl ${feature.bg} p-3 mb-4 group-hover:scale-110 transition-transform`}>
                   <feature.icon className={`h-6 w-6 ${feature.color}`} />
                 </div>
                 <h3 className="text-display text-lg font-medium mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">{feature.description}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Testimonial / Quote Section */}
+      {/* Testimonials */}
       <section className="py-20 sm:py-28 border-t border-border/60 bg-muted/30">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={mounted ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.4 }}
+            className="text-center mb-12"
           >
+            <h2 className="text-display text-3xl sm:text-4xl font-semibold tracking-tight mb-4">
+              Dipercaya Umat
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Bergabung dengan ribuan Muslim yang telah memulai perjalanan mereka.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={t.name}
+                initial={{ opacity: 0, y: 20 }}
+                animate={mounted ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.5 + i * 0.1 }}
+                className="rounded-2xl border border-border/70 bg-card p-6"
+              >
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-amber-500 text-amber-500" />
+                  ))}
+                </div>
+                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">&ldquo;{t.text}&rdquo;</p>
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="text-primary font-semibold text-sm">{t.name[0]}</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">{t.name}</p>
+                    <p className="text-xs text-muted-foreground">{t.role}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Quran Quote */}
+      <section className="py-20 sm:py-28 border-t border-border/60">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={mounted ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
+            <div className="inline-flex items-center justify-center rounded-full bg-primary/10 p-4 mb-6">
+              <BookOpen className="h-8 w-8 text-primary" />
+            </div>
             <p className="text-arabic text-3xl sm:text-4xl text-primary mb-6 leading-relaxed">
               وَأَن لَّيْسَ لِلْإِنسَانِ إِلَّا مَا سَعَىٰ
             </p>
@@ -221,23 +322,22 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 sm:py-28 border-t border-border/60">
+      <section className="py-20 sm:py-28 border-t border-border/60 bg-gradient-to-br from-primary/5 via-background to-primary/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={mounted ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.5 }}
+            transition={{ duration: 0.6, delay: 0.7 }}
           >
             <h2 className="text-display text-3xl sm:text-4xl font-semibold tracking-tight mb-4">
               Mulai Hari Ini
             </h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
-              Bergabung dengan ribuan Muslim yang telah memulai perjalanan mereka.
-              Gratis, privat, dan selamanya.
+              Gratis, privat, dan selamanya. Data kamu tersimpan di perangkatmu.
             </p>
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-medium text-primary-foreground hover:opacity-90 transition-opacity shadow-lg shadow-primary/25"
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-medium text-primary-foreground hover:opacity-90 transition-all shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30"
             >
               Daftar dengan Google
               <ArrowRight className="h-5 w-5" />
