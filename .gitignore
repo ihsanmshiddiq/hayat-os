@@ -51,4 +51,6 @@ prompt
 
 server.log
 # Skills directory
-/skills/
+/skills/.env
+prisma/init.sql
+prisma/apply-migration.js
