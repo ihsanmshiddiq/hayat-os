@@ -734,9 +734,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: "dhikr-1000", title: "Thousand Lights", description: "Recite 1,000 dhikr counts", icon: "Sparkles", category: "dhikr", tier: "silver", goal: 1000, unit: "counts" },
   { id: "dhikr-10000", title: "Ocean of Dhikr", description: "Recite 10,000 dhikr counts", icon: "Infinity", category: "dhikr", tier: "gold", goal: 10000, unit: "counts" },
   // Habits
-  { id: "habit-7", title: "Building Momentum", description: "Complete any habit 7 times", icon: "Repeat", category: "habit", tier: "bronze", goal: 7, unit: "check-ins" },
-  { id: "habit-30", title: "Habit Forged", description: "Complete any habit 30 times", icon: "Trophy", category: "habit", tier: "silver", goal: 30, unit: "check-ins" },
-  { id: "habit-100", title: "Identity Shift", description: "Complete any habit 100 times", icon: "Crown", category: "habit", tier: "gold", goal: 100, unit: "check-ins" },
+  { id: "habit-7", title: "Bangun Momen", description: "Selesaikan kebiasaan 7 kali", icon: "Repeat", category: "habit", tier: "bronze", goal: 7, unit: "kali" },
+  { id: "habit-30", title: "Kebiasaan Terbentuk", description: "Selesaikan kebiasaan 30 kali", icon: "Trophy", category: "habit", tier: "silver", goal: 30, unit: "kali" },
+  { id: "habit-100", title: "Perubahan Identitas", description: "Selesaikan kebiasaan 100 kali", icon: "Crown", category: "habit", tier: "gold", goal: 100, unit: "kali" },
   // Journal
   { id: "journal-7", title: "Reflective Soul", description: "Write 7 journal entries", icon: "PenLine", category: "journal", tier: "bronze", goal: 7, unit: "entries" },
   { id: "journal-30", title: "Keeper of Memories", description: "Write 30 journal entries", icon: "BookMarked", category: "journal", tier: "silver", goal: 30, unit: "entries" },

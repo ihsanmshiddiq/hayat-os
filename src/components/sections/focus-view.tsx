@@ -112,7 +112,7 @@ export function FocusView() {
             }
             setCompletedToday((n) => n + 1);
             toast.success("Masha'Allah! Sesi fokus selesai.", {
-              description: `Take a ${breakMin}-minute ${FOCUS_BREAKS.find(b => b.id === breakId)?.label.toLowerCase()} break.`,
+              description: `Istirahat ${breakMin} menit — ${FOCUS_BREAKS.find(b => b.id === breakId)?.label.toLowerCase()}.`,
             });
             // Move to break phase
             setPhase("break");
@@ -196,7 +196,7 @@ export function FocusView() {
   const mode = FOCUS_MODES.find((m) => m.id === modeId)!;
   const breakActivity = FOCUS_BREAKS.find((b) => b.id === breakId)!;
   const ModeIcon = MODE_ICONS[mode.icon] ?? Brain;
-  const BreakIcon = BREAK_ICONS[breakActivity.icon] ?? Jeda;
+  const BreakIcon = BREAK_ICONS[breakActivity.icon] ?? Pause;
 
   const totalForPhase = phase === "break" ? breakSec : focusSec;
   const progressPct = totalForPhase > 0 ? ((totalForPhase - tersisa) / totalForPhase) * 100 : 0;
@@ -241,13 +241,13 @@ export function FocusView() {
                 )}>
                   {phase === "focusing" && <Sparkles className="h-3 w-3 animate-pulse" />}
                   {phase === "break" && <Coffee className="h-3 w-3" />}
-                  {phase === "paused" && <Jeda className="h-3 w-3" />}
+                  {phase === "paused" && <Pause className="h-3 w-3" />}
                   {phase === "done" && <CheckCircle2 className="h-3 w-3" />}
                   {phase === "idle" && <TimerIcon className="h-3 w-3" />}
                   {phase === "break" ? "Istirahat" : phase === "idle" ? "Siap" : phase}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  {mode.label} · {focusMin}m focus / {breakMin}m break
+                  {mode.label} · {focusMin}m fokus / {breakMin}m istirahat
                 </span>
               </div>
               {completedToday > 0 && (
@@ -288,7 +288,7 @@ export function FocusView() {
                       {fmt(tersisa)}
                     </div>
                     <div className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">
-                      {phase === "break" ? "until focus" : "tersisa"}
+                      {phase === "break" ? "menuju fokus" : "tersisa"}
                     </div>
                     {intention && phase !== "idle" && (
                       <p className="mt-3 max-w-[220px] text-center text-xs text-foreground/70 italic line-clamp-2">
@@ -315,7 +315,7 @@ export function FocusView() {
                         onClick={handlePause}
                         className="inline-flex items-center gap-2 rounded-full bg-amber-500/10 px-5 py-2.5 text-sm font-medium text-amber-600 dark:text-amber-400 transition-all hover:bg-amber-500/20"
                       >
-                        <Jeda className="h-4 w-4" /> Jeda
+                        <Pause className="h-4 w-4" /> Jeda
                       </button>
                     ) : (
                       <button
@@ -386,7 +386,7 @@ export function FocusView() {
                   <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Aktivitas istirahat</p>
                   <div className="flex flex-wrap gap-2">
                     {FOCUS_BREAKS.map((b) => {
-                      const Icon = BREAK_ICONS[b.icon] ?? Jeda;
+                      const Icon = BREAK_ICONS[b.icon] ?? Pause;
                       const active = b.id === breakId;
                       return (
                         <button
@@ -543,7 +543,7 @@ export function FocusView() {
                       {s.completed ? (
                         <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
                       ) : (
-                        <span className="h-2 w-2 rounded-full bg-amber-500 shrink-0" title="Incomplete" />
+                        <span className="h-2 w-2 rounded-full bg-amber-500 shrink-0" title="Belum selesai" />
                       )}
                     </li>
                   );
@@ -648,9 +648,9 @@ export function FocusView() {
           إِنَّ اللَّهَ يُحِبُّ إِذَا عَمِلَ أَحَدُكُمْ عَمَلًا أَنْ يُتْقِنَهُ
         </p>
         <p className="text-sm text-foreground/80 italic">
-          "Indeed, Allah loves that when one of you does a work, he does it with excellence."
+"Sesungguhnya Allah mencintai apabila salah seorang dari kalian mengerjakan sesuatu, maka ia menyempurnakannya."
         </p>
-        <p className="text-[11px] text-muted-foreground mt-1.5">— Prophet Muhammad ﷺ · Al-Bayhaqi</p>
+        <p className="text-[11px] text-muted-foreground mt-1.5">— Nabi Muhammad ﷺ · Al-Bayhaqi</p>
       </motion.div>
     </div>
   );

@@ -105,7 +105,7 @@ function EmptyState() {
       <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
         {[
           { icon: Target, title: "Tetapkan target", text: "Pilih Al-Quran penuh, Juz Amma, atau surah tertentu" },{icon: TrendingUp, title: "Lacak kecepatan harian", text: "Lihat runtutan bacaan dan proyeksi penyelesaian" },
-          { icon: Trophy, title: "Selesaikan dengan barakah", text: "Finish with a beautiful 30-Juz progress map" },
+          { icon: Trophy, title: "Selesaikan dengan barakah", text: "Selesaikan dengan peta progres 30 Juz yang indah" },
         ].map((f, i) => {
           const Icon = f.icon;
           return (
@@ -223,7 +223,7 @@ function ActivePlanHero({ plan }: { plan: KhatmaActive }) {
             <div className="mt-5">
               <div className="flex items-center justify-between text-xs mb-1.5">
                 <span className="text-muted-foreground">Progres keseluruhan</span>
-                <span className="font-medium tabular-nums">{plan.pagesReadSinceStart} / {plan.totalPages} pages</span>
+                <span className="font-medium tabular-nums">{plan.pagesReadSinceStart} / {plan.totalPages} halaman</span>
               </div>
               <div className="h-2.5 rounded-full bg-muted overflow-hidden relative">
                 <motion.div
@@ -325,7 +325,7 @@ function JuzProgressGrid({ plan }: { plan: KhatmaActive }) {
                   className="absolute -top-12 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap rounded-lg border border-border bg-popover px-2.5 py-1.5 text-[10px] shadow-soft"
                 >
                   <p className="font-medium">Juz {j.juz}</p>
-                  <p className="text-muted-foreground tabular-nums">{j.pagesRead} / {j.totalPages} pages</p>
+                  <p className="text-muted-foreground tabular-nums">{j.pagesRead} / {j.totalPages} halaman</p>
                 </motion.div>
               ) : null}
             </motion.div>
@@ -351,7 +351,7 @@ function JuzProgressGrid({ plan }: { plan: KhatmaActive }) {
           <p className="text-display text-xl font-semibold tabular-nums text-muted-foreground">
             {juz.filter(j => j.pct === 0).length}
           </p>
-          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Not started</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Belum mulai</p>
         </div>
       </div>
     </SectionCard>
@@ -368,7 +368,7 @@ function DailyPaceCard({ plan }: { plan: KhatmaActive }) {
     <SectionCard>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-display text-lg font-medium">Daily Pace</h3>
+          <h3 className="text-display text-lg font-medium">Kecepatan Harian</h3>
           <p className="text-xs text-muted-foreground mt-0.5">{history.length} hari terakhir vs target</p>
         </div>
         {plan.streak > 0 ? (
@@ -381,7 +381,7 @@ function DailyPaceCard({ plan }: { plan: KhatmaActive }) {
 
       <div className="flex items-end justify-between gap-1 h-32 mb-3">
         {history.length === 0 ? (
-          <div className="w-full text-center text-xs text-muted-foreground py-12">No reading logged yet.</div>
+          <div className="w-full text-center text-xs text-muted-foreground py-12">Belum ada catatan bacaan.</div>
         ) : (
           history.map((h, i) => {
             const pct = (h.pagesRead / maxPages) * 100;
@@ -405,7 +405,7 @@ function DailyPaceCard({ plan }: { plan: KhatmaActive }) {
                 />
                 {/* tooltip on hover */}
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-border bg-popover px-2 py-1 text-[10px] shadow-soft pointer-events-none">
-                  <p className="font-medium tabular-nums">{h.pagesRead} / {h.target} pages</p>
+                  <p className="font-medium tabular-nums">{h.pagesRead} / {h.target} halaman</p>
                   <p className="text-muted-foreground">{new Date(h.date).toLocaleDateString("id-ID", { month: "short", day: "numeric" })}</p>
                 </div>
               </div>
@@ -417,8 +417,8 @@ function DailyPaceCard({ plan }: { plan: KhatmaActive }) {
       <div className="flex items-center justify-between text-[10px] text-muted-foreground">
         <span>{history.length > 0 ? new Date(history[0].date).toLocaleDateString("id-ID", { month: "short", day: "numeric" }) : "—"}</span>
         <div className="flex items-center gap-1.5">
-          <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-primary/80" /> Met</span>
-          <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-primary/40" /> Below</span>
+          <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-primary/80" /> Tercapai</span>
+          <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-primary/40" /> Kurang</span>
           <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm border border-dashed border-amber-500/60" /> Target</span>
         </div>
         <span>{history.length > 0 ? new Date(history[history.length - 1].date).toLocaleDateString("id-ID", { month: "short", day: "numeric" }) : "—"}</span>
@@ -446,7 +446,7 @@ function TodayQuickLog({ dailyTarget }: { dailyTarget: number }) {
       <div className="flex items-center gap-2 mb-2">
         <Plus className="h-3.5 w-3.5 text-primary" />
         <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-          Log pages read today
+          Catat halaman hari ini
         </span>
       </div>
       <div className="flex items-center gap-2">
@@ -455,13 +455,13 @@ function TodayQuickLog({ dailyTarget }: { dailyTarget: number }) {
           min={0}
           value={pages}
           onChange={(e) => setPages(e.target.value)}
-          placeholder={`e.g. ${dailyTarget}`}
+          placeholder={`misalnya ${dailyTarget}`}
           className="h-9 tabular-nums"
           onKeyDown={(e) => e.key === "Enter" && log()}
         />
         <Button onClick={log} disabled={!pages || updateQuran.isPending} className="h-9 gap-1.5 shrink-0">
           {updateQuran.isPending ? <Clock className="h-3.5 w-3.5 animate-pulse" /> : <BookOpen className="h-3.5 w-3.5" />}
-          Log
+          Catat
         </Button>
       </div>
     </div>
@@ -502,13 +502,13 @@ function PlanHistory({ history }: { history: KhatmaHistoryItem[] }) {
                   <Trophy className="h-2.5 w-2.5" />Selesai</span>
               ) : (
                 <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                  Paused
+                  Dijeda
                 </span>
               )}
             </div>
 
             <div className="flex items-center gap-3 text-[11px] text-muted-foreground mb-3">
-              <span className="flex items-center gap-1"><BookMarked className="h-3 w-3" /> {p.totalPages} pages</span>
+              <span className="flex items-center gap-1"><BookMarked className="h-3 w-3" /> {p.totalPages} halaman</span>
               <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {p.targetDays}d</span>
               <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {new Date(p.startDate).toLocaleDateString("id-ID", { month: "short", day: "numeric" })}</span>
             </div>
@@ -521,7 +521,7 @@ function PlanHistory({ history }: { history: KhatmaHistoryItem[] }) {
                 onClick={() => updateKhatma.mutate({ id: p.id, isActive: true })}
                 disabled={updateKhatma.isPending}
               >
-                Resume
+                Lanjutkan
               </Button>
               <Button
                 size="sm"
@@ -530,7 +530,7 @@ function PlanHistory({ history }: { history: KhatmaHistoryItem[] }) {
                 onClick={() => deleteKhatma.mutate(p.id)}
                 disabled={deleteKhatma.isPending}
               >
-                Delete
+                Hapus
               </Button>
             </div>
           </motion.div>
@@ -581,13 +581,13 @@ function NewPlanDialog({ triggerLabel }: { triggerLabel: string }) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="text-display">New Khatma Plan</DialogTitle>
+          <DialogTitle className="text-display">Rencana Khatma Baru</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4 pt-2">
           {/* Scope selector */}
           <div>
-            <Label className="mb-2 block">Choose scope</Label>
+            <Label className="mb-2 block">Pilih cakupan</Label>
             <div className="grid grid-cols-2 gap-2">
               {SCOPE_OPTIONS.map((s) => (
                 <button
@@ -606,7 +606,7 @@ function NewPlanDialog({ triggerLabel }: { triggerLabel: string }) {
                   </div>
                   <p className="text-[10px] text-muted-foreground line-clamp-2 leading-relaxed">{s.description}</p>
                   <div className="flex items-center gap-1.5 mt-1.5">
-                    <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-medium text-primary">{s.pages} pages</span>
+                    <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-medium text-primary">{s.pages} halaman</span>
                     <span className="text-arabic text-xs text-primary/70">{s.arabic}</span>
                   </div>
                 </button>
@@ -616,16 +616,16 @@ function NewPlanDialog({ triggerLabel }: { triggerLabel: string }) {
 
           {/* Name */}
           <div>
-            <Label>Plan name</Label>
+            <Label>Nama rencana</Label>
             <Input value={name} onChange={(e) => setName(e.target.value)} placeholder={selectedScope.label} className="mt-1.5" />
           </div>
 
           {/* Daily target */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <Label>Daily target</Label>
+              <Label>Target harian</Label>
               <span className="text-xs text-muted-foreground">
-                Estimated completion: <span className="font-medium text-foreground tabular-nums">{targetDays} days</span>
+                Perkiraan selesai: <span className="font-medium text-foreground tabular-nums">{targetDays} hari</span>
               </span>
             </div>
             <div className="flex items-center gap-3">
@@ -639,18 +639,18 @@ function NewPlanDialog({ triggerLabel }: { triggerLabel: string }) {
               />
               <div className="w-20 shrink-0 rounded-lg border border-border px-3 py-2 text-center">
                 <span className="text-display text-base font-semibold tabular-nums">{dailyTarget}</span>
-                <span className="text-[10px] text-muted-foreground ml-1">/day</span>
+                <span className="text-[10px] text-muted-foreground ml-1">/hari</span>
               </div>
             </div>
             <p className="text-[11px] text-muted-foreground mt-1.5">
-              At {dailyTarget} pages/day, you'll finish {selectedScope.label} in approximately{" "}
-              <span className="font-medium text-foreground">{targetDays} days</span> ({selectedScope.pages} pages total).
+              Dengan {dailyTarget} halaman/hari, kamu akan menyelesaikan {selectedScope.label} dalam sekitar{" "}
+              <span className="font-medium text-foreground">{targetDays} hari</span> ({selectedScope.pages} halaman total).
             </p>
           </div>
 
           <Button onClick={submit} className="w-full gap-2" disabled={createKhatma.isPending}>
             {createKhatma.isPending ? <Clock className="h-4 w-4 animate-pulse" /> : <Sparkles className="h-4 w-4" />}
-            Start Khatma
+            Mulai Khatma
           </Button>
         </div>
       </DialogContent>

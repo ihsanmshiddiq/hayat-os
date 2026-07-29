@@ -121,7 +121,7 @@ export function HabitsView() {
               <div className="space-y-4 pt-2">
                 <div>
                   <Label>Nama kebiasaan</Label>
-                  <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Tahajjud" className="mt-1.5" />
+                  <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="misalnya Tahajjud" className="mt-1.5" />
                 </div>
                 <div>
                   <Label>Kategori</Label>
@@ -147,7 +147,7 @@ export function HabitsView() {
                   </div>
                 </div>
                 <div>
-                  <Label>Icon</Label>
+                  <Label>Ikon</Label>
                   <div className="mt-1.5 grid grid-cols-6 gap-2">
                     {ICON_OPTIONS.map((ic) => (
                       <button key={ic} onClick={() => setIcon(ic)} className={cn("flex h-9 w-9 items-center justify-center rounded-lg border", icon === ic ? "border-primary bg-primary/10 text-primary" : "border-border hover:bg-muted")}>
@@ -157,7 +157,7 @@ export function HabitsView() {
                   </div>
                 </div>
                 <div>
-                  <Label>Color</Label>
+                  <Label>Warna</Label>
                   <div className="mt-1.5 flex gap-2">
                     {COLOR_OPTIONS.map((c) => (
                       <button key={c} onClick={() => setColor(c)} className={cn("h-8 w-8 rounded-full", habitColor(c).dot, color === c ? "ring-2 ring-offset-2 ring-offset-background ring-foreground/40" : "")} />
@@ -169,7 +169,7 @@ export function HabitsView() {
                   <Input value={cue} onChange={(e) => setCue(e.target.value)} placeholder="Setelah Subuh" className="mt-1.5" />
                 </div>
                 <div>
-                  <Label>Reward</Label>
+                  <Label>Penghargaan</Label>
                   <Input value={reward} onChange={(e) => setReward(e.target.value)} placeholder="Seketika ketenangan" className="mt-1.5" />
                 </div>
                 <Button onClick={submit} className="w-full">Buat kebiasaan</Button>
@@ -226,17 +226,17 @@ export function HabitsView() {
                 Konsistensi 90 Hari
               </p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                {heatmapStats.completedDays} active days · {heatmapStats.totalDone} check-ins · {heatmapStats.avgPerDay.toFixed(1)} avg/day
+                {heatmapStats.completedDays} hari aktif · {heatmapStats.totalDone} total · {heatmapStats.avgPerDay.toFixed(1)} rata-rata/hari
               </p>
             </div>
             <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
-              <span>Less</span>
+              <span>Sedikit</span>
               <div className="h-3 w-3 rounded-sm bg-muted" />
               <div className="h-3 w-3 rounded-sm bg-primary/20" />
               <div className="h-3 w-3 rounded-sm bg-primary/40" />
               <div className="h-3 w-3 rounded-sm bg-primary/70" />
               <div className="h-3 w-3 rounded-sm bg-primary" />
-              <span>More</span>
+              <span>Banyak</span>
             </div>
           </div>
 
@@ -272,12 +272,12 @@ export function HabitsView() {
             <div className="mt-3 pt-3 border-t border-border/50 flex items-center justify-between text-xs">
               <span className="text-muted-foreground flex items-center gap-1.5">
                 <Flame className="h-3 w-3 text-amber-500" />
-                Hari terbaik: <span className="font-medium text-foreground">{heatmapStats.bestDay.done} habits</span>
+                Hari terbaik: <span className="font-medium text-foreground">{heatmapStats.bestDay.done} kebiasaan</span>
                 <span className="text-muted-foreground/70">·</span>
                 <span>{heatmapStats.bestDay.date.toLocaleDateString("id-ID", { month: "short", day: "numeric" })}</span>
               </span>
               <span className="text-primary font-medium">
-                {Math.round((heatmapStats.completedDays / 90) * 100)}% of last 90 days
+                {Math.round((heatmapStats.completedDays / 90) * 100)}% dari 90 hari terakhir
               </span>
             </div>
           )}
