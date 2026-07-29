@@ -168,7 +168,7 @@ function ActivePlanHero({ plan }: { plan: KhatmaActive }) {
               )}
               {plan.streak > 0 ? (
                 <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-rose-600 dark:text-rose-400">
-                  <Flame className="h-3 w-3" /> {plan.streak}d streak
+                  <Flame className="h-3 w-3" /> {plan.streak} hari berturut
                 </span>
               ) : null}
             </div>
