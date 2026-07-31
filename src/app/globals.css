@@ -116,6 +116,37 @@
   --sidebar-ring: oklch(0.7 0.12 162);
 }
 
+/* A restrained, personal pastel palette for Tantri's profile. */
+.tantri-theme {
+  --background: oklch(0.985 0.012 340); --foreground: oklch(0.29 0.04 300);
+  --card: oklch(1 0.008 350); --card-foreground: oklch(0.29 0.04 300);
+  --popover: oklch(1 0.008 350); --popover-foreground: oklch(0.29 0.04 300);
+  --primary: oklch(0.68 0.13 345); --primary-foreground: oklch(0.99 0.01 340);
+  --secondary: oklch(0.95 0.035 220); --secondary-foreground: oklch(0.32 0.055 280);
+  --muted: oklch(0.965 0.018 320); --muted-foreground: oklch(0.53 0.035 300);
+  --accent: oklch(0.93 0.055 220); --accent-foreground: oklch(0.33 0.06 280);
+  --border: oklch(0.9 0.028 325); --input: oklch(0.9 0.028 325); --ring: oklch(0.68 0.13 345);
+  --sidebar: oklch(0.98 0.015 338); --sidebar-accent: oklch(0.94 0.045 325); --sidebar-border: oklch(0.9 0.028 325);
+}
+.dark.tantri-theme {
+  --background: oklch(0.2 0.025 315); --foreground: oklch(0.96 0.02 345);
+  --card: oklch(0.245 0.032 310); --card-foreground: oklch(0.96 0.02 345);
+  --popover: oklch(0.245 0.032 310); --popover-foreground: oklch(0.96 0.02 345);
+  --primary: oklch(0.74 0.12 345); --primary-foreground: oklch(0.23 0.03 310);
+  --secondary: oklch(0.3 0.045 275); --secondary-foreground: oklch(0.95 0.02 340);
+  --muted: oklch(0.29 0.03 310); --muted-foreground: oklch(0.76 0.035 330);
+  --accent: oklch(0.34 0.06 260); --accent-foreground: oklch(0.95 0.03 330);
+  --border: oklch(0.58 0.05 320 / 35%); --input: oklch(0.58 0.05 320 / 45%);
+  --sidebar: oklch(0.225 0.028 310); --sidebar-accent: oklch(0.31 0.05 320); --sidebar-border: oklch(0.58 0.05 320 / 30%);
+}
+.tantri-theme body { background-image: radial-gradient(circle at 8% 7%, oklch(0.9 0.06 345 / 35%), transparent 27%), radial-gradient(circle at 92% 12%, oklch(0.91 0.06 230 / 28%), transparent 30%); }
+.tantri-sparkles { pointer-events: none; position: fixed; inset: 0; z-index: 60; overflow: hidden; }
+.tantri-sparkles span { position: absolute; color: oklch(0.72 0.12 345 / 55%); font-size: 14px; animation: tantri-float 7s ease-in-out infinite; filter: drop-shadow(0 1px 5px oklch(0.72 0.12 345 / 35%)); }
+.tantri-sparkles span:nth-child(even) { color: oklch(0.72 0.08 235 / 55%); }
+.tantri-welcome::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 15% 15%, oklch(0.88 0.08 345 / 32%), transparent 35%), radial-gradient(circle at 85% 85%, oklch(0.88 0.07 225 / 28%), transparent 36%); }
+@keyframes tantri-float { 0%, 100% { transform: translateY(0) scale(.85); opacity: .28; } 50% { transform: translateY(-22px) scale(1.12); opacity: .78; } }
+@media (max-width: 1023px) { .tantri-sparkles span { font-size: 19px; animation-duration: 5.5s; } .tantri-sparkles span:nth-child(n+7) { display: none; } }
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

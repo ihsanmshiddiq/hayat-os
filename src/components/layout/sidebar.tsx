@@ -88,8 +88,13 @@ const NAV_GROUPS: NavGroup[] = [
 
 const NAV_ITEMS: NavItem[] = NAV_GROUPS.flatMap((g) => g.items);
 
+const EN_NAV: Partial<Record<ViewKey, string>> = {
+  dashboard: "Dashboard", kalender: "Calendar", jurnal: "Journal", kebiasaan: "Habits", khatma: "Khatma", hifz: "Hifz", shalat: "Prayer", doa: "Duas", catatan: "Notes", tujuan: "Goals", fokus: "Focus", keuangan: "Finance", siklus: "Cycle", pencapaian: "Achievements", analitik: "Analytics", pengaturan: "Settings",
+};
+const EN_GROUPS: Record<string, string> = { Ringkasan: "Overview", Ibadah: "Worship", Sistem: "System" };
+
 export function Sidebar({ userName, userImage }: { userName?: string | null; userImage?: string | null }) {
-  const { activeView, setActiveView, sidebarCollapsed, toggleSidebar } = useAppStore();
+  const { activeView, setActiveView, sidebarCollapsed, toggleSidebar, language } = useAppStore();
   const { theme, setTheme } = useTheme();
   const mounted = useMounted();
   const [profileOpen, setProfileOpen] = React.useState(false);
@@ -156,7 +161,7 @@ export function Sidebar({ userName, userImage }: { userName?: string | null; use
               <div key={group.label}>
                 {!sidebarCollapsed && (
                   <p className="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
-                    {group.label}
+                    {language === "en" ? EN_GROUPS[group.label] : group.label}
                   </p>
                 )}
                 {sidebarCollapsed && (
@@ -189,7 +194,7 @@ export function Sidebar({ userName, userImage }: { userName?: string | null; use
                           )}
                         />
                         {!sidebarCollapsed && (
-                          <span className="truncate font-medium flex-1 text-left">{item.label}</span>
+                          <span className="truncate font-medium flex-1 text-left">{language === "en" ? EN_NAV[item.key] : item.label}</span>
                         )}
                       </button>
                     );
@@ -199,7 +204,7 @@ export function Sidebar({ userName, userImage }: { userName?: string | null; use
                           <Tooltip>
                             <TooltipTrigger asChild>{inner}</TooltipTrigger>
                             <TooltipContent side="right" className="font-medium">
-                              {item.label}
+                              {language === "en" ? EN_NAV[item.key] : item.label}
                             </TooltipContent>
                           </Tooltip>
                         </li>

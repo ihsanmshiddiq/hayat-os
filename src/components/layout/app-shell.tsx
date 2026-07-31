@@ -14,6 +14,7 @@ import { useDashboard } from "@/lib/hooks";
 import { createClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import { DashboardView } from "@/components/dashboard/dashboard-view";
+import { TantriTheme } from "@/components/layout/tantri-theme";
 
 // Lazy-load setiap section agar compile hanya yang aktif
 const CalendarView = dynamic(() => import("@/components/sections/calendar-view").then(m => ({ default: m.CalendarView })), { ssr: false });
@@ -33,7 +34,7 @@ const AnalyticsView = dynamic(() => import("@/components/sections/analytics-view
 const SettingsView = dynamic(() => import("@/components/sections/settings-view").then(m => ({ default: m.SettingsView })), { ssr: false });
 
 export function AppShell() {
-  const { activeView } = useAppStore();
+  const { activeView, language } = useAppStore();
   const { data } = useDashboard();
   const [user, setUser] = React.useState<User | null>(null);
 
@@ -42,6 +43,10 @@ export function AppShell() {
     supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
   }, []);
 
+  React.useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
+
   // Prefer Supabase user name, fallback to database user name
   const userName = user?.user_metadata?.full_name ?? user?.user_metadata?.name ?? data?.user.name;
   const userImage = user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture ?? null;
@@ -49,6 +54,7 @@ export function AppShell() {
 
   return (
     <div className="flex min-h-screen bg-background">
+      <TantriTheme name={userName} />
       <Sidebar userName={userName} userImage={userImage} />
       <div className="flex-1 flex flex-col min-w-0 lg:pb-0 pb-16">
         <Topbar userName={userName} userImage={userImage} />

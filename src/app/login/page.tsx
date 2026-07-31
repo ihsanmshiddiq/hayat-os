@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Loader2, Mail, Lock, Eye, EyeOff, Send } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
@@ -25,7 +25,17 @@ export default function LoginPage() {
 
   React.useEffect(() => {
     setMounted(true);
+    if (new URLSearchParams(window.location.search).get("error")) setError("Sesi masuk tidak dapat diselesaikan. Silakan coba lagi.");
   }, []);
+
+  const readableError = (message?: string) => {
+    const lower = message?.toLowerCase() ?? "";
+    if (lower.includes("provider is not enabled") || lower.includes("unsupported provider")) return "Masuk dengan Google belum diaktifkan di Supabase. Aktifkan provider Google terlebih dahulu.";
+    if (lower.includes("email not confirmed")) return "Email ini belum terverifikasi. Buka email verifikasi Anda, atau kirim ulang di bawah ini.";
+    if (lower.includes("invalid login credentials")) return "Email atau password belum tepat.";
+    if (lower.includes("email rate limit")) return "Terlalu banyak permintaan email. Tunggu sebentar lalu coba lagi.";
+    return message || "Terjadi kesalahan. Silakan coba lagi.";
+  };
 
   const handleGoogleLogin = async () => {
     setLoading(true);
@@ -39,7 +49,7 @@ export default function LoginPage() {
       });
       if (error) throw error;
     } catch (err: any) {
-      setError(err.message || "Gagal masuk dengan Google");
+      setError(readableError(err.message));
       setLoading(false);
     }
   };
@@ -60,7 +70,7 @@ export default function LoginPage() {
           },
         });
         if (error) throw error;
-        setSuccess("Akun berhasil dibuat! Silakan masuk.");
+        setSuccess("Akun dibuat. Periksa inbox (termasuk Spam) untuk memverifikasi email sebelum masuk.");
         setIsSignUp(false);
       } else {
         const { error } = await supabase.auth.signInWithPassword({
@@ -72,7 +82,22 @@ export default function LoginPage() {
         router.refresh();
       }
     } catch (err: any) {
-      setError(err.message || "Terjadi kesalahan");
+      setError(readableError(err.message));
+    } finally {
+      setEmailLoading(false);
+    }
+  };
+
+  const resendVerification = async () => {
+    if (!email) return setError("Masukkan alamat email terlebih dahulu.");
+    setEmailLoading(true);
+    setError(null);
+    try {
+      const { error } = await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: `${window.location.origin}/auth/callback` } });
+      if (error) throw error;
+      setSuccess("Email verifikasi baru sudah dikirim. Periksa inbox dan folder Spam.");
+    } catch (err: any) {
+      setError(readableError(err.message));
     } finally {
       setEmailLoading(false);
     }
@@ -191,8 +216,9 @@ export default function LoginPage() {
 
             {/* Error/Success Messages */}
             {error && (
-              <div className="rounded-xl bg-rose-500/10 border border-rose-500/20 p-3 text-sm text-rose-600 dark:text-rose-400">
+              <div className="rounded-xl bg-rose-500/10 border border-rose-500/20 p-3 text-sm text-rose-600 dark:text-rose-400 space-y-2">
                 {error}
+                {error.includes("belum terverifikasi") && <button type="button" onClick={resendVerification} disabled={emailLoading} className="flex items-center gap-1.5 font-medium underline underline-offset-2 disabled:opacity-50"><Send className="h-3.5 w-3.5" />Kirim ulang email verifikasi</button>}
               </div>
             )}
             {success && (

@@ -35,7 +35,7 @@ import { getSpecialProfile } from "@/lib/easter-egg";
 
 export function SettingsView() {
   const { theme, setTheme } = useTheme();
-  const { pixelCompanionEnabled, togglePixelCompanion } = useAppStore();
+  const { pixelCompanionEnabled, togglePixelCompanion, language, setLanguage } = useAppStore();
   const { data } = useDashboard();
   const { data: settings } = useSettings();
   const updateSettings = useUpdateSettings();
@@ -44,6 +44,10 @@ export function SettingsView() {
   const name = settings?.name ?? data?.user.name ?? "Ahmad Rahman";
   const initials = name.split(" ").map((p) => p[0]).slice(0, 2).join("").toUpperCase();
   const specialProfile = getSpecialProfile(name);
+
+  React.useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
 
   // Local form state — synced with server
   const [formName, setFormName] = React.useState(name);
@@ -195,6 +199,17 @@ export function SettingsView() {
               </div>
             </div>
 
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-medium">Bahasa</p>
+                <p className="text-xs text-muted-foreground">Bahasa utama antarmuka Hayat</p>
+              </div>
+              <div className="flex items-center gap-1 rounded-lg border border-border p-1" aria-label="Pilih bahasa">
+                <button onClick={() => setLanguage("id")} className={cn("h-8 rounded-md px-2.5 text-xs font-medium", language === "id" ? "bg-primary text-primary-foreground" : "hover:bg-muted")}>Indonesia</button>
+                <button onClick={() => setLanguage("en")} className={cn("h-8 rounded-md px-2.5 text-xs font-medium", language === "en" ? "bg-primary text-primary-foreground" : "hover:bg-muted")}>English</button>
+              </div>
+            </div>
+
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">Pixel Companion</p>
@@ -245,8 +260,8 @@ export function SettingsView() {
                 ))}
               </select>
               <p className="text-[11px] text-muted-foreground mt-1.5">
-                Calculated for {formLokasi || "lokasi Anda"} ({formLat}, {formLng}).
-                Saved method: <span className="font-medium text-foreground/80">{settings?.method ?? "Kemenag"}</span>
+                Dihitung untuk {formLokasi || "lokasi Anda"} ({formLat}, {formLng}).
+                Metode tersimpan: <span className="font-medium text-foreground/80">{settings?.method ?? "Kemenag"}</span>
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3">
