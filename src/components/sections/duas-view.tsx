@@ -33,6 +33,20 @@ const ICON_MAP: Record<string, LucideIcon> = {
   BookOpen: BookOpenIcon,
 };
 
+const CORE_CATEGORIES = [
+  { id: "morning-evening", name: "Morning & Evening", icon: "Sunrise" },
+  { id: "after-prayer", name: "After Prayer", icon: "Sparkles" },
+  { id: "before-sleep", name: "Before Sleep", icon: "Moon" },
+  { id: "distress-forgiveness", name: "Distress & Forgiveness", icon: "Heart" },
+  { id: "gratitude-protection", name: "Gratitude & Protection", icon: "Shield" },
+];
+
+function categoryOf(dua: Dua) {
+  if (["distress", "forgiveness"].includes(dua.category)) return "distress-forgiveness";
+  if (["gratitude", "protection", "eating", "travel", "knowledge"].includes(dua.category)) return "gratitude-protection";
+  return dua.category;
+}
+
 export function DuasView() {
   const [activeCategory, setActiveCategory] = React.useState<string>("all");
   const [query, setQuery] = React.useState("");
@@ -41,7 +55,7 @@ export function DuasView() {
   const tts = useTTS();
 
   const filtered = DUAS.filter((d) => {
-    const inCat = activeCategory === "all" || d.category === activeCategory;
+    const inCat = activeCategory === "all" || categoryOf(d) === activeCategory;
     const inSearch =
       !query ||
       d.title.toLowerCase().includes(query.toLowerCase()) ||
@@ -91,9 +105,9 @@ export function DuasView() {
         >
           Semua ({DUAS.length})
         </button>
-        {DUA_CATEGORIES.map((cat) => {
+        {CORE_CATEGORIES.map((cat) => {
           const Icon = ICON_MAP[cat.icon] ?? BookOpen;
-          const count = DUAS.filter((d) => d.category === cat.id).length;
+          const count = DUAS.filter((d) => categoryOf(d) === cat.id).length;
           return (
             <button
               key={cat.id}
@@ -119,7 +133,7 @@ export function DuasView() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <AnimatePresence>
           {filtered.map((d, i) => {
-            const cat = DUA_CATEGORIES.find((c) => c.id === d.category);
+            const cat = CORE_CATEGORIES.find((c) => c.id === categoryOf(d));
             const Icon = cat ? (ICON_MAP[cat.icon] ?? BookOpen) : BookOpen;
             return (
               <motion.button
@@ -189,7 +203,7 @@ export function DuasView() {
                 <div>
                   <p className="text-display text-lg font-medium">{selected.title}</p>
                   <p className="text-[11px] text-muted-foreground">
-                    {DUA_CATEGORIES.find((c) => c.id === selected.category)?.name}
+                    {CORE_CATEGORIES.find((c) => c.id === categoryOf(selected))?.name}
                   </p>
                 </div>
               </div>

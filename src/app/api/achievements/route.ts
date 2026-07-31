@@ -15,13 +15,11 @@ export async function GET() {
   const [
     allPrayers,
     allQuran,
-    allDhikr,
     allHabits,
     allJournals,
   ] = await Promise.all([
     db.prayerLog.findMany({ where: { userId }, orderBy: { date: "desc" } }),
     db.quranLog.findMany({ where: { userId }, orderBy: { date: "desc" } }),
-    db.dhikrLog.findMany({ where: { userId }, orderBy: { date: "desc" } }),
     db.habit.findMany({ where: { userId }, include: { logs: true } }),
     db.journal.findMany({ where: { userId }, orderBy: { date: "desc" } }),
   ]);
@@ -58,9 +56,6 @@ export async function GET() {
   // Quran totals
   const totalQuranPages = allQuran.reduce((a, q) => a + (q.pagesRead ?? 0), 0);
 
-  // Dhikr totals
-  const totalDhikrCounts = allDhikr.reduce((a, d) => a + (d.count ?? 0), 0);
-
   // Habits — best single-habit check-in count
   let bestHabitCheckins = 0;
   let totalHabitCheckins = 0;
@@ -80,7 +75,6 @@ export async function GET() {
     perfectWeekStreak,
     fajrOnTimeStreak,
     totalQuranPages,
-    totalDhikrCounts,
     bestHabitCheckins,
     totalHabitCheckins,
     totalJournalEntries,

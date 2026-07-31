@@ -33,14 +33,10 @@ export function KeyboardShortcutsOverlay() {
         { keys: ["G", "C"], label: "Kalender", action: () => setActiveView("kalender") },
         { keys: ["G", "J"], label: "Jurnal Harian", action: () => setActiveView("jurnal") },
         { keys: ["G", "H"], label: "Kebiasaan", action: () => setActiveView("kebiasaan") },
-        { keys: ["G", "Q"], label: "Quran", action: () => setActiveView("quran") },
         { keys: ["G", "K"], label: "Khatma", action: () => setActiveView("khatma") },
         { keys: ["G", "S"], label: "Shalat", action: () => setActiveView("shalat") },
-        { keys: ["G", "T"], label: "Dzikir", action: () => setActiveView("dzikr") },
         { keys: ["G", "U"], label: "Doa", action: () => setActiveView("doa") },
-        { keys: ["G", "N"], label: "Asmaul Husna", action: () => setActiveView("asma") },
         { keys: ["G", "M"], label: "Hifz Al-Quran", action: () => setActiveView("hifz") },
-        { keys: ["G", "X"], label: "Hifz Al-Quran", action: () => setActiveView("hifz") },
         { keys: ["G", "W"], label: "Tujuan", action: () => setActiveView("tujuan") },
         { keys: ["G", "E"], label: "Pencapaian", action: () => setActiveView("pencapaian") },
         { keys: ["G", "F"], label: "Fokus", action: () => setActiveView("fokus") },
@@ -209,10 +205,10 @@ export function useGlobalKeyboardShortcuts() {
       if (gPressed) {
         const navMap: Record<string, ViewKey> = {
           D: "dashboard", C: "kalender", J: "jurnal", H: "kebiasaan",
-          Q: "quran", K: "khatma", S: "shalat", T: "dzikr", U: "doa",
-          N: "asma", F: "fokus", O: "catatan", G: "tujuan",
+          K: "khatma", S: "shalat", U: "doa",
+          F: "fokus", O: "catatan", G: "tujuan",
           A: "analitik", ",": "pengaturan",
-          M: "hifz", X: "hifz", W: "tujuan", E: "pencapaian",
+          M: "hifz", W: "tujuan", E: "pencapaian",
         };
         const target = navMap[key] ?? navMap[e.key];
         if (target) {

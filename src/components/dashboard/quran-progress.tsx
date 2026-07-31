@@ -114,7 +114,7 @@ export function QuranProgress() {
       </div>
 
       <button
-        onClick={() => setActiveView("quran")}
+        onClick={() => setActiveView("khatma")}
         className="w-full text-sm text-primary font-medium hover:underline underline-offset-4"
       >
         Buka ruang kerja Al-Quran →

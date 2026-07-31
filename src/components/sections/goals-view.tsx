@@ -23,6 +23,17 @@ const CATEGORIES = [
   { key: "dakwah", label: "Dakwah", tint: "bg-cyan-500", text: "text-cyan-600 dark:text-cyan-400", bg: "bg-cyan-500/10" },
 ];
 
+type MilestoneItem = { label: string; done: boolean };
+
+function parseMilestones(value: string | null): MilestoneItem[] {
+  if (!value) return [];
+  return value.split("|").map((item) => ({ done: item.trim().startsWith("[x]"), label: item.replace(/^\s*\[[ x]\]\s*/i, "").trim() })).filter((item) => item.label);
+}
+
+function serializeMilestones(items: MilestoneItem[]) {
+  return items.map((item) => `${item.done ? "[x]" : "[ ]"} ${item.label}`).join(" | ");
+}
+
 export function GoalsView() {
   const { data } = useGoals();
   const createGoal = useCreateGoal();
@@ -33,6 +44,7 @@ export function GoalsView() {
   const [title, setTitle] = React.useState("");
   const [category, setCategory] = React.useState("ibadah");
   const [milestone, setMilestone] = React.useState("");
+  const [status, setStatus] = React.useState<"all" | "active" | "done">("all");
 
   const goals = data?.goals ?? [];
   const active = goals.filter((g) => !g.done);
@@ -90,9 +102,13 @@ export function GoalsView() {
         <SummaryCard label="Kategori" value={new Set(goals.map((g) => g.category)).size} tint="text-sky-500" />
       </div>
 
+      <div className="mb-5 flex gap-2">
+        {(["all", "active", "done"] as const).map((item) => <button key={item} onClick={() => setStatus(item)} className={cn("rounded-full border px-3 py-1.5 text-xs font-medium", status === item ? "border-primary bg-primary text-primary-foreground" : "border-border hover:bg-muted")}>{item === "all" ? "Semua" : item === "active" ? "Aktif" : "Selesai"}</button>)}
+      </div>
+
       {active.length === 0 && done.length === 0 ? (
         <SectionCard><div className="text-center py-12"><p className="text-display text-lg font-medium">Belum ada tujuan</p><p className="text-sm text-muted-foreground mt-1">Tetapkan niat pertamamu.</p></div></SectionCard>
-      ) : (
+      ) : status !== "done" ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <AnimatePresence>
             {active.map((g) => {
@@ -117,7 +133,7 @@ export function GoalsView() {
                         </div>
                       </div>
                       <p className="text-display text-lg font-medium mb-1 leading-snug">{g.title}</p>
-                      {g.milestone ? <p className="text-xs text-muted-foreground mb-3 flex items-center gap-1"><Flag className="h-3 w-3 text-amber-500" /> {g.milestone}</p> : <div className="mb-3" />}
+                      {g.milestone ? <div className="mb-3 space-y-1.5">{parseMilestones(g.milestone).map((item, index, items) => <button key={`${item.label}-${index}`} onClick={() => { const next = items.map((entry, itemIndex) => itemIndex === index ? { ...entry, done: !entry.done } : entry); const completed = next.filter((entry) => entry.done).length; updateGoal.mutate({ id: g.id, body: { milestone: serializeMilestones(next), progress: Math.round((completed / next.length) * 100) } }); }} className="flex w-full items-center gap-2 text-left text-xs text-muted-foreground hover:text-foreground"><span className={cn("flex h-4 w-4 items-center justify-center rounded border", item.done ? "border-emerald-500 bg-emerald-500 text-white" : "border-border")}><Check className={cn("h-3 w-3", !item.done && "opacity-0")} /></span><span className={cn(item.done && "line-through")}>{item.label}</span></button>)}</div> : <div className="mb-3" />}
                       <div className="flex items-center justify-between mb-1.5">
                         <span className="text-xs text-muted-foreground uppercase tracking-wide">Progress</span>
                         <span className="text-sm font-semibold tabular-nums">{g.progress}%</span>
@@ -149,9 +165,9 @@ export function GoalsView() {
             })}
           </AnimatePresence>
         </div>
-      )}
+      ) : null}
 
-      {done.length > 0 ? (
+      {done.length > 0 && status !== "active" ? (
         <div className="mt-8">
           <p className="text-display text-sm font-medium text-muted-foreground mb-3">Selesai · {done.length}</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">

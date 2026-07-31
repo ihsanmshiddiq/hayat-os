@@ -17,7 +17,7 @@ export async function GET() {
   const startOfPrevWeek = new Date(startOfWeek);
   startOfPrevWeek.setDate(startOfPrevWeek.getDate() - 7);
 
-  const [prayerToday, quranToday, habits, journalToday, goals, events, dhikrToday] =
+  const [prayerToday, quranToday, habits, journalToday, goals, events] =
     await Promise.all([
       db.prayerLog.findUnique({ where: { userId_date: { userId, date: today } } }),
       db.quranLog.findUnique({ where: { userId_date: { userId, date: today } } }),
@@ -37,7 +37,6 @@ export async function GET() {
         orderBy: { date: "asc" },
         take: 5,
       }),
-      db.dhikrLog.findMany({ where: { userId, date: today } }),
     ]);
 
   // 14-day prayer history for charts
@@ -51,15 +50,14 @@ export async function GET() {
     orderBy: { date: "asc" },
   });
 
-  // Today's completion (prayers + quran + dhikr + journal)
+  // Today's completion (prayers + quran + journal)
   const prayersDone = prayerToday
     ? [prayerToday.fajr, prayerToday.dhuhr, prayerToday.asr, prayerToday.maghrib, prayerToday.isha].filter(Boolean).length
     : 0;
   const quranDone = (quranToday?.pagesRead ?? 0) >= (quranToday?.targetPages ?? 2) ? 1 : 0;
-  const dhikrDone = dhikrToday.length > 0 && dhikrToday.every((d) => d.count >= d.target) ? 1 : 0;
   const journalDone = journalToday ? 1 : 0;
-  const totalTasks = 5 + 1 + 1 + 1; // 5 prayers + quran + dhikr + journal
-  const doneTasks = prayersDone + quranDone + dhikrDone + journalDone;
+  const totalTasks = 5 + 1 + 1; // 5 prayers + quran + journal
+  const doneTasks = prayersDone + quranDone + journalDone;
 
   // Current streak — consecutive days with at least 4 prayers done
   let streak = 0;
@@ -78,7 +76,6 @@ export async function GET() {
     !prayerToday?.fajr ? "Fajr prayer"
     : !(quranToday && quranToday.pagesRead >= (quranToday.targetPages ?? 2)) ? "Quran reading"
     : !prayerToday?.dhuhr ? "Dhuhr prayer"
-    : !dhikrToday.every((d) => d.count >= d.target) ? "Evening dhikr"
     : !prayerToday?.asr ? "Asr prayer"
     : !journalToday ? "Daily journal"
     : "Continue your streak";
@@ -100,7 +97,6 @@ export async function GET() {
       focus,
       prayers: prayerToday,
       quran: quranToday,
-      dhikr: dhikrToday,
       journal: journalToday,
     },
     prayerHistory: prayerHistory.map((p) => ({

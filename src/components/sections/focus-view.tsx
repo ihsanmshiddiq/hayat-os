@@ -51,11 +51,12 @@ export function FocusView() {
   const { data, isLoading } = useFocus(30);
   const startFocus = useStartFocus();
   const stopFocus = useStopFocus();
+  const breakOptions = FOCUS_BREAKS.filter((item) => item.id !== "dhikr");
 
   // Timer state (in seconds, persisted in localStorage so a refresh doesn't lose progress)
   const [phase, setPhase] = React.useState<Phase>("idle");
   const [modeId, setModeId] = React.useState<string>("deep");
-  const [breakId, setBreakId] = React.useState<string>("dhikr");
+  const [breakId, setBreakId] = React.useState<string>("stretch");
   const [focusMin, setFocusMin] = React.useState(25);
   const [breakMin, setBreakMin] = React.useState(5);
   const [intention, setIntention] = React.useState("");
@@ -75,7 +76,7 @@ export function FocusView() {
         if (s.phase && s.phase !== "idle") {
           setPhase(s.phase);
           setModeId(s.modeId ?? "deep");
-          setBreakId(s.breakId ?? "dhikr");
+          setBreakId(s.breakId ?? "stretch");
           setFocusMin(s.focusMin ?? 25);
           setBreakMin(s.breakMin ?? 5);
           setIntention(s.intention ?? "");
@@ -194,7 +195,7 @@ export function FocusView() {
   };
 
   const mode = FOCUS_MODES.find((m) => m.id === modeId)!;
-  const breakActivity = FOCUS_BREAKS.find((b) => b.id === breakId)!;
+  const breakActivity = breakOptions.find((b) => b.id === breakId) ?? breakOptions[0];
   const ModeIcon = MODE_ICONS[mode.icon] ?? Brain;
   const BreakIcon = BREAK_ICONS[breakActivity.icon] ?? Pause;
 
@@ -212,7 +213,7 @@ export function FocusView() {
     <div>
       <ViewHeader
         title="Fokus"
-        subtitle="Kerja dalam dengan niat. Istirahat penuh kesadaran dengan dzikir."
+        subtitle="Kerja dalam dengan niat, diselingi istirahat penuh kesadaran."
         icon={<TimerIcon className="h-5 w-5" />}
         badge={
           stats?.streak ? (
@@ -261,7 +262,7 @@ export function FocusView() {
             <div className="flex flex-col items-center justify-center py-6">
               <div className="relative">
                 <ProgressRing
-                  progress={progressPct}
+                  value={progressPct}
                   size={280}
                   strokeWidth={12}
                   className={cn(
@@ -385,7 +386,7 @@ export function FocusView() {
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Aktivitas istirahat</p>
                   <div className="flex flex-wrap gap-2">
-                    {FOCUS_BREAKS.map((b) => {
+                    {breakOptions.map((b) => {
                       const Icon = BREAK_ICONS[b.icon] ?? Pause;
                       const active = b.id === breakId;
                       return (

@@ -145,7 +145,7 @@ export function JournalQuickEntry() {
       </div>
 
       <button
-        onClick={() => setActiveView("journal")}
+        onClick={() => setActiveView("jurnal")}
         className="mt-4 text-sm text-primary font-medium hover:underline underline-offset-4"
       >
         Open full journal →

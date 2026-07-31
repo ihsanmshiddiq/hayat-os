@@ -6,7 +6,6 @@ import {
   CalendarDays,
   PenLine,
   Repeat,
-  BookOpen,
   Sparkles,
   StickyNote,
   Target,
@@ -18,12 +17,12 @@ import {
   Sun,
   ChevronDown,
   HandHeart,
-  Disc,
   Crown,
-  Gem,
   Timer,
   BookMarked,
   ScrollText,
+  Wallet,
+  Flower2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
@@ -65,13 +64,10 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: "Ibadah",
     items: [
-      { key: "quran", label: "Al-Quran", icon: BookOpen, description: "Membaca & menghafal" },
-      { key: "khatma", label: "Khatma", icon: ScrollText, description: "Rencana baca Al-Quran" },
+      { key: "khatma", label: "Khatma", icon: ScrollText, description: "Tilawah & rencana khatam" },
       { key: "hifz", label: "Hifz", icon: BookMarked, description: "Pelacak hafalan Al-Quran" },
       { key: "shalat", label: "Shalat", icon: Sparkles, description: "Pelacakan shalat" },
-      { key: "dzikr", label: "Dzikir", icon: Disc, description: "Tasbih & dzikir harian" },
       { key: "doa", label: "Doa", icon: HandHeart, description: "Kumpulan doa harian" },
-      { key: "asma", label: "99 Asma", icon: Gem, description: "Asma'ul Husna" },
     ],
   },
   {
@@ -80,6 +76,8 @@ const NAV_GROUPS: NavGroup[] = [
       { key: "catatan", label: "Catatan", icon: StickyNote, description: "Catatan markdown" },
       { key: "tujuan", label: "Tujuan", icon: Target, description: "Yang kamu bangun" },
       { key: "fokus", label: "Fokus", icon: Timer, description: "Kerja dalam dengan niat" },
+      { key: "keuangan", label: "Keuangan", icon: Wallet, description: "Pemasukan & pengeluaran" },
+      { key: "siklus", label: "Siklus", icon: Flower2, description: "Pelacak siklus" },
       { key: "pencapaian", label: "Pencapaian", icon: Crown, description: "Lencana & pencapaian" },
       { key: "analitik", label: "Analitik", icon: BarChart3, description: "Wawasan indah" },
       { key: "pengaturan", label: "Pengaturan", icon: Settings, description: "Preferensi" },

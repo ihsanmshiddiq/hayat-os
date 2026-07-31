@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import {
-  Crown, Sparkles, Flame, Award, BookOpen, BookMarked, Library, Disc, Infinity as InfinityIcon,
+  Crown, Sparkles, Flame, Award, BookOpen, BookMarked, Library, Infinity as InfinityIcon,
   Repeat, Trophy, PenLine, Star, Sunrise, Lock, Check,
 } from "lucide-react";
 import { ViewHeader } from "@/components/shared/view-header";
@@ -15,14 +15,13 @@ import { ACHIEVEMENTS, TIER_STYLES, type Achievement } from "@/lib/islamic";
 import { cn } from "@/lib/utils";
 
 const ICONS: Record<string, React.ElementType> = {
-  Sparkles, Flame, Award, BookOpen, BookMarked, Library, Disc, Infinity: InfinityIcon,
+  Sparkles, Flame, Award, BookOpen, BookMarked, Library, Infinity: InfinityIcon,
   Repeat, Trophy, Crown, PenLine, Star, Sunrise,
 };
 
 const CATEGORY_LABELS: Record<Achievement["category"], string> = {
   prayer: "Shalat",
   quran: "Quran",
-  dhikr: "Dhikr",
   habit: "Kebiasaan",
   journal: "Jurnal",
   streak: "Runtutan",
@@ -42,9 +41,6 @@ function getProgress(a: Achievement, stats: AchievementsData, todayPercent: numb
     case "quran-60": return stats.totalQuranPages;
     case "quran-300": return stats.totalQuranPages;
     case "quran-604": return stats.totalQuranPages;
-    case "dhikr-100": return stats.totalDhikrCounts;
-    case "dhikr-1000": return stats.totalDhikrCounts;
-    case "dhikr-10000": return stats.totalDhikrCounts;
     case "habit-7": return stats.bestHabitCheckins;
     case "habit-30": return stats.bestHabitCheckins;
     case "habit-100": return stats.bestHabitCheckins;
@@ -65,7 +61,7 @@ export function AchievementsView() {
   const todayPercent = dash?.today.completion.percent ?? 0;
   const emptyStats: AchievementsData = {
     prayerStreak: 0, totalPrayersDone: 0, perfectDays: 0, perfectWeekStreak: 0,
-    fajrOnTimeStreak: 0, totalQuranPages: 0, totalDhikrCounts: 0,
+    fajrOnTimeStreak: 0, totalQuranPages: 0,
     bestHabitCheckins: 0, totalHabitCheckins: 0, totalJournalEntries: 0,
   };
   const s = stats ?? emptyStats;
@@ -79,13 +75,15 @@ export function AchievementsView() {
 
   const unlockedCount = computed.filter((a) => a.unlocked).length;
   const filtered = filter === "all" ? computed : computed.filter((a) => a.tier === filter);
+  const totalXp = computed.reduce((total, achievement) => total + (achievement.unlocked ? ({ bronze: 100, silver: 250, gold: 500, platinum: 1000 }[achievement.tier]) : 0), 0);
+  const level = Math.floor(totalXp / 500) + 1;
 
   // Hero stats
   const heroStats = [
+    { label: `Level ${level}`, value: totalXp, unit: "XP", icon: Sparkles, color: "text-primary" },
     { label: "Terbuka", value: unlockedCount, total: ACHIEVEMENTS.length, icon: Trophy, color: "text-amber-500" },
     { label: "Runtutan shalat", value: s.prayerStreak, unit: "days", icon: Flame, color: "text-rose-500" },
     { label: "Halaman Quran", value: s.totalQuranPages, icon: BookOpen, color: "text-emerald-500" },
-    { label: "Jumlah dzikir", value: s.totalDhikrCounts, icon: Disc, color: "text-primary" },
   ];
 
   return (

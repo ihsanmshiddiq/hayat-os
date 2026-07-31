@@ -44,8 +44,8 @@ const features = [
   },
   {
     icon: Heart,
-    title: "Doa & Asmaul Husna",
-    description: "Koleksi doa harian dan renungan 99 Nama Allah yang indah.",
+    title: "Doa Harian",
+    description: "Koleksi doa shahih dari Al-Quran dan Sunnah untuk berbagai kesempatan.",
     color: "text-rose-500",
     bg: "bg-rose-500/10",
     border: "border-rose-500/20",
@@ -278,7 +278,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {false && <>{/* Testimonials */}
       <section className="py-20 sm:py-28 border-t border-border/60 bg-muted/30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <motion.div
@@ -339,6 +339,8 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      </>}
 
       {/* Quran Quote with GlareHover */}
       <section className="py-20 sm:py-28 border-t border-border/60">

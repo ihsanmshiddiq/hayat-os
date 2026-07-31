@@ -1,8 +1,5 @@
 import { db } from "@/lib/db";
-import {
-  DHIKR_PHRASES,
-  SURAHS,
-} from "@/lib/islamic";
+import { SURAHS } from "@/lib/islamic";
 
 /**
  * Ensures the demo LifeOS user exists and is seeded with a rich,
@@ -262,26 +259,6 @@ export async function ensureSeedData() {
     }
   }
 
-  // Dhikr log for today
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  for (const p of DHIKR_PHRASES.slice(0, 3)) {
-    const exists = await db.dhikrLog.findFirst({
-      where: { userId, date: today, phrase: p.phrase },
-    });
-    if (!exists) {
-      await db.dhikrLog.create({
-        data: {
-          userId,
-          date: today,
-          phrase: p.phrase,
-          count: Math.floor(Math.random() * (p.target + 1)),
-          target: p.target,
-        },
-      });
-    }
-  }
-
   // Sunnah fasts — last 30 days, mostly Mondays/Thursdays + a few white-days
   const existingFasts = await db.sunnahFast.count({ where: { userId } });
   if (existingFasts === 0) {
@@ -308,7 +285,7 @@ export async function ensureSeedData() {
   const existingFocus = await db.focusSession.count({ where: { userId } });
   if (existingFocus === 0) {
     const modes = ["deep", "study", "quran", "reading"];
-    const breaks = ["dhikr", "stretch", "water", "walk"];
+    const breaks = ["stretch", "water", "walk"];
     const intentions = [
       "Reviewing Surah Al-Kahf translation",
       "Memorizing new ayahs",

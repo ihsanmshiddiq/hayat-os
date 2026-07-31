@@ -19,18 +19,17 @@ import { DashboardView } from "@/components/dashboard/dashboard-view";
 const CalendarView = dynamic(() => import("@/components/sections/calendar-view").then(m => ({ default: m.CalendarView })), { ssr: false });
 const JournalView = dynamic(() => import("@/components/sections/journal-view").then(m => ({ default: m.JournalView })), { ssr: false });
 const HabitsView = dynamic(() => import("@/components/sections/habits-view").then(m => ({ default: m.HabitsView })), { ssr: false });
-const QuranView = dynamic(() => import("@/components/sections/quran-view").then(m => ({ default: m.QuranView })), { ssr: false });
 const KhatmaView = dynamic(() => import("@/components/sections/khatma-view").then(m => ({ default: m.KhatmaView })), { ssr: false });
 const SalahView = dynamic(() => import("@/components/sections/salah-view").then(m => ({ default: m.SalahView })), { ssr: false });
-const DhikrView = dynamic(() => import("@/components/sections/dhikr-view").then(m => ({ default: m.DhikrView })), { ssr: false });
 const DuasView = dynamic(() => import("@/components/sections/duas-view").then(m => ({ default: m.DuasView })), { ssr: false });
-const AsmaView = dynamic(() => import("@/components/sections/asma-view").then(m => ({ default: m.AsmaView })), { ssr: false });
 const HifzView = dynamic(() => import("@/components/sections/hifz-view").then(m => ({ default: m.HifzView })), { ssr: false });
 const NotesView = dynamic(() => import("@/components/sections/notes-view").then(m => ({ default: m.NotesView })), { ssr: false });
 const GoalsView = dynamic(() => import("@/components/sections/goals-view").then(m => ({ default: m.GoalsView })), { ssr: false });
+const FocusView = dynamic(() => import("@/components/sections/focus-view").then(m => ({ default: m.FocusView })), { ssr: false });
+const FinanceView = dynamic(() => import("@/components/sections/finance-view").then(m => ({ default: m.FinanceView })), { ssr: false });
+const MenstrualView = dynamic(() => import("@/components/sections/menstrual-view").then(m => ({ default: m.MenstrualView })), { ssr: false });
 const AchievementsView = dynamic(() => import("@/components/sections/achievements-view").then(m => ({ default: m.AchievementsView })), { ssr: false });
 const AnalyticsView = dynamic(() => import("@/components/sections/analytics-view").then(m => ({ default: m.AnalyticsView })), { ssr: false });
-const FocusView = dynamic(() => import("@/components/sections/focus-view").then(m => ({ default: m.FocusView })), { ssr: false });
 const SettingsView = dynamic(() => import("@/components/sections/settings-view").then(m => ({ default: m.SettingsView })), { ssr: false });
 
 export function AppShell() {
@@ -91,18 +90,17 @@ function renderView(view: string) {
     case "kalender": return <CalendarView />;
     case "jurnal": return <JournalView />;
     case "kebiasaan": return <HabitsView />;
-    case "quran": return <QuranView />;
     case "khatma": return <KhatmaView />;
-    case "shalat": return <SalahView />;
-    case "dzikr": return <DhikrView />;
-    case "doa": return <DuasView />;
-    case "asma": return <AsmaView />;
     case "hifz": return <HifzView />;
+    case "shalat": return <SalahView />;
+    case "doa": return <DuasView />;
     case "catatan": return <NotesView />;
     case "tujuan": return <GoalsView />;
+    case "fokus": return <FocusView />;
+    case "keuangan": return <FinanceView />;
+    case "siklus": return <MenstrualView />;
     case "pencapaian": return <AchievementsView />;
     case "analitik": return <AnalyticsView />;
-    case "fokus": return <FocusView />;
     case "pengaturan": return <SettingsView />;
     default: return <DashboardView />;
   }

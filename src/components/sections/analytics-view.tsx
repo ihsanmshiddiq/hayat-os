@@ -42,6 +42,14 @@ export function AnalyticsView() {
   const habitPct = habitLogs.length ? Math.round((habitLogs.filter((l) => l.done).length / habitLogs.length) * 100) : 0;
 
   const streakDays = data?.today.streak ?? 0;
+  const activityByDate = new Map((data?.prayerHistory ?? []).map((p) => [p.date.slice(0, 10), p.count]));
+  const heatmapDays = Array.from({ length: 26 * 7 }, (_, index) => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() - (26 * 7 - 1 - index));
+    const count = activityByDate.get(date.toISOString().slice(0, 10)) ?? 0;
+    return { key: date.toISOString(), count, label: date.toLocaleDateString("id-ID", { day: "numeric", month: "short" }) };
+  });
   const kpis = [
     { label: "Konsistensi shalat", value: `${prayerPct}%`, sub: `${totalPrayers}/${totalPossible} shalat`, icon: Activity, tint: "text-emerald-500", bg: "bg-emerald-500/10" },
     { label: "Hari baca Quran", value: `${quranPct}%`, sub: `${quranDays}/${quranHistory.length} hari`, icon: BookOpen, tint: "text-amber-500", bg: "bg-amber-500/10" },
@@ -82,6 +90,16 @@ export function AnalyticsView() {
           );
         })}
       </div>
+
+      <SectionCard className="mb-6 overflow-x-auto">
+        <div className="flex items-end justify-between gap-4 mb-4">
+          <div><h3 className="text-display text-lg font-medium">Kalender Kontribusi</h3><p className="text-sm text-muted-foreground">26 minggu terakhir · intensitas berdasarkan shalat yang tercatat</p></div>
+          <div className="flex items-center gap-1 text-[10px] text-muted-foreground"><span>Kurang</span>{[0, 1, 3, 5].map((value) => <span key={value} className={`h-3 w-3 rounded-sm ${value === 0 ? "bg-muted" : value < 3 ? "bg-primary/30" : value < 5 ? "bg-primary/60" : "bg-primary"}`} />)}<span>Aktif</span></div>
+        </div>
+        <div className="grid grid-rows-7 grid-flow-col gap-1 min-w-[620px]">
+          {heatmapDays.map((day) => <div key={day.key} title={`${day.label}: ${day.count}/5 shalat`} className={`h-3.5 w-3.5 rounded-sm transition-colors ${day.count === 0 ? "bg-muted" : day.count < 3 ? "bg-primary/30" : day.count < 5 ? "bg-primary/60" : "bg-primary"}`} />)}
+        </div>
+      </SectionCard>
 
       {/* Prayer trend */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">

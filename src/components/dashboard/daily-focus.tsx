@@ -2,10 +2,10 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, BookOpen, Sparkles, PenLine, Plus, Minus } from "lucide-react";
-import { useDashboard, useTogglePrayer, useSunnah, useUpdateDhikr } from "@/lib/hooks";
+import { Check, BookOpen, PenLine, Plus, Minus } from "lucide-react";
+import { useDashboard, useTogglePrayer, useSunnah } from "@/lib/hooks";
 import { ProgressRing } from "@/components/shared/progress-ring";
-import { DHIKR_PHRASES, OBLIGATORY_PRAYERS, PRAYER_AR } from "@/lib/islamic";
+import { OBLIGATORY_PRAYERS, PRAYER_AR } from "@/lib/islamic";
 import { useAppStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
@@ -13,13 +13,11 @@ export function DailyFocus() {
   const { data } = useDashboard();
   const togglePrayer = useTogglePrayer();
   const sunnah = useSunnah();
-  const updateDhikr = useUpdateDhikr();
   const { setActiveView } = useAppStore();
 
   const completion = data?.today.completion ?? { done: 0, total: 8, percent: 0 };
   const prayers = data?.today.prayers;
   const quran = data?.today.quran;
-  const dhikr = data?.today.dhikr ?? [];
 
   const prayerItems = OBLIGATORY_PRAYERS.map((p) => ({
     key: p.toLowerCase() as "fajr" | "dhuhr" | "asr" | "maghrib" | "isha",
@@ -29,7 +27,6 @@ export function DailyFocus() {
   }));
 
   const quranDone = quran ? quran.pagesRead >= quran.targetPages : false;
-  const dhikrDone = dhikr.length > 0 && dhikr.every((d) => d.count >= d.target);
   const journalDone = !!data?.today.journal;
 
   return (
@@ -66,8 +63,8 @@ export function DailyFocus() {
             </div>
           </FocusGroup>
 
-          {/* Quran + Dhikr + Journal */}
-          <div className="grid sm:grid-cols-3 gap-2.5">
+          {/* Quran + Journal */}
+          <div className="grid sm:grid-cols-2 gap-2.5">
             <FocusRow
               icon={<BookOpen className="h-4 w-4" />}
               tint="text-emerald-600 dark:text-emerald-400"
@@ -75,16 +72,7 @@ export function DailyFocus() {
               label="Al-Quran"
               value={quran ? `${quran.pagesRead}/${quran.targetPages} halaman` : "0/2 halaman"}
               done={quranDone}
-              onClick={() => setActiveView("quran")}
-            />
-            <FocusRow
-              icon={<Sparkles className="h-4 w-4" />}
-              tint="text-amber-600 dark:text-amber-400"
-              bg="bg-amber-500/10"
-              label="Dzikir"
-              value={`${dhikrDone ? "Selesai" : `${dhikr.length}/${DHIKR_PHRASES.length - 2} lafadz`}`}
-              done={dhikrDone}
-              onClick={() => setActiveView("dashboard")}
+              onClick={() => setActiveView("khatma")}
             />
             <FocusRow
               icon={<PenLine className="h-4 w-4" />}
@@ -95,40 +83,6 @@ export function DailyFocus() {
               done={journalDone}
               onClick={() => setActiveView("jurnal")}
             />
-          </div>
-
-          {/* Quick dhikr counter */}
-          <div className="rounded-xl border border-border/60 bg-muted/40 p-3.5">
-            <div className="flex items-center justify-between mb-2.5">
-              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Dzikir Cepat</span>
-              <span className="text-[11px] text-muted-foreground">ketuk untuk menghitung</span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {DHIKR_PHRASES.slice(0, 3).map((p) => {
-                const log = dhikr.find((d) => d.phrase === p.phrase);
-                const count = log?.count ?? 0;
-                const target = log?.target ?? p.target;
-                const complete = count >= target;
-                return (
-                  <button
-                    key={p.phrase}
-                    onClick={() =>
-                      updateDhikr.mutate({ phrase: p.phrase, count: complete ? 0 : count + 1, target })
-                    }
-                    className={cn(
-                      "group flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs transition-all",
-                      complete
-                        ? "border-primary/40 bg-primary/10 text-primary"
-                        : "border-border bg-card hover:border-border hover:bg-muted/60"
-                    )}
-                  >
-                    <span className="text-arabic text-sm leading-none">{p.ar}</span>
-                    <span className="font-medium">{p.phrase}</span>
-                    <span className="tabular-nums text-muted-foreground">{count}/{target}</span>
-                  </button>
-                );
-              })}
-            </div>
           </div>
 
           {/* Sunnah counter */}

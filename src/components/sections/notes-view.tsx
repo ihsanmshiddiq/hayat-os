@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { StickyNote, Plus, Search, Pin, Trash2, Tag, Download, FileText, Files, ChevronDown } from "lucide-react";
+import { StickyNote, Plus, Search, Pin, Trash2, Tag, Download, FileText, Files, ChevronDown, Eye, Pencil, Bold, List } from "lucide-react";
 import { ViewHeader } from "@/components/shared/view-header";
 import { SectionCard } from "@/components/shared/section-card";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,8 @@ import { useNotes, useCreateNote, useUpdateNote, useDeleteNote, type Note } from
 import { useDebounce } from "@/hooks/use-now";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import ReactMarkdown from "react-markdown";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 function countWords(text: string): number {
   const t = text.trim();
@@ -73,6 +75,8 @@ export function NotesView() {
   const [query, setQuery] = React.useState("");
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
   const [exportOpen, setExportOpen] = React.useState(false);
+  const [createOpen, setCreateOpen] = React.useState(false);
+  const [draft, setDraft] = React.useState({ title: "", folder: "Inbox", tags: "", content: "" });
   const debouncedQuery = useDebounce(query, 200);
 
   const allNotes = data?.notes ?? [];
@@ -90,9 +94,10 @@ export function NotesView() {
   const selected = notes.find((n) => n.id === selectedId) ?? notes[0] ?? null;
 
   const create = () => {
+    if (!draft.title.trim()) return toast.error("Judul catatan wajib diisi");
     createNote.mutate(
-      { title: "Catatan tanpa judul", content: "", folder: activeFolder === "All" ? "Inbox" : activeFolder },
-      { onSuccess: (res) => setSelectedId(res.note.id) }
+      { ...draft, folder: draft.folder || (activeFolder === "All" ? "Inbox" : activeFolder) },
+      { onSuccess: (res) => { setSelectedId(res.note.id); setCreateOpen(false); setDraft({ title: "", folder: "Inbox", tags: "", content: "" }); } }
     );
   };
 
@@ -166,10 +171,25 @@ export function NotesView() {
                 )}
               </AnimatePresence>
             </div>
-            <Button onClick={create} className="gap-2"><Plus className="h-4 w-4" /> Catatan baru</Button>
+            <Button onClick={() => { setDraft((d) => ({ ...d, folder: activeFolder === "All" ? "Inbox" : activeFolder })); setCreateOpen(true); }} className="gap-2"><Plus className="h-4 w-4" /> Catatan baru</Button>
           </div>
         }
       />
+
+      <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+        <DialogContent className="sm:max-w-xl">
+          <DialogHeader><DialogTitle className="text-display">Catatan Baru</DialogTitle></DialogHeader>
+          <div className="space-y-3 pt-2">
+            <Input value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} placeholder="Judul catatan" autoFocus />
+            <div className="grid grid-cols-2 gap-3">
+              <Input value={draft.folder} onChange={(e) => setDraft({ ...draft, folder: e.target.value })} placeholder="Folder" />
+              <Input value={draft.tags} onChange={(e) => setDraft({ ...draft, tags: e.target.value })} placeholder="tag, dipisah koma" />
+            </div>
+            <textarea value={draft.content} onChange={(e) => setDraft({ ...draft, content: e.target.value })} placeholder="Mulai menulis…" className="min-h-40 w-full rounded-xl border border-border bg-background p-3 text-sm outline-none focus:border-primary/40" />
+            <Button onClick={create} className="w-full" disabled={createNote.isPending}>Simpan catatan</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6">
         {/* Sidebar: folders + search */}
@@ -271,6 +291,7 @@ function NoteEditor({
   const [title, setTitle] = React.useState(note.title);
   const [content, setContent] = React.useState(note.content);
   const [tags, setTags] = React.useState(note.tags.join(", "));
+  const [preview, setPreview] = React.useState(false);
 
   React.useEffect(() => {
     setTitle(note.title);
@@ -289,6 +310,7 @@ function NoteEditor({
   const wordCount = countWords(content);
   const charCount = content.length;
   const readMinutes = Math.max(1, Math.round(wordCount / 200));
+  const insertMarkdown = (text: string) => setContent((value) => `${value}${value ? "\n" : ""}${text}`);
 
   return (
     <SectionCard className="flex flex-col">
@@ -304,12 +326,17 @@ function NoteEditor({
           <Trash2 className="h-4 w-4" />
         </button>
       </div>
-      <textarea
+      <div className="mb-2 flex items-center gap-1 border-b border-border/60 pb-2">
+        <button onClick={() => insertMarkdown("**teks tebal**")} className="rounded p-1.5 hover:bg-muted" title="Tebal"><Bold className="h-3.5 w-3.5" /></button>
+        <button onClick={() => insertMarkdown("- item daftar")} className="rounded p-1.5 hover:bg-muted" title="Daftar"><List className="h-3.5 w-3.5" /></button>
+        <button onClick={() => setPreview((v) => !v)} className="ml-auto inline-flex items-center gap-1 rounded px-2 py-1 text-xs hover:bg-muted">{preview ? <Pencil className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}{preview ? "Tulis" : "Pratinjau"}</button>
+      </div>
+      {preview ? <div className="flex-1 min-h-[300px] rounded-lg border border-border bg-background/60 p-3 prose prose-sm dark:prose-invert max-w-none"><ReactMarkdown>{content || "_Belum ada isi catatan._"}</ReactMarkdown></div> : <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="Tulis dalam markdown… # Judul, **tebal**, - daftar"
         className="flex-1 min-h-[300px] resize-none rounded-lg border border-border bg-background/60 px-3 py-2.5 text-sm font-mono leading-relaxed focus:bg-background focus:border-primary/40 outline-none transition-colors scroll-slim"
-      />
+      />}
       <div className="flex items-center gap-2 mt-3">
         <Tag className="h-3.5 w-3.5 text-muted-foreground" />
         <Input value={tags} onChange={(e) => setTags(e.target.value)} placeholder="tags, comma, separated" className="h-8 text-xs" />

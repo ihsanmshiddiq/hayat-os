@@ -152,7 +152,7 @@ function ActivePlanHero({ plan }: { plan: KhatmaActive }) {
           <div className="flex flex-col items-center sm:items-start">
             <ProgressRing value={completionPct} size={132} strokeWidth={10}>
               <div className="text-center">
-                <AnimatedNumber value={completionPct} className="text-display text-3xl font-semibold tabular-nums" suffix="%" />
+                <AnimatedNumber value={completionPct} className="text-display text-3xl font-semibold tabular-nums" />%
                 <p className="text-[10px] text-muted-foreground uppercase tracking-wider mt-0.5">selesai</p>
               </div>
             </ProgressRing>

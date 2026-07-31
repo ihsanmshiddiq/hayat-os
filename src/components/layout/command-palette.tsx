@@ -13,10 +13,10 @@ import {
 } from "@/components/ui/command";
 import { NAV_ITEMS } from "@/components/layout/sidebar";
 import { useAppStore } from "@/lib/store";
-import { Search, Moon, Sun, CornerDownLeft, HandHeart, Gem, BookMarked, Timer, ScrollText, Compass } from "lucide-react";
+import { Search, Moon, Sun, CornerDownLeft, HandHeart, BookMarked, Timer, ScrollText } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useDashboard } from "@/lib/hooks";
-import { SURAHS, ASMA_UL_HUSNA, getNameOfDay, QURAN_SURAHS } from "@/lib/islamic";
+import { QURAN_SURAHS } from "@/lib/islamic";
 import { DUAS } from "@/lib/duas";
 
 export function CommandPalette() {
@@ -111,14 +111,6 @@ export function CommandPalette() {
             <ScrollText className="h-4 w-4" />
             Mulai rencana Khatma Quran
           </CommandItem>
-          <CommandItem
-            value="find qibla direction kaaba mecca"
-            onSelect={() => { setActiveView("shalat"); setCommandOpen(false); }}
-            className="gap-3"
-          >
-            <Compass className="h-4 w-4" />
-            Cari arah Kiblat
-          </CommandItem>
         </CommandGroup>
 
         <CommandSeparator />
@@ -144,22 +136,6 @@ export function CommandPalette() {
           </CommandGroup>
         )}
 
-        <CommandSeparator />
-
-        <CommandGroup heading="Quran — jump to surah">
-          {SURAHS.slice(0, 8).map((s) => (
-            <CommandItem
-              key={s.number}
-              value={`${s.name} ${s.english} ${s.number}`}
-              onSelect={() => { setActiveView("quran"); setCommandOpen(false); }}
-              className="gap-3"
-            >
-              <span className="text-arabic text-base text-primary">{s.arabic}</span>
-              <span className="font-medium">{s.name}</span>
-              <span className="ml-auto text-xs text-muted-foreground">{s.ayahs} ayahs</span>
-            </CommandItem>
-          ))}
-        </CommandGroup>
 
         <CommandSeparator />
 
@@ -179,30 +155,6 @@ export function CommandPalette() {
         </CommandGroup>
 
         <CommandSeparator />
-
-        <CommandGroup heading="99 Names — jump to">
-          <CommandItem
-            value="name of the day asma ul husna"
-            onSelect={() => { setActiveView("asma"); setCommandOpen(false); }}
-            className="gap-3"
-          >
-            <Gem className="h-4 w-4 text-primary" />
-            <span className="font-medium">Nama Hari Ini</span>
-            <span className="ml-auto text-xs text-muted-foreground">{getNameOfDay().translit}</span>
-          </CommandItem>
-          {ASMA_UL_HUSNA.slice(0, 10).map((n) => (
-            <CommandItem
-              key={n.number}
-              value={`name ${n.translit} ${n.meaning} ${n.arabic} allah`}
-              onSelect={() => { setActiveView("asma"); setCommandOpen(false); }}
-              className="gap-3"
-            >
-              <span className="text-arabic text-base text-primary">{n.arabic}</span>
-              <span className="font-medium">{n.translit}</span>
-              <span className="ml-auto text-xs text-muted-foreground truncate max-w-[160px]">{n.meaning}</span>
-            </CommandItem>
-          ))}
-        </CommandGroup>        <CommandSeparator />
 
         <CommandGroup heading="Hifz — jump to surah">
           {QURAN_SURAHS.slice(0, 12).map((s) => (

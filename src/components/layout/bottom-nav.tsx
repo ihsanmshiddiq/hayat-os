@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import {
   LayoutDashboard,
-  BookOpen,
+  ScrollText,
   Sparkles,
   Repeat,
   Settings,
@@ -20,7 +20,7 @@ interface MobileNavItem {
 
 const MOBILE_NAV_ITEMS: MobileNavItem[] = [
   { key: "dashboard", label: "Dasbor", icon: LayoutDashboard },
-  { key: "quran", label: "Quran", icon: BookOpen },
+  { key: "khatma", label: "Khatma", icon: ScrollText },
   { key: "shalat", label: "Shalat", icon: Sparkles },
   { key: "kebiasaan", label: "Kebiasaan", icon: Repeat },
   { key: "pengaturan", label: "Lainnya", icon: Settings },

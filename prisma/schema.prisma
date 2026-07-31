@@ -31,7 +31,6 @@ model User {
   notes     Note[]
   goals     Goal[]
   events    CalendarEvent[]
-  dhikrs    DhikrLog[]
   fasts     SunnahFast[]
   focus     FocusSession[]
   hifz      HifzSurah[]
@@ -140,7 +139,7 @@ model FocusSession {
   durationSec Int      // planned duration (e.g. 1500 = 25min)
   elapsedSec  Int      @default(0) // actual elapsed when stopped
   mode        String   @default("deep") // deep | study | quran | reading
-  breakActivity String? // dhikr | stretch | water | walk | none
+  breakActivity String? // stretch | water | walk | none
   completed   Boolean  @default(false) // did the session reach full duration?
   intention   String?  // user-set intention for the session
   createdAt   DateTime @default(now())
@@ -295,23 +294,6 @@ model CalendarEvent {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId, date])
-}
-
-/// Daily dhikr counter.
-model DhikrLog {
-  id        String   @id @default(cuid())
-  userId    String
-  date      DateTime
-  phrase    String   @default("Subhanallah")
-  count     Int      @default(0)
-  target    Int      @default(33)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, date, phrase])
   @@index([userId, date])
 }
 

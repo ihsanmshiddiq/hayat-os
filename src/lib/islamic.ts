@@ -640,30 +640,6 @@ export function getNameOfDay(date = new Date()): DivineName {
 }
 
 /**
- * Calculate the Qibla bearing (direction to the Kaaba in Makkah) from a given
- * location using the great-circle initial bearing formula.
- * Returns degrees clockwise from true North.
- *
- * Kaaba coordinates: 21.4225° N, 39.8262° E
- */
-export function calculateQibla(lat: number, lng: number): number {
-  const KAABA_LAT = 21.4225;
-  const KAABA_LNG = 39.8262;
-  const φ1 = lat * DEG2RAD;
-  const φ2 = KAABA_LAT * DEG2RAD;
-  const Δλ = (KAABA_LNG - lng) * DEG2RAD;
-  const y = Math.sin(Δλ);
-  const x = Math.cos(φ1) * Math.tan(φ2) - Math.sin(φ1) * Math.cos(Δλ);
-  let θ = Math.atan2(y, x) * RAD2DEG;
-  return (θ + 360) % 360;
-}
-
-/** Compass direction label from a bearing in degrees. */
-export function compassDirection(bearing: number): string {
-  const dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
-  return dirs[Math.round(bearing / 45) % 8];
-}
-
 /* ---------------- Journal reflection prompts ---------------- */
 
 export interface JournalPrompt {
@@ -712,7 +688,7 @@ export interface Achievement {
   title: string;
   description: string;
   icon: string; // lucide icon name
-  category: "prayer" | "quran" | "dhikr" | "habit" | "journal" | "streak" | "special";
+  category: "prayer" | "quran" | "habit" | "journal" | "streak" | "special";
   tier: "bronze" | "silver" | "gold" | "platinum";
   goal: number; // numeric target
   unit: string; // e.g. "days", "pages", "count"
@@ -729,10 +705,6 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: "quran-60", title: "Khatm in Progress", description: "Read 60 pages (1 juz)", icon: "BookMarked", category: "quran", tier: "silver", goal: 60, unit: "pages" },
   { id: "quran-300", title: "Halfway There", description: "Read 300 pages", icon: "Library", category: "quran", tier: "gold", goal: 300, unit: "pages" },
   { id: "quran-604", title: "Khatm Complete", description: "Finish the entire Quran (604 pages)", icon: "Crown", category: "quran", tier: "platinum", goal: 604, unit: "pages" },
-  // Dhikr
-  { id: "dhikr-100", title: "Tongue of Remembrance", description: "Recite 100 dhikr counts", icon: "Disc", category: "dhikr", tier: "bronze", goal: 100, unit: "counts" },
-  { id: "dhikr-1000", title: "Thousand Lights", description: "Recite 1,000 dhikr counts", icon: "Sparkles", category: "dhikr", tier: "silver", goal: 1000, unit: "counts" },
-  { id: "dhikr-10000", title: "Ocean of Dhikr", description: "Recite 10,000 dhikr counts", icon: "Infinity", category: "dhikr", tier: "gold", goal: 10000, unit: "counts" },
   // Habits
   { id: "habit-7", title: "Bangun Momen", description: "Selesaikan kebiasaan 7 kali", icon: "Repeat", category: "habit", tier: "bronze", goal: 7, unit: "kali" },
   { id: "habit-30", title: "Kebiasaan Terbentuk", description: "Selesaikan kebiasaan 30 kali", icon: "Trophy", category: "habit", tier: "silver", goal: 30, unit: "kali" },
@@ -1375,7 +1347,14 @@ export function getUpcomingIslamicEvents(count = 4): UpcomingIslamicEvent[] {
     if (monthDiff < 0 || (monthDiff === 0 && ev.day < curDay)) monthDiff += 12;
     const dayDelta = ev.day - (monthDiff === 0 ? curDay : 0);
     const daysUntil = Math.round(monthDiff * 29.53 + Math.max(dayDelta, 0));
-    return { ...ev, daysUntil };
+    return {
+      hijriMonth: ev.month,
+      hijriDay: ev.day,
+      name: ev.name,
+      type: ev.type,
+      description: getIslamicEventDescription(ev.name),
+      daysUntil,
+    };
   });
   return events.sort((a, b) => a.daysUntil - b.daysUntil).slice(0, count);
 }

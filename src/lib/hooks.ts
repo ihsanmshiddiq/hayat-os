@@ -35,7 +35,6 @@ export interface DashboardData {
       pagesRead: number; targetPages: number; lastSurah: string | null; lastAyah: number | null;
       memorizedAyahs: number; minutesSpent: number; ayahsRead: number;
     } | null;
-    dhikr: { id: string; phrase: string; count: number; target: number }[];
     journal: { id: string; mood: number | null } | null;
   };
   prayerHistory: {
@@ -185,7 +184,7 @@ export function useNotes(folder?: string) {
 
 export function useCreateNote() {
   const qc = useQueryClient();
-  return useMutation({
+  return useMutation<{ note: Note }, Error, { title: string; content?: string; folder?: string; tags?: string }>({
     mutationFn: (vars: { title: string; content?: string; folder?: string; tags?: string }) =>
       json("/api/notes", { method: "POST", body: JSON.stringify(vars) }),
     onSettled: () => qc.invalidateQueries({ queryKey: ["notes"] }),
@@ -288,32 +287,6 @@ export function useDeleteEvent() {
   });
 }
 
-/* ---------------- Dhikr ---------------- */
-
-export function useUpdateDhikr() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (vars: { phrase: string; count: number; target?: number }) =>
-      json("/api/dhikr", { method: "PATCH", body: JSON.stringify(vars) }),
-    onSettled: () => qc.invalidateQueries({ queryKey: ["dashboard"] }),
-  });
-}
-
-/* ---------------- Dhikr history (30-day) ---------------- */
-
-export interface DhikrHistoryItem {
-  date: string;
-  total: number;
-  phrases: { phrase: string; count: number; target: number }[];
-}
-
-export function useDhikrHistory(days = 30) {
-  return useQuery({
-    queryKey: ["dhikr-history", days],
-    queryFn: () => json<{ history: DhikrHistoryItem[] }>(`/api/dhikr?days=${days}`),
-  });
-}
-
 /* ---------------- Achievements ---------------- */
 
 export interface AchievementsData {
@@ -323,7 +296,6 @@ export interface AchievementsData {
   perfectWeekStreak: number;
   fajrOnTimeStreak: number;
   totalQuranPages: number;
-  totalDhikrCounts: number;
   bestHabitCheckins: number;
   totalHabitCheckins: number;
   totalJournalEntries: number;

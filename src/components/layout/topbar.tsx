@@ -213,7 +213,7 @@ export function Topbar({ userName, userImage }: TopbarProps) {
                         title="Shalat berikutnya mendekat"
                         desc={next && now ? `${next.name} dalam ${formatCountdown(next.msRemaining)} · ${formatTimeInZone(next.time, tz)}` : "—"}
                       />
-                      <NotifItem title="Baca Al-Quran" desc="2 halaman lagi untuk target hari ini" />
+                      <NotifItem title="Baca Al-Quran" desc="Target tilawah hari ini" />
                       <NotifItem title="Jurnal harian" desc="Kamu belum menulis hari ini" />
                     </div>
                   </motion.div>
