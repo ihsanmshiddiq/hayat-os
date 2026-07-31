@@ -5,7 +5,7 @@ import { ensureSeedData } from "@/lib/seed";
 export const dynamic = "force-dynamic";
 
 /** GET /api/dashboard — aggregated overview for the dashboard home. */
-export async function GET() {
+async function loadDashboard() {
   const user = await ensureSeedData();
   const userId = user.id;
 
@@ -80,7 +80,7 @@ export async function GET() {
     : !journalToday ? "Daily journal"
     : "Continue your streak";
 
-  return NextResponse.json({
+  return {
     user: {
       id: user.id,
       name: user.name,
@@ -140,7 +140,47 @@ export async function GET() {
       type: e.type,
       note: e.note,
     })),
+  };
+}
+
+/**
+ * The dashboard remains reviewable when the optional demo database is offline.
+ * Mutating routes still require the database; this read-only fallback avoids a
+ * blank application shell while configuration is being completed.
+ */
+export async function GET() {
+  try {
+    const dashboard = await Promise.race([
+      loadDashboard(),
+      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("Database timeout")), 5000)),
+    ]);
+    return NextResponse.json(dashboard);
+  } catch (error) {
+    console.error("Dashboard database fallback:", error);
+    return NextResponse.json(createDemoDashboard(), { headers: { "x-hayat-data-source": "demo-fallback" } });
+  }
+}
+
+function createDemoDashboard() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const history = Array.from({ length: 14 }, (_, index) => {
+    const date = new Date(today);
+    date.setDate(today.getDate() - (13 - index));
+    const completed = index % 4 === 0 ? 3 : 4;
+    return { date, fajr: true, dhuhr: true, asr: completed >= 3, maghrib: completed >= 4, isha: index % 3 !== 0, sunnah: index % 3 };
   });
+  return {
+    user: { id: "demo", name: "Anda", email: "demo@hayat.app", location: "Jakarta, Indonesia", latitude: -6.2088, longitude: 106.8456, method: "Kemenag" },
+    today: {
+      date: today.toISOString(), completion: { done: 0, total: 7, percent: 0 }, streak: 4, focus: "Mulai dengan niat baik hari ini",
+      prayers: { fajr: false, dhuhr: false, asr: false, maghrib: false, isha: false, sunnah: 0 },
+      quran: { pagesRead: 0, targetPages: 2, lastSurah: "Al-Fatihah", lastAyah: 7, memorizedAyahs: 0, minutesSpent: 0, ayahsRead: 0 }, journal: null,
+    },
+    prayerHistory: history.map((entry) => ({ ...entry, count: [entry.fajr, entry.dhuhr, entry.asr, entry.maghrib, entry.isha].filter(Boolean).length })),
+    quranHistory: history.map((entry, index) => ({ date: entry.date, pagesRead: index % 4 === 0 ? 0 : 2, targetPages: 2, minutesSpent: index % 4 === 0 ? 0 : 15 })),
+    habits: [], goals: [], upcomingEvents: [],
+  };
 }
 
 function computeHabitStreak(logs: { date: Date; done: boolean }[]): number {
