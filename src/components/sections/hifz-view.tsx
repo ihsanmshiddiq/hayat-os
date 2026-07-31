@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { ViewHeader } from "@/components/shared/view-header";
 import { SectionCard } from "@/components/shared/section-card";
+import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { ProgressRing } from "@/components/shared/progress-ring";
 import { AnimatedNumber } from "@/components/shared/animated-number";
 import {
@@ -437,62 +438,60 @@ export function HifzView() {
               const isOverdue =
                 surah.status === "memorized" && surah.daysUntilReview <= 0;
               return (
-                <motion.button
+                <SpotlightCard
                   key={surah.number}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: Math.min(i * 0.012, 0.3) }}
                   onClick={() => setSelected(surah)}
-                  className={cn(
-                    "group relative overflow-hidden rounded-xl border p-3 text-left transition-all",
-                    "hover:shadow-premium hover:-translate-y-0.5",
-                    surah.status === "memorized" &&
-                      "border-emerald-500/30 bg-emerald-500/5",
-                    surah.status === "in_progress" &&
-                      "border-amber-500/30 bg-amber-500/5",
-                    surah.status === "needs_review" &&
-                      "border-rose-500/30 bg-rose-500/5",
-                    surah.status === "not_started" &&
-                      "border-border/70 bg-card hover:border-border",
-                  )}
+                  className="p-3 text-left cursor-pointer"
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-semibold tabular-nums text-muted-foreground">
-                      {String(surah.number).padStart(3, "0")}
-                    </span>
-                    <StatusIcon
-                      status={surah.status}
-                      className={cn("h-3.5 w-3.5", meta.color)}
-                    />
-                  </div>
-                  <p className="text-arabic text-lg leading-none mb-1.5 text-foreground">
-                    {surah.arabic}
-                  </p>
-                  <p className="text-xs font-medium truncate">{surah.name}</p>
-                  <div className="flex items-center justify-between mt-2">
-                    <span className="text-[10px] text-muted-foreground tabular-nums">
-                      {surah.ayahs} ayahs
-                    </span>
-                    <span className="text-[9px] uppercase tracking-wide text-muted-foreground">
-                      {surah.revelation === "meccan" ? "Mk" : "Md"}
-                    </span>
-                  </div>
-                  {/* Progress bar for in-progress */}
-                  {isMenghafal && (
-                    <div className="mt-2 h-1 rounded-full bg-muted overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${progress}%` }}
-                        transition={{ duration: 0.6 }}
-                        className="h-full bg-amber-500"
+                  <motion.div
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: Math.min(i * 0.012, 0.3) }}
+                    className={cn(
+                      "relative",
+                      surah.status === "memorized" && "bg-emerald-500/5",
+                      surah.status === "in_progress" && "bg-amber-500/5",
+                      surah.status === "needs_review" && "bg-rose-500/5",
+                    )}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-semibold tabular-nums text-muted-foreground">
+                        {String(surah.number).padStart(3, "0")}
+                      </span>
+                      <StatusIcon
+                        status={surah.status}
+                        className={cn("h-3.5 w-3.5", meta.color)}
                       />
                     </div>
-                  )}
-                  {/* Overdue indicator */}
-                  {isOverdue && (
-                    <div className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-rose-500 animate-pulse" />
-                  )}
-                </motion.button>
+                    <p className="text-arabic text-lg leading-none mb-1.5 text-foreground">
+                      {surah.arabic}
+                    </p>
+                    <p className="text-xs font-medium truncate">{surah.name}</p>
+                    <div className="flex items-center justify-between mt-2">
+                      <span className="text-[10px] text-muted-foreground tabular-nums">
+                        {surah.ayahs} ayahs
+                      </span>
+                      <span className="text-[9px] uppercase tracking-wide text-muted-foreground">
+                        {surah.revelation === "meccan" ? "Mk" : "Md"}
+                      </span>
+                    </div>
+                    {/* Progress bar for in-progress */}
+                    {isMenghafal && (
+                      <div className="mt-2 h-1 rounded-full bg-muted overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${progress}%` }}
+                          transition={{ duration: 0.6 }}
+                          className="h-full bg-amber-500"
+                        />
+                      </div>
+                    )}
+                    {/* Overdue indicator */}
+                    {isOverdue && (
+                      <div className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-rose-500 animate-pulse" />
+                    )}
+                  </motion.div>
+                </SpotlightCard>
               );
             })}
           </div>

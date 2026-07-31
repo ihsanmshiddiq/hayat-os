@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { ViewHeader } from "@/components/shared/view-header";
 import { SectionCard } from "@/components/shared/section-card";
+import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { ProgressRing } from "@/components/shared/progress-ring";
 import { AnimatedNumber } from "@/components/shared/animated-number";
 import { IslamicGeometricPattern } from "@/components/shared/islamic-pattern";
@@ -226,7 +227,7 @@ export function FocusView() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Timer hero — spans 2 cols */}
-        <SectionCard className="lg:col-span-2 relative overflow-hidden !p-0">
+        <SpotlightCard className="lg:col-span-2 relative overflow-hidden !p-0">
           <IslamicGeometricPattern className="text-primary" opacity={0.05} size={56} />
           <div className="relative p-6 sm:p-8">
             {/* Phase label */}
@@ -491,67 +492,67 @@ export function FocusView() {
               </motion.div>
             )}
           </div>
-        </SectionCard>
+        </SpotlightCard>
 
         {/* Right column: stats + today's sessions */}
         <div className="space-y-6">
-          {/* Stats card */}
-          <SectionCard>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-display text-lg font-medium">Fokusmu</h3>
-              <TimerIcon className="h-4 w-4 text-muted-foreground" />
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <StatTile label="Hari ini" value={stats?.todayCount ?? 0} suffix="sesi" tint="text-primary" bg="bg-primary/10" animate />
-              <StatTile label="Hari ini" value={Math.round((stats?.todaySeconds ?? 0) / 60)} suffix="mnt" tint="text-emerald-600 dark:text-emerald-400" bg="bg-emerald-500/10" animate />
-              <StatTile label="Runtutan" value={stats?.streak ?? 0} suffix="hari" tint="text-amber-600 dark:text-amber-400" bg="bg-amber-500/10" animate icon={<Flame className="h-3.5 w-3.5" />} />
-              <StatTile label="Sepanjang waktu" value={stats?.totalSessions ?? 0} suffix="total" tint="text-rose-600 dark:text-rose-400" bg="bg-rose-500/10" animate />
-              <StatTile label="Selesai" value={stats?.completedSessions ?? 0} suffix="selesai" tint="text-teal-600 dark:text-teal-400" bg="bg-teal-500/10" animate />
-              <StatTile label="Rata-rata" value={stats?.avgMinutesPerSession ?? 0} suffix="mnt/sesi" tint="text-slate-600 dark:text-slate-400" bg="bg-slate-500/10" animate />
-            </div>
-          </SectionCard>
+        {/* Stats card */}
+        <SpotlightCard>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-display text-lg font-medium">Fokusmu</h3>
+            <TimerIcon className="h-4 w-4 text-muted-foreground" />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <StatTile label="Hari ini" value={stats?.todayCount ?? 0} suffix="sesi" tint="text-primary" bg="bg-primary/10" animate />
+            <StatTile label="Hari ini" value={Math.round((stats?.todaySeconds ?? 0) / 60)} suffix="mnt" tint="text-emerald-600 dark:text-emerald-400" bg="bg-emerald-500/10" animate />
+            <StatTile label="Runtutan" value={stats?.streak ?? 0} suffix="hari" tint="text-amber-600 dark:text-amber-400" bg="bg-amber-500/10" animate icon={<Flame className="h-3.5 w-3.5" />} />
+            <StatTile label="Sepanjang waktu" value={stats?.totalSessions ?? 0} suffix="total" tint="text-rose-600 dark:text-rose-400" bg="bg-rose-500/10" animate />
+            <StatTile label="Selesai" value={stats?.completedSessions ?? 0} suffix="selesai" tint="text-teal-600 dark:text-teal-400" bg="bg-teal-500/10" animate />
+            <StatTile label="Rata-rata" value={stats?.avgMinutesPerSession ?? 0} suffix="mnt/sesi" tint="text-slate-600 dark:text-slate-400" bg="bg-slate-500/10" animate />
+          </div>
+        </SpotlightCard>
 
-          {/* Sesi hari ini */}
-          <SectionCard>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-display text-lg font-medium">Sesi hari ini</h3>
-              <span className="text-xs text-muted-foreground">{todaySessions.length} total</span>
+{/* Sesi hari ini */}
+        <SpotlightCard>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-display text-lg font-medium">Sesi hari ini</h3>
+            <span className="text-xs text-muted-foreground">{todaySessions.length} total</span>
+          </div>
+          {todaySessions.length === 0 ? (
+            <div className="py-6 text-center">
+              <TimerIcon className="h-8 w-8 text-muted-foreground/40 mx-auto mb-2" />
+              <p className="text-sm text-muted-foreground">Belum ada sesi hari ini.</p>
+              <p className="text-xs text-muted-foreground/70 mt-0.5">Tekan Mulai Fokus untuk memulai sesi pertamamu.</p>
             </div>
-            {todaySessions.length === 0 ? (
-              <div className="py-6 text-center">
-                <TimerIcon className="h-8 w-8 text-muted-foreground/40 mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground">Belum ada sesi hari ini.</p>
-                <p className="text-xs text-muted-foreground/70 mt-0.5">Tekan Mulai Fokus untuk memulai sesi pertamamu.</p>
-              </div>
-            ) : (
-              <ul className="space-y-2 max-h-80 overflow-y-auto scroll-slim pr-1">
-                {todaySessions.map((s) => {
-                  const m = FOCUS_MODES.find((x) => x.id === s.mode) ?? FOCUS_MODES[0];
-                  const Icon = MODE_ICONS[m.icon] ?? Brain;
-                  return (
-                    <li key={s.id} className="flex items-center gap-3 rounded-xl border border-border/60 bg-background/60 p-3">
-                      <span className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", m.bg)}>
-                        <Icon className={cn("h-4 w-4", m.accent)} />
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium truncate">{s.intention ?? m.label}</p>
-                        <p className="text-[11px] text-muted-foreground">
-                          {new Date(s.startedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                          {" · "}
-                          {Math.round(s.elapsedSec / 60)}m / {Math.round(s.durationSec / 60)}m
-                        </p>
-                      </div>
-                      {s.completed ? (
-                        <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
-                      ) : (
-                        <span className="h-2 w-2 rounded-full bg-amber-500 shrink-0" title="Belum selesai" />
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </SectionCard>
+          ) : (
+            <ul className="space-y-2 max-h-80 overflow-y-auto scroll-slim pr-1">
+              {todaySessions.map((s) => {
+                const m = FOCUS_MODES.find((x) => x.id === s.mode) ?? FOCUS_MODES[0];
+                const Icon = MODE_ICONS[m.icon] ?? Brain;
+                return (
+                  <li key={s.id} className="flex items-center gap-3 rounded-xl border border-border/60 bg-background/60 p-3">
+                    <span className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", m.bg)}>
+                      <Icon className={cn("h-4 w-4", m.accent)} />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium truncate">{s.intention ?? m.label}</p>
+                      <p className="text-[11px] text-muted-foreground">
+                        {new Date(s.startedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                        {" · "}
+                        {Math.round(s.elapsedSec / 60)}m / {Math.round(s.durationSec / 60)}m
+                      </p>
+                    </div>
+                    {s.completed ? (
+                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
+                    ) : (
+                      <span className="h-2 w-2 rounded-full bg-amber-500 shrink-0" title="Belum selesai" />
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </SpotlightCard>
 
           {/* Niat yang disarankan */}
           <SectionCard className="relative overflow-hidden">

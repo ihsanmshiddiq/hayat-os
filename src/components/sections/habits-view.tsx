@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Repeat, Plus, Check, Flame, Trash2, X, Heart, Activity, BookOpen, Users, Circle } from "lucide-react";
 import { ViewHeader } from "@/components/shared/view-header";
 import { SectionCard } from "@/components/shared/section-card";
+import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -301,13 +302,8 @@ export function HabitsView() {
             const doneToday = last7.some((l) => new Date(l.date).toDateString() === today.toDateString() && l.done);
             const weekCount = last7.filter((l) => l.done).length;
             return (
-              <motion.div
-                key={h.id}
-                layout
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="group rounded-2xl border border-border/70 bg-card shadow-soft p-5"
-              >
+              <SpotlightCard key={h.id} className="p-5">
+                <motion.div layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                 <div className="flex items-start gap-3 mb-4">
                   <span className={cn("flex h-11 w-11 shrink-0 items-center justify-center rounded-xl", clr.bg, clr.text)}>
                     <HabitIcon name={h.icon} className="h-5 w-5" />
@@ -356,7 +352,8 @@ export function HabitsView() {
                     </div>
                   ))}
                 </div>
-              </motion.div>
+                </motion.div>
+              </SpotlightCard>
             );
           })}
         </div>

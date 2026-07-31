@@ -108,7 +108,23 @@ export function useUpdateQuran() {
   return useMutation({
     mutationFn: (vars: Record<string, unknown>) =>
       json("/api/quran", { method: "PATCH", body: JSON.stringify(vars) }),
-    onSettled: () => qc.invalidateQueries({ queryKey: ["dashboard"] }),
+    onSettled: () => {
+      qc.invalidateQueries({ queryKey: ["dashboard"] });
+      qc.invalidateQueries({ queryKey: ["quran"] });
+      qc.invalidateQueries({ queryKey: ["khatma"] });
+    },
+  });
+}
+
+export interface QuranLogItem {
+  date: string; pagesRead: number; ayahsRead: number; lastSurah: string | null; lastAyah: number | null;
+  memorizedAyahs: number; targetPages: number; minutesSpent: number;
+}
+
+export function useQuran(days = 30) {
+  return useQuery({
+    queryKey: ["quran", days],
+    queryFn: () => json<{ logs: QuranLogItem[]; totals: { pagesRead: number; memorizedAyahs: number; minutesSpent: number } }>(`/api/quran?days=${days}`),
   });
 }
 

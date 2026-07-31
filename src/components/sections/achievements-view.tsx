@@ -7,7 +7,7 @@ import {
   Repeat, Trophy, PenLine, Star, Sunrise, Lock, Check,
 } from "lucide-react";
 import { ViewHeader } from "@/components/shared/view-header";
-import { SectionCard } from "@/components/shared/section-card";
+import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { ProgressRing } from "@/components/shared/progress-ring";
 import { AnimatedNumber } from "@/components/shared/animated-number";
 import { useAchievements, useDashboard, type AchievementsData } from "@/lib/hooks";
@@ -105,7 +105,7 @@ export function AchievementsView() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.06 }}
             >
-              <SectionCard padded={false} className="p-4">
+              <SpotlightCard className="p-4">
                 <div className="flex items-center gap-3">
                   <div className={cn("flex h-10 w-10 items-center justify-center rounded-xl bg-muted/60", h.color)}>
                     <Icon className="h-5 w-5" />
@@ -119,7 +119,7 @@ export function AchievementsView() {
                     </p>
                   </div>
                 </div>
-              </SectionCard>
+              </SpotlightCard>
             </motion.div>
           );
         })}
@@ -169,10 +169,9 @@ export function AchievementsView() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.35, delay: Math.min(i * 0.04, 0.4), ease: [0.22, 1, 0.36, 1] }}
             >
-              <SectionCard
-                padded={false}
+              <SpotlightCard
                 className={cn(
-                  "relative overflow-hidden p-5 transition-all",
+                  "p-5 transition-all",
                   a.unlocked && tierStyle.glow,
                   !a.unlocked && "opacity-90"
                 )}
@@ -242,7 +241,7 @@ export function AchievementsView() {
                     )}
                   />
                 </div>
-              </SectionCard>
+              </SpotlightCard>
             </motion.div>
           );
         })}

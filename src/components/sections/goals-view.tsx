@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Target, Plus, Trash2, Check, Flag, Calendar, Sparkles } from "lucide-react";
 import { ViewHeader } from "@/components/shared/view-header";
 import { SectionCard } from "@/components/shared/section-card";
+import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -115,10 +116,10 @@ export function GoalsView() {
               const cat = CATEGORIES.find((c) => c.key === g.category) ?? CATEGORIES[0];
               return (
                 <motion.div key={g.id} layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }}>
-                  <SectionCard interactive className="relative overflow-hidden">
+                  <SpotlightCard className="relative overflow-hidden">
                     {/* Decorative gradient tint by category */}
                     <div className={cn("absolute -top-12 -right-12 h-32 w-32 rounded-full blur-3xl opacity-30 pointer-events-none", cat.tint)} />
-                    <div className="relative">
+                    <div className="relative p-5">
                       <div className="flex items-start justify-between gap-3 mb-4">
                         <div className="flex items-center gap-2">
                           <span className={cn("flex h-8 w-8 items-center justify-center rounded-lg", cat.bg, cat.text)}>
@@ -159,7 +160,7 @@ export function GoalsView() {
                         <span className="text-[10px] font-medium text-primary">{100 - g.progress}% lagi</span>
                       </div>
                     </div>
-                  </SectionCard>
+                  </SpotlightCard>
                 </motion.div>
               );
             })}
@@ -188,9 +189,9 @@ export function GoalsView() {
 
 function SummaryCard({ label, value, tint }: { label: string; value: number | string; tint: string }) {
   return (
-    <SectionCard padded>
+    <SpotlightCard className="p-5">
       <p className="text-xs text-muted-foreground uppercase tracking-wide">{label}</p>
       <p className={cn("text-display text-2xl font-semibold mt-1", tint)}>{value}</p>
-    </SectionCard>
+    </SpotlightCard>
   );
 }

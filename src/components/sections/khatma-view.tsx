@@ -19,10 +19,13 @@ import {
 } from "@/components/ui/dialog";
 import {
   useKhatma, useCreateKhatma, useUpdateKhatma, useDeleteKhatma,
-  type KhatmaActive, type KhatmaHistoryItem,
+  useQuran, type KhatmaActive, type KhatmaHistoryItem,
 } from "@/lib/hooks";
 import { useUpdateQuran } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
+import { SURAHS } from "@/lib/islamic";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SpotlightCard } from "@/components/shared/spotlight-card";
 
 const SCOPE_OPTIONS: {
   key: string;
@@ -54,24 +57,51 @@ export function KhatmaView() {
         action={active ? <NewPlanDialog triggerLabel="Rencana baru" /> : undefined}
       />
 
-      {!active ? (
-        <EmptyState />
-      ) : (
-        <>
-          <ActivePlanHero plan={active} />
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 mt-6">
-            <JuzProgressGrid plan={active} />
-            <DailyPaceCard plan={active} />
-          </div>
-          {history.length > 0 ? (
-            <div className="mt-6">
-              <PlanHistory history={history} />
-            </div>
-          ) : null}
-        </>
-      )}
+      <Tabs defaultValue="tilawah" className="mt-6">
+        <TabsList className="mb-6">
+          <TabsTrigger value="tilawah">Tilawah</TabsTrigger>
+          <TabsTrigger value="rencana">Rencana Khatma</TabsTrigger>
+        </TabsList>
+        <TabsContent value="tilawah"><TilawahTab /></TabsContent>
+        <TabsContent value="rencana">
+          {!active ? <EmptyState /> : <>
+            <ActivePlanHero plan={active} />
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 mt-6"><JuzProgressGrid plan={active} /><DailyPaceCard plan={active} /></div>
+            {history.length > 0 ? <div className="mt-6"><PlanHistory history={history} /></div> : null}
+          </>}
+        </TabsContent>
+      </Tabs>
     </div>
   );
+}
+
+function TilawahTab() {
+  const { data, isLoading } = useQuran();
+  const updateQuran = useUpdateQuran();
+  const latest = data?.logs.at(-1);
+  const [pages, setPages] = React.useState("");
+  const [surah, setSurah] = React.useState(latest?.lastSurah ?? "Al-Fatihah");
+  const [ayah, setAyah] = React.useState(String(latest?.lastAyah ?? 1));
+  const selectedSurah = SURAHS.find((item) => item.name === surah) ?? SURAHS[0];
+  const history = [...(data?.logs ?? [])].filter((log) => log.pagesRead > 0).slice(-7).reverse();
+  const total = data?.totals.pagesRead ?? 0;
+  const submit = () => updateQuran.mutate({ pagesRead: Number(pages) || latest?.pagesRead || 0, lastSurah: surah, lastAyah: Math.min(Number(ayah) || 1, selectedSurah.ayahs) });
+
+  return <div className="space-y-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <SpotlightCard className="p-5" spotlightColor="#10b981"><p className="text-xs text-muted-foreground">Halaman terbaca</p><p className="text-display text-3xl font-semibold mt-1">{total}</p><p className="text-xs text-muted-foreground mt-1">Total seluruh tilawah</p></SpotlightCard>
+      <SpotlightCard className="p-5" spotlightColor="#f59e0b"><p className="text-xs text-muted-foreground">Target hari ini</p><p className="text-display text-3xl font-semibold mt-1">{latest?.pagesRead ?? 0}<span className="text-base text-muted-foreground">/{latest?.targetPages ?? 2}</span></p><p className="text-xs text-muted-foreground mt-1">halaman tercatat</p></SpotlightCard>
+      <SpotlightCard className="p-5" spotlightColor="#8b5cf6"><p className="text-xs text-muted-foreground">Bookmark terakhir</p><p className="text-display text-lg font-semibold mt-1 truncate">{latest?.lastSurah ?? "Belum ada"}</p><p className="text-xs text-muted-foreground mt-1">Ayat {latest?.lastAyah ?? "—"}</p></SpotlightCard>
+    </div>
+    <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-6">
+      <SpotlightCard className="p-6" spotlightColor="#10b981">
+        <h3 className="text-display text-lg font-medium">Catat tilawah hari ini</h3><p className="text-sm text-muted-foreground mt-1 mb-5">Catat halaman tanpa menampilkan teks Al-Quran.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-[120px_1fr_100px] gap-3"><Input type="number" min={0} value={pages} onChange={(event) => setPages(event.target.value)} placeholder="Halaman" /><select value={surah} onChange={(event) => setSurah(event.target.value)} className="rounded-xl border border-border bg-background px-3 text-sm">{SURAHS.map((item) => <option key={item.number} value={item.name}>{item.number}. {item.name}</option>)}</select><Input type="number" min={1} max={selectedSurah.ayahs} value={ayah} onChange={(event) => setAyah(event.target.value)} placeholder="Ayat" /></div>
+        <Button onClick={submit} disabled={updateQuran.isPending || isLoading} className="mt-4 gap-2"><BookMarked className="h-4 w-4" />Simpan tilawah & bookmark</Button>
+      </SpotlightCard>
+      <SectionCard><h3 className="text-display text-lg font-medium">Riwayat terbaru</h3><div className="mt-4 space-y-3">{history.length ? history.map((log) => <div key={log.date} className="flex justify-between gap-3 text-sm"><span>{new Date(log.date).toLocaleDateString("id-ID", { weekday: "short", day: "numeric", month: "short" })}</span><span className="font-medium">{log.pagesRead} halaman</span></div>) : <p className="text-sm text-muted-foreground">Belum ada tilawah tercatat.</p>}</div></SectionCard>
+    </div>
+  </div>;
 }
 
 /* ---------------- Empty State ---------------- */
