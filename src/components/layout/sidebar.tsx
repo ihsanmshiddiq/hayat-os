@@ -38,6 +38,7 @@ import {
 import { useMounted } from "@/hooks/use-now";
 import { createClient } from "@/lib/supabase/client";
 import { LogOut } from "lucide-react";
+import { useSettings } from "@/lib/hooks";
 
 interface NavItem {
   key: ViewKey;
@@ -93,6 +94,8 @@ export function Sidebar({ userName, userImage }: { userName?: string | null; use
   const mounted = useMounted();
   const [profileOpen, setProfileOpen] = React.useState(false);
   const supabase = createClient();
+  const { data: settings } = useSettings();
+  const visibleGroups = NAV_GROUPS.map((group) => ({ ...group, items: group.items.filter((item) => item.key !== "siklus" || settings?.menstrualEnabled) }));
 
   const userEmail = "hayat@app";
 
@@ -149,7 +152,7 @@ export function Sidebar({ userName, userImage }: { userName?: string | null; use
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto scroll-slim px-3 py-4">
           <div className="space-y-5">
-            {NAV_GROUPS.map((group) => (
+            {visibleGroups.map((group) => (
               <div key={group.label}>
                 {!sidebarCollapsed && (
                   <p className="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">

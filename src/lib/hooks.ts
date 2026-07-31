@@ -422,6 +422,7 @@ export interface UserSettings {
   latitude: number | null;
   longitude: number | null;
   method: string | null;
+  menstrualEnabled: boolean;
   methods: { key: string; name: string }[];
 }
 
@@ -432,10 +433,23 @@ export function useSettings() {
   });
 }
 
+/* ---------------- Finance ---------------- */
+export interface FinanceTransaction { id: string; amount: number; type: "income" | "expense"; category: string; note: string | null; date: string; }
+export interface BudgetItem { id: string; category: string; monthlyLimit: number; }
+export function useFinance() { return useQuery({ queryKey: ["finance"], queryFn: () => json<{ transactions: FinanceTransaction[]; budgets: BudgetItem[]; summary: { income: number; expense: number; balance: number } }>("/api/finance") }); }
+export function useCreateFinance() { const qc = useQueryClient(); return useMutation({ mutationFn: (body: Record<string, unknown>) => json("/api/finance", { method: "POST", body: JSON.stringify(body) }), onSettled: () => qc.invalidateQueries({ queryKey: ["finance"] }) }); }
+export function useDeleteFinance() { const qc = useQueryClient(); return useMutation({ mutationFn: (id: string) => json(`/api/finance?id=${id}`, { method: "DELETE" }), onSettled: () => qc.invalidateQueries({ queryKey: ["finance"] }) }); }
+
+/* ---------------- Menstrual cycle ---------------- */
+export interface MenstrualLog { id: string; startDate: string; endDate: string | null; symptoms: string | null; note: string | null; }
+export function useMenstrual() { return useQuery({ queryKey: ["menstrual"], queryFn: () => json<{ logs: MenstrualLog[]; insights: { averageCycle: number; averageDuration: number; nextDate: string | null } }>("/api/menstrual") }); }
+export function useCreateMenstrual() { const qc = useQueryClient(); return useMutation({ mutationFn: (body: Record<string, unknown>) => json("/api/menstrual", { method: "POST", body: JSON.stringify(body) }), onSettled: () => qc.invalidateQueries({ queryKey: ["menstrual"] }) }); }
+export function useUpdateMenstrual() { const qc = useQueryClient(); return useMutation({ mutationFn: (vars: { id: string; body: Record<string, unknown> }) => json(`/api/menstrual?id=${vars.id}`, { method: "PATCH", body: JSON.stringify(vars.body) }), onSettled: () => qc.invalidateQueries({ queryKey: ["menstrual"] }) }); }
+
 export function useUpdateSettings() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (vars: { name?: string; location?: string; latitude?: number; longitude?: number; method?: string }) =>
+    mutationFn: (vars: { name?: string; location?: string; latitude?: number; longitude?: number; method?: string; menstrualEnabled?: boolean }) =>
       json<{ ok: boolean; user: UserSettings }>("/api/settings", { method: "PUT", body: JSON.stringify(vars) }),
     onSuccess: (data) => {
       qc.setQueryData(["settings"], data.user);

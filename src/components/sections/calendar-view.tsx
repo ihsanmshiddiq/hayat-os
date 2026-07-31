@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
-import { useCalendar, useCreateEvent, useDeleteEvent } from "@/lib/hooks";
+import { useCalendar, useCreateEvent, useDeleteEvent, useMenstrual, useSettings } from "@/lib/hooks";
 import { useDashboard } from "@/lib/hooks";
 import {
   getHijriDate, getUpcomingIslamicEvents, getIslamicEventDescription,
@@ -32,6 +32,7 @@ const TYPE_STYLES: Record<string, string> = {
   reminder: "bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20",
   goal: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20",
   salah: "bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20",
+  cycle: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20",
 };
 
 const TYPE_DOT: Record<string, string> = {
@@ -40,6 +41,7 @@ const TYPE_DOT: Record<string, string> = {
   reminder: "bg-sky-500",
   goal: "bg-rose-500",
   salah: "bg-violet-500",
+  cycle: "bg-rose-500",
 };
 
 const PRAYER_ICON: Record<string, React.ReactNode> = {
@@ -58,6 +60,8 @@ export function CalendarView() {
   const { data: cal, isLoading } = useCalendar(cursor);
   const createEvent = useCreateEvent();
   const deleteEvent = useDeleteEvent();
+  const { data: settings } = useSettings();
+  const { data: menstrual } = useMenstrual();
 
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState("");
@@ -82,8 +86,15 @@ export function CalendarView() {
       if (!map.has(d)) map.set(d, []);
       map.get(d)!.push({ title: e.name, type: e.type, isIslamic: true });
     });
+    if (settings?.menstrualEnabled) menstrual?.logs.forEach((log) => {
+      const start = new Date(log.startDate); const end = log.endDate ? new Date(log.endDate) : new Date();
+      for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+        if (date.getFullYear() !== cursor.year || date.getMonth() !== cursor.month) continue;
+        const day = date.getDate(); if (!map.has(day)) map.set(day, []); map.get(day)!.push({ title: "Siklus", type: "cycle" });
+      }
+    });
     return map;
-  }, [cal]);
+  }, [cal, cursor, menstrual, settings?.menstrualEnabled]);
 
   const selectedEvents = selectedDay ? (eventsByDay.get(selectedDay) ?? []) : [];
 

@@ -20,6 +20,7 @@ model User {
   latitude  Float?   @default(-6.2088)
   longitude Float?   @default(106.8456)
   method    String?  @default("Kemenag") // prayer calc method key (see CALC_METHODS)
+  menstrualEnabled Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -37,6 +38,9 @@ model User {
   sadaqah   SadaqahEntry[]
   zakat     ZakatCalculation[]
   khatma    KhatmaPlan[]
+  transactions FinanceTransaction[]
+  budgets Budget[]
+  menstrualLogs MenstrualLog[]
 }
 
 /// Quran Khatma (reading cycle) plan — a goal to read the entire Quran
@@ -279,6 +283,44 @@ model Goal {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, category])
+}
+
+model FinanceTransaction {
+  id        String   @id @default(cuid())
+  userId    String
+  amount    Float
+  type      String   // income | expense
+  category  String
+  note      String?
+  date      DateTime
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, date])
+  @@index([userId, type])
+}
+
+model Budget {
+  id           String   @id @default(cuid())
+  userId       String
+  category     String
+  monthlyLimit Float
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([userId, category])
+}
+
+model MenstrualLog {
+  id        String   @id @default(cuid())
+  userId    String
+  startDate DateTime
+  endDate   DateTime?
+  symptoms  String?
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, startDate])
 }
 
 /// A calendar event (reminder, fasting, Islamic event, goal).

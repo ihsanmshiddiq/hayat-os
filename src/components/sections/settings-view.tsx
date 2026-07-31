@@ -200,6 +200,14 @@ export function SettingsView() {
               <Switch checked={pixelCompanionEnabled} onCheckedChange={togglePixelCompanion} />
             </div>
 
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium">Pelacak siklus</p>
+                <p className="text-xs text-muted-foreground">Tampilkan Siklus di navigasi pribadi Anda</p>
+              </div>
+              <Switch checked={settings?.menstrualEnabled ?? false} onCheckedChange={(menstrualEnabled) => updateSettings.mutate({ menstrualEnabled })} />
+            </div>
+
             <div className="rounded-xl bg-muted/40 p-3.5">
               <p className="text-xs font-medium mb-1">Preview</p>
               <div className="flex items-center gap-2">

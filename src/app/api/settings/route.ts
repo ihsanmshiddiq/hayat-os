@@ -16,6 +16,7 @@ export async function GET() {
     latitude: user.latitude,
     longitude: user.longitude,
     method: user.method ?? "Kemenag",
+    menstrualEnabled: user.menstrualEnabled,
     methods: Object.entries(CALC_METHODS).map(([k, m]) => ({ key: k, name: m.name })),
   });
 }
@@ -29,12 +30,13 @@ export async function GET() {
 export async function PUT(req: NextRequest) {
   const user = await ensureSeedData();
   const body = await req.json();
-  const { name, location, latitude, longitude, method } = body as {
+  const { name, location, latitude, longitude, method, menstrualEnabled } = body as {
     name?: string;
     location?: string;
     latitude?: number;
     longitude?: number;
     method?: string;
+    menstrualEnabled?: boolean;
   };
 
   // Validate calc method
@@ -50,6 +52,7 @@ export async function PUT(req: NextRequest) {
       ...(latitude !== undefined ? { latitude } : {}),
       ...(longitude !== undefined ? { longitude } : {}),
       ...(method !== undefined ? { method } : {}),
+      ...(menstrualEnabled !== undefined ? { menstrualEnabled } : {}),
     },
     select: {
       id: true,
@@ -59,6 +62,7 @@ export async function PUT(req: NextRequest) {
       latitude: true,
       longitude: true,
       method: true,
+      menstrualEnabled: true,
     },
   });
 

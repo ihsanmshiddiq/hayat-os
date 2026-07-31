@@ -1,22 +1,33 @@
 "use client";
 
-import { Wallet, Construction } from "lucide-react";
+import * as React from "react";
+import { Wallet, Plus, TrendingDown, TrendingUp, Trash2 } from "lucide-react";
+import { PieChart, Pie, Cell, BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { ViewHeader } from "@/components/shared/view-header";
 import { SectionCard } from "@/components/shared/section-card";
+import { SpotlightCard } from "@/components/shared/spotlight-card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useCreateFinance, useDeleteFinance, useFinance } from "@/lib/hooks";
+
+const COLORS = ["#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#38bdf8"];
+const format = (amount: number) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(amount);
 
 export function FinanceView() {
-  return (
-    <div>
-      <ViewHeader
-        title="Keuangan"
-        subtitle="Pantau pemasukan & pengeluaranmu."
-        icon={<Wallet className="h-5 w-5" />}
-      />
-      <SectionCard className="flex flex-col items-center justify-center py-16">
-        <Construction className="h-10 w-10 text-muted-foreground/40 mb-3" />
-        <p className="text-display text-lg font-medium">Segera Hadir</p>
-        <p className="text-sm text-muted-foreground mt-1">Fitur keuangan sedang dalam pengembangan.</p>
-      </SectionCard>
-    </div>
-  );
+  const { data } = useFinance(); const create = useCreateFinance(); const remove = useDeleteFinance();
+  const [open, setOpen] = React.useState(false); const [form, setForm] = React.useState({ amount: "", type: "expense", category: "Makan", note: "", date: new Date().toISOString().slice(0, 10) });
+  const transactions = data?.transactions ?? []; const summary = data?.summary ?? { income: 0, expense: 0, balance: 0 };
+  const expenses = transactions.filter((item) => item.type === "expense");
+  const byCategory = Object.entries(expenses.reduce<Record<string, number>>((all, item) => ({ ...all, [item.category]: (all[item.category] ?? 0) + item.amount }), {})).map(([name, value]) => ({ name, value }));
+  const monthly = transactions.reduce<Record<string, { income: number; expense: number }>>((all, item) => { const key = new Date(item.date).toLocaleDateString("id-ID", { month: "short" }); all[key] ??= { income: 0, expense: 0 }; all[key][item.type] += item.amount; return all; }, {});
+  const trend = Object.entries(monthly).map(([month, value]) => ({ month, ...value, cashflow: value.income - value.expense }));
+  const submit = () => { if (!Number(form.amount)) return; create.mutate({ ...form, amount: Number(form.amount) }, { onSuccess: () => setOpen(false) }); };
+  return <div>
+    <ViewHeader title="Keuangan" subtitle="Pantau pemasukan, pengeluaran, dan ruang untuk berbagi." icon={<Wallet className="h-5 w-5" />} action={<Button onClick={() => setOpen(true)} className="gap-2"><Plus className="h-4 w-4" />Tambah transaksi</Button>} />
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">{[["Total saldo", summary.balance, "#10b981"], ["Pemasukan", summary.income, "#38bdf8"], ["Pengeluaran", summary.expense, "#f59e0b"], ["Cashflow", summary.income - summary.expense, "#8b5cf6"]].map(([label, value, color]) => <SpotlightCard key={String(label)} className="p-5" spotlightColor={String(color)}><p className="text-xs text-muted-foreground">{label}</p><p className="text-display text-xl sm:text-2xl font-semibold mt-1 tabular-nums">{format(Number(value))}</p></SpotlightCard>)}</div>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"><SectionCard><h3 className="text-display text-lg font-medium">Pengeluaran per kategori</h3><div className="h-64"><ResponsiveContainer><PieChart><Pie data={byCategory} dataKey="value" nameKey="name" innerRadius={55} outerRadius={85}>{byCategory.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}</Pie><Tooltip formatter={(value) => format(Number(value))} /></PieChart></ResponsiveContainer></div></SectionCard><SectionCard><h3 className="text-display text-lg font-medium">Perbandingan In / Out</h3><div className="h-64"><ResponsiveContainer><BarChart data={trend}><XAxis dataKey="month" /><YAxis hide /><Tooltip formatter={(value) => format(Number(value))} /><Bar dataKey="income" fill="#38bdf8" radius={6} /><Bar dataKey="expense" fill="#f59e0b" radius={6} /></BarChart></ResponsiveContainer></div></SectionCard></div>
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6"><SectionCard><h3 className="text-display text-lg font-medium">Tren cashflow</h3><div className="h-56"><ResponsiveContainer><LineChart data={trend}><XAxis dataKey="month" /><YAxis hide /><Tooltip formatter={(value) => format(Number(value))} /><Line type="monotone" dataKey="cashflow" stroke="#10b981" strokeWidth={3} /></LineChart></ResponsiveContainer></div></SectionCard><SectionCard><h3 className="text-display text-lg font-medium mb-3">Transaksi terbaru</h3><div className="space-y-3 max-h-56 overflow-auto scroll-slim">{transactions.slice(0, 8).map((item) => <div key={item.id} className="flex items-center gap-3"><span className={`flex h-8 w-8 items-center justify-center rounded-lg ${item.type === "income" ? "bg-emerald-500/10 text-emerald-500" : "bg-amber-500/10 text-amber-500"}`}>{item.type === "income" ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}</span><div className="min-w-0 flex-1"><p className="text-sm font-medium">{item.category}</p><p className="text-[11px] text-muted-foreground truncate">{item.note || new Date(item.date).toLocaleDateString("id-ID")}</p></div><span className="text-xs font-semibold">{item.type === "income" ? "+" : "-"}{format(item.amount)}</span><button onClick={() => remove.mutate(item.id)}><Trash2 className="h-3.5 w-3.5 text-muted-foreground hover:text-rose-500" /></button></div>)}{!transactions.length && <p className="text-sm text-muted-foreground">Belum ada transaksi.</p>}</div></SectionCard></div>
+    <Dialog open={open} onOpenChange={setOpen}><DialogContent><DialogHeader><DialogTitle>Tambah transaksi</DialogTitle></DialogHeader><div className="space-y-3"><div className="flex gap-2"><button onClick={() => setForm({ ...form, type: "income" })} className={`rounded-lg px-3 py-2 text-sm ${form.type === "income" ? "bg-emerald-500 text-white" : "bg-muted"}`}>Pemasukan</button><button onClick={() => setForm({ ...form, type: "expense" })} className={`rounded-lg px-3 py-2 text-sm ${form.type === "expense" ? "bg-amber-500 text-white" : "bg-muted"}`}>Pengeluaran</button></div><Input type="number" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} placeholder="Nominal" /><Input value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="Kategori" /><Input value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} placeholder="Catatan" /><Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} /><Button onClick={submit} className="w-full">Simpan</Button></div></DialogContent></Dialog>
+  </div>;
 }
