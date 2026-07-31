@@ -6,14 +6,14 @@ import { Crown, Heart, Sparkles, X } from "lucide-react";
 import { getSpecialProfile } from "@/lib/easter-egg";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
 
-export function SpecialWelcome({ name }: { name?: string | null }) {
-  const profile = getSpecialProfile(name);
+export function SpecialWelcome({ name, email }: { name?: string | null; email?: string | null }) {
+  const profile = getSpecialProfile(name, email);
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
-    if (profile && !sessionStorage.getItem("hayat-special-welcome")) {
+    if (profile && !sessionStorage.getItem("hayat-tantri-welcome")) {
       setOpen(true);
-      sessionStorage.setItem("hayat-special-welcome", "1");
+      sessionStorage.setItem("hayat-tantri-welcome", "1");
     }
   }, [profile]);
 

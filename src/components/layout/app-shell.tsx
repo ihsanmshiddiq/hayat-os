@@ -54,7 +54,7 @@ export function AppShell() {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <TantriTheme name={userName} />
+      <TantriTheme name={userName} email={user?.email ?? data?.user.email} />
       <Sidebar userName={userName} userImage={userImage} />
       <div className="flex-1 flex flex-col min-w-0 lg:pb-0 pb-16">
         <Topbar userName={userName} userImage={userImage} />

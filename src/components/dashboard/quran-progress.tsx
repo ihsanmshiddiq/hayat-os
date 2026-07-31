@@ -83,7 +83,7 @@ export function QuranProgress() {
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
             <Target className="h-3.5 w-3.5" /> Terhafal
           </div>
-          <p className="text-sm font-medium tabular-nums">{quran?.memorizedAyahs ?? 0} ayahs</p>
+          <p className="text-sm font-medium tabular-nums">{quran?.memorizedAyahs ?? 0} ayat</p>
         </div>
       </div>
 

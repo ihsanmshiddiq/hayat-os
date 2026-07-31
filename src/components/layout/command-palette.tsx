@@ -116,7 +116,7 @@ export function CommandPalette() {
         <CommandSeparator />
 
         {data && (
-          <CommandGroup heading="Today">
+          <CommandGroup heading="Hari ini">
             <CommandItem
               value={`focus ${data.today.focus}`}
               onSelect={() => { setActiveView("dashboard"); setCommandOpen(false); }}
@@ -167,7 +167,7 @@ export function CommandPalette() {
               <BookMarked className="h-4 w-4 text-muted-foreground" />
               <span className="text-arabic text-base text-primary">{s.arabic}</span>
               <span className="font-medium">{s.name}</span>
-              <span className="ml-auto text-xs text-muted-foreground tabular-nums">{s.ayahs} ayahs</span>
+              <span className="ml-auto text-xs text-muted-foreground tabular-nums">{s.ayahs} ayat</span>
             </CommandItem>
           ))}
         </CommandGroup>

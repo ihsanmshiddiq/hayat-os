@@ -58,7 +58,7 @@ export function DashboardView() {
   return (
     <div className="space-y-6">
       <WelcomeSection />
-      <SpecialWelcome name={data?.user.name} />
+      <SpecialWelcome name={data?.user.name} email={data?.user.email} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DailyFocus />

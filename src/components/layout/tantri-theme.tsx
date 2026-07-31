@@ -8,8 +8,8 @@ const PARTICLES = [
   [58, 12, 2.4, "♥"], [71, 77, 4, "✦"], [84, 29, 1.2, "♥"], [94, 66, 3.7, "✦"],
 ] as const;
 
-export function TantriTheme({ name }: { name?: string | null }) {
-  const isTantri = getSpecialProfile(name)?.kind === "tantri";
+export function TantriTheme({ name, email }: { name?: string | null; email?: string | null }) {
+  const isTantri = getSpecialProfile(name, email)?.kind === "tantri";
   React.useEffect(() => {
     document.documentElement.classList.toggle("tantri-theme", isTantri);
     return () => document.documentElement.classList.remove("tantri-theme");

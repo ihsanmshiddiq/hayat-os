@@ -257,12 +257,12 @@ export default function LandingPage() {
                   borderRadius="16px"
                   borderColor="hsl(var(--border))"
                   glareColor="#ffffff"
-                  glareOpacity={0.1}
+                  glareOpacity={0.24}
                   glareAngle={-30}
-                  glareSize={200}
+                  glareSize={260}
                   transitionDuration={600}
                   playOnce={false}
-                  className="!h-auto"
+                  className="!h-auto landing-feature-glare"
                 >
                   <div className="p-6 text-left w-full">
                     <div className={`inline-flex items-center justify-center rounded-xl ${feature.bg} p-3 mb-4`}>

@@ -189,7 +189,7 @@ export function HifzView() {
                   </h3>
                   <p className="text-sm text-muted-foreground">
                     {stats?.totalMemorizedAyahs.toLocaleString() ?? 0} dari{" "}
-                    {stats?.totalQuranAyahs.toLocaleString() ?? 6236} ayahs
+                    {stats?.totalQuranAyahs.toLocaleString() ?? 6236} ayat
                     Terkhafal
                   </p>
                 </div>
@@ -399,7 +399,7 @@ export function HifzView() {
                             {surah.arabic}
                           </p>
                           <p className="text-muted-foreground text-[10px]">
-                            {surah.ayahs} ayahs ·{" "}
+                            {surah.ayahs} ayat ·{" "}
                             {surah.revelation === "meccan"
                               ? "Makkiyah"
                               : "Madaniyah"}{" "}
@@ -469,7 +469,7 @@ export function HifzView() {
                     <p className="text-xs font-medium truncate">{surah.name}</p>
                     <div className="flex items-center justify-between mt-2">
                       <span className="text-[10px] text-muted-foreground tabular-nums">
-                        {surah.ayahs} ayahs
+                        {surah.ayahs} ayat
                       </span>
                       <span className="text-[9px] uppercase tracking-wide text-muted-foreground">
                         {surah.revelation === "meccan" ? "Mk" : "Md"}
@@ -577,7 +577,7 @@ function SurahDetailModal({
               <p className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1">
                 Surah {surah.number} ·{" "}
                 {surah.revelation === "meccan" ? "Makkiyah" : "Madaniyah"} ·{" "}
-                {surah.ayahs} ayahs
+                {surah.ayahs} ayat
               </p>
               <h2 className="text-display text-2xl font-medium">
                 {surah.name}

@@ -43,7 +43,7 @@ export function SettingsView() {
 
   const name = settings?.name ?? data?.user.name ?? "Ahmad Rahman";
   const initials = name.split(" ").map((p) => p[0]).slice(0, 2).join("").toUpperCase();
-  const specialProfile = getSpecialProfile(name);
+  const specialProfile = getSpecialProfile(name, settings?.email ?? data?.user.email);
 
   React.useEffect(() => {
     document.documentElement.lang = language;

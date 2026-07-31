@@ -57,7 +57,7 @@ export function ScholarQuoteOfTheDay() {
             <BookOpen className="h-3.5 w-3.5" />
           </span>
           <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-600/80 dark:text-amber-400/80">
-            Wisdom of the Day
+            Kutipan Hikmah Hari Ini
           </p>
         </div>
 
@@ -81,7 +81,7 @@ export function ScholarQuoteOfTheDay() {
               </p>
             </div>
             <div className="flex items-center gap-1 text-[11px] text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-              <span>Next</span>
+              <span>Berikutnya</span>
               <ChevronRight className="h-3 w-3" />
             </div>
           </div>

@@ -59,7 +59,7 @@ export function HadithOfTheDay() {
             </span>
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-primary/70">
-                Hadith of the Day
+                Hadis Hari Ini
               </p>
               <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5">
                 {current.theme}
@@ -72,8 +72,8 @@ export function HadithOfTheDay() {
           <button
             onClick={shuffle}
             className="group flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background/50 text-muted-foreground hover:text-foreground hover:bg-background hover:border-primary/30 transition-all"
-            title="Next hadith"
-            aria-label="Show another hadith"
+            title="Hadis berikutnya"
+            aria-label="Tampilkan hadis lain"
           >
             <RefreshCw className="h-3.5 w-3.5 group-hover:rotate-180 transition-transform duration-500" />
           </button>
@@ -125,7 +125,7 @@ export function HadithOfTheDay() {
                   setCurrent(HADITHS_OF_THE_DAY[i]);
                 }}
                 className="group/dot py-1.5"
-                aria-label={`Hadith ${i + 1}`}
+                aria-label={`Hadis ${i + 1}`}
               >
                 <span
                   className={
