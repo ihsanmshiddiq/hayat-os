@@ -31,6 +31,7 @@ import { useMounted } from "@/hooks/use-now";
 import { CALC_METHODS } from "@/lib/islamic";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { getSpecialProfile } from "@/lib/easter-egg";
 
 export function SettingsView() {
   const { theme, setTheme } = useTheme();
@@ -42,6 +43,7 @@ export function SettingsView() {
 
   const name = settings?.name ?? data?.user.name ?? "Ahmad Rahman";
   const initials = name.split(" ").map((p) => p[0]).slice(0, 2).join("").toUpperCase();
+  const specialProfile = getSpecialProfile(name);
 
   // Local form state — synced with server
   const [formName, setFormName] = React.useState(name);
@@ -136,6 +138,7 @@ export function SettingsView() {
             <div>
               <p className="text-display text-lg font-medium">{name}</p>
               <p className="text-sm text-muted-foreground">{settings?.email ?? data?.user.email}</p>
+              {specialProfile ? <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary"><Sparkles className="h-3 w-3" />{specialProfile.title}</span> : null}
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">

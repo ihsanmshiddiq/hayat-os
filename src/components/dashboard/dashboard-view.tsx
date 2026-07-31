@@ -20,9 +20,10 @@ import { HifzPreview } from "@/components/dashboard/hifz-preview";
 import { FocusPreview } from "@/components/dashboard/focus-preview";
 import { motion } from "framer-motion";
 import { AlertTriangle, RefreshCcw } from "lucide-react";
+import { SpecialWelcome } from "@/components/dashboard/special-welcome";
 
 export function DashboardView() {
-  const { isLoading, isError, error, refetch } = useDashboard();
+  const { data, isLoading, isError, error, refetch } = useDashboard();
 
   if (isLoading) return <DashboardSkeleton />;
 
@@ -57,6 +58,7 @@ export function DashboardView() {
   return (
     <div className="space-y-6">
       <WelcomeSection />
+      <SpecialWelcome name={data?.user.name} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DailyFocus />

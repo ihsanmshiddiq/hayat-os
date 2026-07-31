@@ -36,8 +36,8 @@ const features = [
   },
   {
     icon: Sparkles,
-    title: "Shalat & Dzikir",
-    description: "Waktu shalat akurat, tasbih digital, dan pengingat untuk istiqamah.",
+    title: "Shalat & Doa",
+    description: "Waktu shalat akurat, koleksi doa, dan pengingat untuk istiqamah.",
     color: "text-violet-500",
     bg: "bg-violet-500/10",
     border: "border-violet-500/20",
@@ -78,7 +78,7 @@ const features = [
 
 const stats = [
   { label: "Fitur Islami", value: "15+", icon: Star },
-  { label: "Doa & Dzikir", value: "100+", icon: Heart },
+  { label: "Doa pilihan", value: "30+", icon: Heart },
   { label: "Gratis Selamanya", value: "100%", icon: Shield },
 ];
 

@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Hayat" }],
   icons: {
-    icon: "/logo.svg",
+    icon: "/icon.png",
   },
   openGraph: {
     title: "Hayat — Sistem Operasi Islami",
