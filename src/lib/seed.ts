@@ -541,7 +541,7 @@ export async function ensureSeedData() {
   }
 
     return user;
-  });
+  }, { maxWait: 30_000, timeout: 120_000 });
 }
 
 export async function getDemoUserId() {
