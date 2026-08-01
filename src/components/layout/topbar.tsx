@@ -12,7 +12,6 @@ import {
   Keyboard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   Sheet,
   SheetContent,
@@ -20,6 +19,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useAppStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { useNow } from "@/hooks/use-now";
@@ -96,7 +96,7 @@ export function Topbar({ userName, userImage }: TopbarProps) {
         {/* Mobile menu */}
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="lg:hidden">
+            <Button variant="ghost" size="icon" className="hidden">
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>

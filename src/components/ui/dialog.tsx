@@ -54,6 +54,8 @@ function DialogContent({
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean
 }) {
+  const autoDescriptionId = React.useId()
+  const hasDescription = Boolean(props["aria-describedby"])
   return (
     <DialogPortal data-slot="dialog-portal">
       <DialogOverlay />
@@ -64,8 +66,14 @@ function DialogContent({
           className
         )}
         {...props}
+        aria-describedby={props["aria-describedby"] ?? autoDescriptionId}
       >
         {children}
+        {!hasDescription && (
+          <DialogPrimitive.Description id={autoDescriptionId} className="sr-only">
+            Dialog Hayat
+          </DialogPrimitive.Description>
+        )}
         {showCloseButton && (
           <DialogPrimitive.Close
             data-slot="dialog-close"

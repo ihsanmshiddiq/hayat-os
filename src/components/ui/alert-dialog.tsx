@@ -48,6 +48,8 @@ function AlertDialogContent({
   className,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Content>) {
+  const autoDescriptionId = React.useId()
+  const hasDescription = Boolean(props["aria-describedby"])
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />
@@ -58,7 +60,14 @@ function AlertDialogContent({
           className
         )}
         {...props}
-      />
+        aria-describedby={props["aria-describedby"] ?? autoDescriptionId}
+      >
+        {!hasDescription && (
+          <AlertDialogPrimitive.Description id={autoDescriptionId} className="sr-only">
+            Dialog konfirmasi Hayat
+          </AlertDialogPrimitive.Description>
+        )}
+      </AlertDialogPrimitive.Content>
     </AlertDialogPortal>
   )
 }

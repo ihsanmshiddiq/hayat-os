@@ -151,7 +151,7 @@ export function WelcomeSection() {
                   {verse.arabic}
                 </p>
                 <p className="text-sm text-foreground/80 italic leading-relaxed">&ldquo;{verse.translation}&rdquo;</p>
-                <p className="text-[11px] text-muted-foreground mt-1">— {verse.reference}</p>
+                <p className="text-[11px] text-muted-foreground mt-1">— {verse.reference} · Terjemahan Kemenag RI</p>
               </div>
             </div>
           </AnimatedGradientBorder>

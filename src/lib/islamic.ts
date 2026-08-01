@@ -514,9 +514,24 @@ export const VERSES_OF_THE_DAY: QuranVerse[] = [
   { arabic: "إِنَّ ٱللَّهَ يُحِبُّ ٱلْمُتَوَٰكِّلِينَ", translation: "Indeed, Allah loves those who rely on Him.", reference: "Aal-E-Imran 3:159", surah: "Aal-E-Imran", ayah: 159 },
 ];
 
+const KEMENAG_VERSE_TRANSLATIONS: Record<string, string> = {
+  "Ash-Sharh 94:6": "Sesungguhnya bersama kesulitan ada kemudahan.",
+  "Al-Baqarah 2:152": "Maka, ingatlah kepada-Ku, Aku pun akan ingat kepadamu. Bersyukurlah kepada-Ku dan janganlah kamu ingkar kepada-Ku.",
+  "At-Talaq 65:2": "Siapa yang bertakwa kepada Allah, niscaya Dia akan membukakan jalan keluar baginya.",
+  "Al-Baqarah 2:153": "Sesungguhnya Allah beserta orang-orang yang sabar.",
+  "Ta-Ha 20:114": "Ya Tuhanku, tambahkanlah ilmu kepadaku.",
+  "Al-Fatihah 1:2": "Segala puji bagi Allah, Tuhan semesta alam.",
+  "Al-Hadid 57:4": "Dia bersamamu di mana saja kamu berada.",
+  "As-Saff 61:13": "Pertolongan dari Allah dan kemenangan yang dekat.",
+  "Al-Baqarah 2:155": "Sampaikanlah kabar gembira kepada orang-orang yang sabar.",
+  "Al-Isra 17:24": "Wahai Tuhanku, sayangilah keduanya sebagaimana mereka menyayangiku di waktu kecil.",
+  "Aal-E-Imran 3:159": "Sesungguhnya Allah mencintai orang-orang yang bertawakal.",
+};
+
 export function getVerseOfTheDay(date = new Date()): QuranVerse {
   const dayOfYear = Math.floor((date.getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / 86400000);
-  return VERSES_OF_THE_DAY[dayOfYear % VERSES_OF_THE_DAY.length];
+  const verse = VERSES_OF_THE_DAY[dayOfYear % VERSES_OF_THE_DAY.length];
+  return { ...verse, translation: KEMENAG_VERSE_TRANSLATIONS[verse.reference] ?? verse.translation };
 }
 
 /* ---------------- 99 Names of Allah (Asma'ul Husna) ---------------- */

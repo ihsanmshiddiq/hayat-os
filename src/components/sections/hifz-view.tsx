@@ -19,6 +19,7 @@ import {
   TrendingUp,
   Award,
   Flame,
+  Plus,
 } from "lucide-react";
 import { ViewHeader } from "@/components/shared/view-header";
 import { SectionCard } from "@/components/shared/section-card";
@@ -91,6 +92,7 @@ export function HifzView() {
   const [selected, setSelected] = React.useState<HifzSurahItem | null>(null);
 
   const stats = data?.stats;
+  const firstNewSurah = data?.surahs.find((surah) => surah.status === "not_started") ?? data?.surahs[0];
 
   const filtered = React.useMemo(() => {
     if (!data) return [];
@@ -156,6 +158,18 @@ export function HifzView() {
             <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">
               {stats?.memorizedSurahs ?? 0} / 114 Terkhafal
             </span>
+          }
+          action={
+            <button
+              type="button"
+              onClick={() => setSelected(firstNewSurah ?? null)}
+              disabled={!firstNewSurah}
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-3.5 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition hover:opacity-90 disabled:opacity-50"
+            >
+              <Plus className="h-4 w-4" />
+              <span className="hidden sm:inline">Tambah hafalan</span>
+              <span className="sm:hidden">Tambah</span>
+            </button>
           }
         />
 

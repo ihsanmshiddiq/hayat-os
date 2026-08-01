@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const requestedNext = searchParams.get("next") ?? "/";
@@ -15,10 +15,7 @@ export async function GET(request: Request) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll: () => request.headers.get("cookie")?.split(";").map((item) => {
-          const [name, ...value] = item.trim().split("=");
-          return { name, value: value.join("=") };
-        }) ?? [],
+        getAll: () => request.cookies.getAll(),
         setAll: (cookies) => cookies.forEach(({ name, value, options }) => response.cookies.set(name, value, options)),
       },
     }
