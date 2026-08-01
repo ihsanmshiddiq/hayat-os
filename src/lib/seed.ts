@@ -27,9 +27,16 @@ export async function ensureSeedData() {
       authUser = result.data.user;
     }
   }
-  let user = authUser?.id
-    ? await db.user.findUnique({ where: { supabaseId: authUser.id } })
-    : null;
+  // Every API route may call this concurrently on a cold deployment. Keep
+  // the whole idempotent seed pass in one transaction and serialize it with
+  // a Postgres advisory lock so two instances cannot create the same rows.
+  return db.$transaction(async (tx) => {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext('hayat:seed'))`;
+    const db = tx;
+
+    let user = authUser?.id
+      ? await db.user.findUnique({ where: { supabaseId: authUser.id } })
+      : null;
   if (!user && authUser?.email) {
     user = await db.user.findUnique({ where: { email: authUser.email } });
   }
@@ -533,7 +540,8 @@ export async function ensureSeedData() {
     });
   }
 
-  return user;
+    return user;
+  });
 }
 
 export async function getDemoUserId() {
