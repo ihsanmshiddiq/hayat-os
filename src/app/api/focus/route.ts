@@ -119,6 +119,8 @@ export async function POST(req: NextRequest) {
 
   if (action === "stop" || action === "complete") {
     const { id, elapsedSec } = body as { id: string; elapsedSec: number };
+    const ownedSession = await db.focusSession.findFirst({ where: { id, userId } });
+    if (!ownedSession) return NextResponse.json({ error: "Not found" }, { status: 404 });
     const session = await db.focusSession.update({
       where: { id },
       data: {

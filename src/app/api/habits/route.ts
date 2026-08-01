@@ -49,6 +49,8 @@ export async function PATCH(req: NextRequest) {
   const userId = user.id;
   const body = await req.json();
   const { habitId, date, done } = body as { habitId: string; date?: string; done: boolean };
+  const habit = await db.habit.findFirst({ where: { id: habitId, userId }, select: { id: true } });
+  if (!habit) return NextResponse.json({ error: "Not found" }, { status: 404 });
   const d = date ? new Date(date) : new Date();
   d.setHours(0, 0, 0, 0);
   const log = await db.habitLog.upsert({

@@ -455,9 +455,9 @@ export function useSettings() {
 /* ---------------- Finance ---------------- */
 export interface FinanceTransaction { id: string; amount: number; type: "income" | "expense"; category: string; note: string | null; date: string; }
 export interface BudgetItem { id: string; category: string; monthlyLimit: number; }
-export function useFinance() { return useQuery({ queryKey: ["finance"], queryFn: () => json<{ transactions: FinanceTransaction[]; budgets: BudgetItem[]; summary: { income: number; expense: number; balance: number } }>("/api/finance") }); }
-export function useCreateFinance() { const qc = useQueryClient(); return useMutation({ mutationFn: (body: Record<string, unknown>) => json("/api/finance", { method: "POST", body: JSON.stringify(body) }), onSettled: () => qc.invalidateQueries({ queryKey: ["finance"] }) }); }
-export function useDeleteFinance() { const qc = useQueryClient(); return useMutation({ mutationFn: (id: string) => json(`/api/finance?id=${id}`, { method: "DELETE" }), onSettled: () => qc.invalidateQueries({ queryKey: ["finance"] }) }); }
+export function useFinance() { return useQuery({ queryKey: ["finance"], queryFn: () => json<{ transactions: FinanceTransaction[]; budgets: BudgetItem[]; summary: { income: number; expense: number; balance: number } }>("/api/keuangan") }); }
+export function useCreateFinance() { const qc = useQueryClient(); return useMutation({ mutationFn: (body: Record<string, unknown>) => json("/api/keuangan", { method: "POST", body: JSON.stringify(body) }), onSettled: () => qc.invalidateQueries({ queryKey: ["finance"] }) }); }
+export function useDeleteFinance() { const qc = useQueryClient(); return useMutation({ mutationFn: (id: string) => json(`/api/keuangan?id=${id}`, { method: "DELETE" }), onSettled: () => qc.invalidateQueries({ queryKey: ["finance"] }) }); }
 
 /* ---------------- Menstrual cycle ---------------- */
 export interface MenstrualLog { id: string; startDate: string; endDate: string | null; symptoms: string | null; note: string | null; }
@@ -472,7 +472,19 @@ export function useUpdateSettings() {
       json<{ ok: boolean; user: UserSettings }>("/api/settings", { method: "PUT", body: JSON.stringify(vars) }),
     onSuccess: (data) => {
       qc.setQueryData(["settings"], data.user);
-      qc.invalidateQueries({ queryKey: ["dashboard"] });
+      qc.setQueryData<DashboardData | undefined>(["dashboard"], (current) => current ? {
+        ...current,
+        user: {
+          ...current.user,
+          name: data.user.name,
+          email: data.user.email,
+          location: data.user.location,
+          latitude: data.user.latitude,
+          longitude: data.user.longitude,
+          method: data.user.method,
+        },
+      } : current);
+      void qc.invalidateQueries({ queryKey: ["dashboard"] });
     },
   });
 }

@@ -57,8 +57,10 @@ export function AppShell() {
   }, [queryClient]);
 
 
-  // Prefer Supabase user name, fallback to database user name
-  const userName = user?.user_metadata?.full_name ?? user?.user_metadata?.name ?? data?.user.name;
+  // The Prisma User record is the canonical display source. Supabase
+  // metadata is only a bootstrap fallback for the first render; otherwise a
+  // name changed in Settings would be overwritten by stale OAuth metadata.
+  const userName = data?.user.name ?? user?.user_metadata?.full_name ?? user?.user_metadata?.name;
   const userImage = user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture ?? null;
   useGlobalKeyboardShortcuts();
 

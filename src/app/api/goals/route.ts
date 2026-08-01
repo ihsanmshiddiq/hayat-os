@@ -51,6 +51,8 @@ export async function PATCH(req: NextRequest) {
   const userId = user.id;
   const id = req.nextUrl.searchParams.get("id");
   if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
+  const existing = await db.goal.findFirst({ where: { id, userId } });
+  if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
   const body = await req.json();
   const { title, category, progress, milestone, done, targetDate } = body;
   const goal = await db.goal.update({

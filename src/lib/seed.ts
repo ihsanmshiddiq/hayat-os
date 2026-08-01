@@ -4,6 +4,13 @@ import { createClient } from "@/lib/supabase/server";
 import { headers } from "next/headers";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
+export class AuthRequiredError extends Error {
+  constructor() {
+    super("Authentication required");
+    this.name = "AuthRequiredError";
+  }
+}
+
 /**
  * Ensures the demo LifeOS user exists and is seeded with a rich,
  * realistic dataset so the dashboard never looks empty.
@@ -41,6 +48,10 @@ export async function ensureSeedData() {
     user = await db.user.findUnique({ where: { email: authUser.email } });
   }
   if (!user && !authUser) {
+    // Keep the local demo fallback for development only. Production API
+    // requests must always carry a real Supabase session; otherwise Prisma's
+    // database-owner connection could read another user's rows.
+    if (process.env.NODE_ENV === "production") throw new AuthRequiredError();
     user = await db.user.findFirst();
   }
   if (user && authUser?.id && user.supabaseId !== authUser.id) {

@@ -24,6 +24,8 @@ export async function POST(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   const user = await ensureSeedData(); const id = req.nextUrl.searchParams.get("id"); const body = await req.json();
   if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
-  const log = await db.menstrualLog.update({ where: { id }, data: { ...(body.endDate !== undefined ? { endDate: body.endDate ? new Date(body.endDate) : null } : {}), ...(body.symptoms !== undefined ? { symptoms: body.symptoms } : {}), ...(body.note !== undefined ? { note: body.note } : {}) } });
+  const existing = await db.menstrualLog.findFirst({ where: { id, userId: user.id }, select: { id: true } });
+  if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  const log = await db.menstrualLog.update({ where: { id: existing.id }, data: { ...(body.endDate !== undefined ? { endDate: body.endDate ? new Date(body.endDate) : null } : {}), ...(body.symptoms !== undefined ? { symptoms: body.symptoms } : {}), ...(body.note !== undefined ? { note: body.note } : {}) } });
   return NextResponse.json({ log });
 }
