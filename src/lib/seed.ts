@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import { SURAHS } from "@/lib/islamic";
 import { createClient } from "@/lib/supabase/server";
+import { headers } from "next/headers";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
 /**
  * Ensures the demo LifeOS user exists and is seeded with a rich,
@@ -9,7 +11,22 @@ import { createClient } from "@/lib/supabase/server";
  */
 export async function ensureSeedData() {
   const supabase = await createClient();
-  const { data: { user: authUser } } = await supabase.auth.getUser();
+  let { data: { user: authUser } } = await supabase.auth.getUser();
+
+  // Some browser Supabase setups persist the session outside cookies. API
+  // hooks forward the bearer token, so resolve it here as a reliable fallback.
+  if (!authUser) {
+    const authorization = (await headers()).get("authorization");
+    const accessToken = authorization?.replace(/^Bearer\s+/i, "");
+    if (accessToken && process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      const bearerClient = createSupabaseClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      );
+      const result = await bearerClient.auth.getUser(accessToken);
+      authUser = result.data.user;
+    }
+  }
   let user = authUser?.email
     ? await db.user.findUnique({ where: { email: authUser.email } })
     : await db.user.findFirst();

@@ -1,0 +1,14 @@
+{
+  "name": "Hayat — Sistem Operasi Islami",
+  "short_name": "Hayat",
+  "description": "Ruang tenang untuk ibadah, kebiasaan, refleksi, dan tujuan harian.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#08110d",
+  "theme_color": "#4db58a",
+  "lang": "id",
+  "icons": [
+    { "src": "/icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { PwaRegister } from "@/components/providers/pwa-register";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,6 +44,7 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icon.png",
   },
+  manifest: "/manifest.webmanifest",
   openGraph: {
     title: "Hayat — Sistem Operasi Islami",
     description: "Sistem operasi Islami yang tenang dan elegan untuk kehidupan sehari-hari.",
@@ -69,6 +71,7 @@ export default function RootLayout({
         >
           <QueryProvider>
             {children}
+            <PwaRegister />
             <Toaster />
             <SonnerToaster position="bottom-right" richColors closeButton />
           </QueryProvider>

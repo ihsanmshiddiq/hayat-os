@@ -1,12 +1,31 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createClient } from "@/lib/supabase/client";
+import { enqueueOfflineRequest } from "@/lib/offline-queue";
 
 async function json<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, {
-    ...init,
-    headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
-  });
+  // Supabase's browser session may live in local storage, while API routes run
+  // on the server. Forward the access token explicitly so every API call is
+  // scoped to the signed-in user instead of falling back to demo data.
+  const { data: { session } } = await createClient().auth.getSession();
+  const authorization = session?.access_token
+    ? { Authorization: `Bearer ${session.access_token}` }
+    : {};
+  const headers = new Headers(init?.headers);
+  headers.set("Content-Type", "application/json");
+  if (authorization.Authorization) headers.set("Authorization", authorization.Authorization);
+  const method = (init?.method ?? "GET").toUpperCase();
+  let res: Response;
+  try {
+    res = await fetch(url, { ...init, headers });
+  } catch (error) {
+    if (method !== "GET" && typeof init?.body === "string") {
+      enqueueOfflineRequest({ url, method, body: init.body });
+      return { ok: true, queued: true } as T;
+    }
+    throw error;
+  }
   if (!res.ok) throw new Error(`Request failed: ${res.status}`);
   return res.json() as Promise<T>;
 }

@@ -11,6 +11,7 @@ import { KeyboardShortcutsOverlay, useGlobalKeyboardShortcuts } from "@/componen
 import { PageTransition } from "@/components/shared/page-transition";
 import { useAppStore } from "@/lib/store";
 import { useDashboard } from "@/lib/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import { DashboardView } from "@/components/dashboard/dashboard-view";
@@ -36,12 +37,24 @@ const SettingsView = dynamic(() => import("@/components/sections/settings-view")
 export function AppShell() {
   const { activeView } = useAppStore();
   const { data } = useDashboard();
+  const queryClient = useQueryClient();
   const [user, setUser] = React.useState<User | null>(null);
 
   React.useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
-  }, []);
+    const syncUser = (nextUser: User | null) => {
+      setUser(nextUser);
+      // The first dashboard query can run before Supabase restores the
+      // browser session. Refetch once the user is known so demo data never
+      // remains in the UI after login.
+      void queryClient.invalidateQueries();
+    };
+    supabase.auth.getUser().then(({ data: { user } }) => syncUser(user));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      syncUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, [queryClient]);
 
 
   // Prefer Supabase user name, fallback to database user name
