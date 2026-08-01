@@ -61,13 +61,14 @@ export function AppShell() {
   // metadata is only a bootstrap fallback for the first render; otherwise a
   // name changed in Settings would be overwritten by stale OAuth metadata.
   const userName = data?.user.name ?? user?.user_metadata?.full_name ?? user?.user_metadata?.name;
+  const userEmail = data?.user.email ?? user?.email ?? null;
   const userImage = user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture ?? null;
   useGlobalKeyboardShortcuts();
 
   return (
     <div className="flex min-h-screen bg-background">
-      <TantriTheme name={userName} email={user?.email ?? data?.user.email} />
-      <Sidebar userName={userName} userImage={userImage} userEmail={user?.email ?? data?.user.email} />
+      <TantriTheme name={userName} email={userEmail} />
+      <Sidebar userName={userName} userImage={userImage} userEmail={userEmail} />
       <div className="flex-1 flex flex-col min-w-0 lg:pb-0 pb-16">
         <Topbar userName={userName} userImage={userImage} />
         <main className="flex-1 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-[1400px] w-full mx-auto">
