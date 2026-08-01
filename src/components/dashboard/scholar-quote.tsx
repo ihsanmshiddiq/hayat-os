@@ -6,6 +6,21 @@ import { Quote, BookOpen, ChevronRight } from "lucide-react";
 import { getScholarQuoteOfTheDay, SCHOLAR_QUOTES } from "@/lib/islamic";
 import { useNow } from "@/hooks/use-now";
 
+const HIKMAH_ID: Record<number, string> = {
+  1: "Orang bijak adalah yang menghisab dirinya dan beramal untuk kehidupan setelah kematian.",
+  2: "Ilmu bukanlah apa yang dihafal; ilmu adalah apa yang memberi manfaat.",
+  3: "Siapa yang tidak merenungkan keagungan Tuhannya akan meremehkan perintah-Nya.",
+  4: "Tingkat ilmu tertinggi adalah berkata, ‘Aku tidak tahu’ ketika memang tidak tahu.",
+  5: "Keikhlasan adalah rahasia antara Allah dan hamba, yang bahkan tidak ditulis oleh para malaikat.",
+  6: "Sabar memiliki dua bagian: setengahnya iman dan setengahnya kesabaran.",
+  7: "Kesempurnaan Islam seseorang adalah meninggalkan hal yang tidak menjadi urusannya.",
+  8: "Siapa yang mengenal dirinya, ia mengenal Tuhannya.",
+  9: "Jangan melihat kecilnya dosa, tetapi lihatlah keagungan Zat yang kamu durhakai.",
+  10: "Ilmu menghidupkan hati, mengusir rasa lapar, dan menemani tubuh dalam kesendirian.",
+  11: "Waspadalah terhadap dosa kecil; ia dapat terkumpul hingga menjadi besar.",
+  12: "Siapa yang ingin menjadi manusia paling mulia, hendaklah ia bertakwa kepada Allah.",
+};
+
 /**
  * Scholar Quote of the Day — compact card featuring rotating wisdom
  * from classical Islamic scholars (Imam al-Shafi'i, Ibn al-Qayyim, etc.).
@@ -31,6 +46,7 @@ export function ScholarQuoteOfTheDay() {
     setIndex(i);
     setCurrent(SCHOLAR_QUOTES[i]);
   }, [index]);
+  const indonesianText = HIKMAH_ID[current.id] ?? current.text;
 
   return (
     <motion.button
@@ -69,7 +85,7 @@ export function ScholarQuoteOfTheDay() {
         >
           <Quote className="h-5 w-5 text-amber-500/40 mb-2" />
           <p className="text-[15px] sm:text-base text-foreground/90 italic leading-relaxed">
-            {current.text}
+            {indonesianText}
           </p>
 
           <div className="mt-4 flex items-center justify-between gap-2">

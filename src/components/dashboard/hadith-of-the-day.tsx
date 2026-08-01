@@ -7,6 +7,24 @@ import { getHadithOfTheDay, HADITHS_OF_THE_DAY } from "@/lib/islamic";
 import { IslamicPatternMoroccan } from "@/components/shared/islamic-pattern";
 import { useNow } from "@/hooks/use-now";
 
+const HADITH_ID = [
+  "Amal dinilai berdasarkan niat, dan setiap orang mendapatkan sesuai yang ia niatkan.",
+  "Siapa yang beriman kepada Allah dan hari akhir, hendaklah berkata baik atau diam.",
+  "Tidak sempurna iman seseorang sampai ia mencintai saudaranya seperti mencintai dirinya sendiri.",
+  "Seorang Muslim adalah orang yang kaum Muslimin selamat dari lisan dan tangannya.",
+  "Agama adalah nasihat yang tulus.",
+  "Siapa menempuh jalan untuk mencari ilmu, Allah mudahkan baginya jalan menuju surga.",
+  "Senyummu kepada saudaramu adalah sedekah.",
+  "Sedekah tidak mengurangi harta.",
+  "Kebersihan adalah sebagian dari iman.",
+  "Siapa yang tidak menyayangi manusia, Allah tidak menyayanginya.",
+  "Sebaik-baik kalian adalah yang mempelajari Al-Qur’an dan mengajarkannya.",
+  "Shalat adalah cahaya.",
+  "Siapa yang menegakkan shalat Ramadan karena iman dan mengharap pahala, diampuni dosa-dosanya yang telah lalu.",
+  "Di antara tanda baiknya Islam seseorang adalah meninggalkan hal yang tidak bermanfaat baginya.",
+  "Bersungguh-sungguhlah pada hal yang bermanfaat bagimu, mohon pertolongan Allah, dan jangan merasa lemah.",
+];
+
 /**
  * Hadith of the Day — premium card with rotating authentic hadith.
  * Deterministically picks one per day; user can shuffle through others.
@@ -32,6 +50,7 @@ export function HadithOfTheDay() {
     setIndex(nextIdx);
     setCurrent(HADITHS_OF_THE_DAY[nextIdx]);
   }, [index]);
+  const indonesianText = HADITH_ID[current.id - 1] ?? current.english;
 
   return (
     <motion.section
@@ -62,7 +81,7 @@ export function HadithOfTheDay() {
                 Hadis Hari Ini
               </p>
               <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5">
-                {current.theme}
+                {current.theme === "Character" ? "Akhlak" : current.theme === "Speech" ? "Lisan" : current.theme === "Intention" ? "Niat" : current.theme === "Knowledge" ? "Ilmu" : current.theme}
                 <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-500/20">
                   {current.grade}
                 </span>
@@ -92,7 +111,7 @@ export function HadithOfTheDay() {
             <div className="md:order-1 md:border-r md:border-border/60 md:pr-8">
               <Quote className="h-6 w-6 text-primary/40 mb-2" />
               <p className="text-[15px] sm:text-base text-foreground/85 italic leading-relaxed">
-                &ldquo;{current.english}&rdquo;
+                &ldquo;{indonesianText}&rdquo;
               </p>
               {/* Attribution */}
               <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Repeat, Plus, Check, Flame, Trash2, X, Heart, Activity, BookOpen, Users, Circle } from "lucide-react";
+import { Repeat, Plus, Check, Flame, Trash2, X, Heart, Activity, BookOpen, Users, Circle, Sparkles } from "lucide-react";
 import { ViewHeader } from "@/components/shared/view-header";
 import { SectionCard } from "@/components/shared/section-card";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
@@ -179,6 +179,16 @@ export function HabitsView() {
           </Dialog>
         }
       />
+
+      <SectionCard className="mb-5 bg-gradient-to-r from-primary/5 via-card to-amber-500/5">
+        <div className="flex items-center justify-between gap-3 mb-3">
+          <div><p className="text-display text-base font-medium">Rekomendasi kebiasaan</p><p className="text-xs text-muted-foreground">Pilih satu untuk menambahkannya dengan cepat.</p></div>
+          <Sparkles className="h-4 w-4 text-primary" />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          {[{ name: "Baca Al-Quran", category: "knowledge", icon: "BookOpen", color: "emerald", cue: "Setelah Subuh" }, { name: "Sedekah harian", category: "worship", icon: "Heart", color: "rose", cue: "Setelah shalat" }, { name: "Minum air cukup", category: "health", icon: "Droplet", color: "cyan", cue: "Setiap pagi" }].map((item) => <button key={item.name} onClick={() => { setName(item.name); setCategory(item.category); setIcon(item.icon); setColor(item.color); setCue(item.cue); setOpen(true); }} className="flex items-center gap-2 rounded-xl border border-border/70 bg-background/50 px-3 py-2.5 text-left text-xs hover:border-primary/40 hover:bg-primary/5"><HabitIcon name={item.icon} className="h-4 w-4 text-primary" />{item.name}<Plus className="ml-auto h-3.5 w-3.5 text-muted-foreground" /></button>)}
+        </div>
+      </SectionCard>
 
       {/* Category filter row */}
       {allHabits.length > 0 && (

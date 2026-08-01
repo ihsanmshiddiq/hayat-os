@@ -13,7 +13,7 @@ interface ShortcutGroup {
 export function KeyboardShortcutsOverlay() {
   const open = useKeyboardShortcutsOpen();
   const setOpen = useSetKeyboardShortcutsOpen();
-  const { setActiveView, setCommandOpen, toggleSidebar, togglePixelCompanion } = useAppStore();
+  const { setActiveView, setCommandOpen, toggleSidebar } = useAppStore();
 
   // Close on Escape
   React.useEffect(() => {
@@ -50,7 +50,6 @@ export function KeyboardShortcutsOverlay() {
         { keys: ["⌘", "K"], label: "Buka command palette", action: () => setCommandOpen(true) },
         { keys: ["?"], label: "Tampilkan bantuan" },
         { keys: ["B"], label: "Toggle sidebar", action: toggleSidebar },
-        { keys: ["P"], label: "Toggle pixel companion", action: togglePixelCompanion },
         { keys: ["T"], label: "Ganti tema" },
         { keys: ["Esc"], label: "Tutup dialog" },
       ],
@@ -170,7 +169,7 @@ export function useSetKeyboardShortcutsOpen() {
 
 /** Global keyboard listener — registers the "?" key + all G+X navigation shortcuts. */
 export function useGlobalKeyboardShortcuts() {
-  const { setActiveView, setCommandOpen, commandOpen, toggleSidebar, togglePixelCompanion } = useAppStore();
+  const { setActiveView, setCommandOpen, commandOpen, toggleSidebar } = useAppStore();
   const setOpen = useSetKeyboardShortcutsOpen();
 
   React.useEffect(() => {
@@ -223,11 +222,10 @@ export function useGlobalKeyboardShortcuts() {
       // Single-key shortcuts (only when no overlay/palette open)
       if (!commandOpen) {
         if (key === "B") { e.preventDefault(); toggleSidebar(); }
-        else if (key === "P") { e.preventDefault(); togglePixelCompanion(); }
       }
     };
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [setActiveView, setCommandOpen, commandOpen, toggleSidebar, togglePixelCompanion, setOpen]);
+  }, [setActiveView, setCommandOpen, commandOpen, toggleSidebar, setOpen]);
 }

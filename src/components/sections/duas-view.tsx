@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { HandHeart, Search, BookOpen, Copy, Check, X, Volume2, Loader2 } from "lucide-react";
+import { HandHeart, Search, BookOpen, Copy, Check, X } from "lucide-react";
 import { ViewHeader } from "@/components/shared/view-header";
 import { SectionCard } from "@/components/shared/section-card";
 import { Input } from "@/components/ui/input";
@@ -16,7 +16,6 @@ import {
   RefreshCw, BookMarked, Shield, BookOpen as BookOpenIcon,
   type LucideIcon,
 } from "lucide-react";
-import { useTTS } from "@/hooks/use-tts";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -34,12 +33,34 @@ const ICON_MAP: Record<string, LucideIcon> = {
 };
 
 const CORE_CATEGORIES = [
-  { id: "morning-evening", name: "Morning & Evening", icon: "Sunrise" },
-  { id: "after-prayer", name: "After Prayer", icon: "Sparkles" },
-  { id: "before-sleep", name: "Before Sleep", icon: "Moon" },
-  { id: "distress-forgiveness", name: "Distress & Forgiveness", icon: "Heart" },
-  { id: "gratitude-protection", name: "Gratitude & Protection", icon: "Shield" },
+  { id: "morning-evening", name: "Pagi & Petang", icon: "Sunrise" },
+  { id: "after-prayer", name: "Setelah Shalat", icon: "Sparkles" },
+  { id: "before-sleep", name: "Sebelum Tidur", icon: "Moon" },
+  { id: "distress-forgiveness", name: "Kesulitan & Ampunan", icon: "Heart" },
+  { id: "gratitude-protection", name: "Syukur & Perlindungan", icon: "Shield" },
 ];
+
+const ID_DUA_COPY: Record<string, [string, string]> = {
+  d1: ["Dzikir Pagi", "Kita telah memasuki pagi dan pada waktu ini seluruh kerajaan milik Allah. Segala puji bagi Allah."],
+  d2: ["Dzikir Petang", "Kita telah memasuki petang dan pada waktu ini seluruh kerajaan milik Allah. Segala puji bagi Allah."],
+  d3: ["Sayyidul Istighfar", "Ya Allah, Engkau adalah Tuhanku. Tidak ada sesembahan yang berhak disembah selain Engkau. Engkau menciptakanku dan aku adalah hamba-Mu."],
+  d4: ["Tiga Surat Perlindungan", "Dengan nama Allah, yang dengan nama-Nya tidak ada sesuatu pun di bumi dan langit yang dapat membahayakan. Dia Maha Mendengar lagi Maha Mengetahui."],
+  d5: ["Setelah Shalat", "Ya Allah, tolonglah aku untuk mengingat-Mu, bersyukur kepada-Mu, dan beribadah dengan baik kepada-Mu."],
+  d6: ["Memohon Surga", "Ya Allah, aku memohon surga kepada-Mu dan berlindung kepada-Mu dari neraka."],
+  d7: ["Sebelum Tidur", "Dengan nama-Mu ya Allah, aku mati dan aku hidup."],
+  d8: ["Ampunan Sebelum Tidur", "Ya Allah, aku memohon ampunan-Mu dan bertobat kepada-Mu."],
+  d9: ["Dzikir Sebelum Tidur", "Mahasuci Allah dan segala puji bagi-Nya."],
+  d10: ["Sebelum Makan", "Dengan nama Allah."], d11: ["Setelah Makan", "Segala puji bagi Allah yang memberiku makanan ini dan rezeki dengannya tanpa daya dan kekuatanku."], d12: ["Doa Berbuka", "Telah hilang dahaga, urat-urat telah basah, dan pahala telah ditetapkan, insyaAllah."],
+  d13: ["Doa Bepergian", "Mahasuci Dia yang menundukkan kendaraan ini untuk kami, padahal kami tidak mampu menguasainya, dan kepada Tuhan kami akan kembali."], d14: ["Memasuki Kota", "Ya Allah, berkahilah kami di dalamnya."],
+  d15: ["Doa Saat Kesulitan", "Tidak ada sesembahan selain Engkau. Mahasuci Engkau, sungguh aku termasuk orang-orang yang zalim."], d16: ["Kecemasan dan Kesedihan", "Ya Allah, aku berlindung kepada-Mu dari kegelisahan dan kesedihan, kelemahan dan kemalasan."], d17: ["Saat Masa Sulit", "Cukuplah Allah bagi kami dan Dia sebaik-baik pelindung."],
+  d18: ["Ampunan Menyeluruh", "Ya Allah, ampunilah seluruh dosaku, yang kecil dan besar, yang awal dan akhir, yang tampak dan tersembunyi."], d19: ["Memohon Ampunan", "Aku memohon ampun kepada Allah Yang Mahaagung, tiada sesembahan selain Dia, Yang Mahahidup dan terus mengurus makhluk-Nya."],
+  d20: ["Saat Mendapat Nikmat", "Segala puji bagi Allah, dengan karunia-Nya kebaikan menjadi sempurna."], d21: ["Bentuk Syukur Terbaik", "Segala puji bagi Allah, pujian yang banyak, baik, dan penuh berkah."], d22: ["Memohon Perlindungan", "Aku berlindung dengan kalimat-kalimat Allah yang sempurna dari kejahatan makhluk-Nya."], d23: ["Perlindungan dari Keburukan", "Ya Allah, aku berlindung kepada-Mu dari keburukan pendengaranku, penglihatanku, lisanku, dan hatiku."], d24: ["Doa Nabi Musa", "Tuhanku, lapangkanlah dadaku, mudahkanlah urusanku."], d25: ["Memohon Ilmu yang Bermanfaat", "Ya Allah, aku memohon ilmu yang bermanfaat, rezeki yang baik, dan amal yang diterima."],
+};
+
+function localizeDua(dua: Dua): Dua {
+  const copy = ID_DUA_COPY[dua.id];
+  return copy ? { ...dua, title: copy[0], translation: copy[1] } : dua;
+}
 
 function categoryOf(dua: Dua) {
   if (["distress", "forgiveness"].includes(dua.category)) return "distress-forgiveness";
@@ -52,9 +73,7 @@ export function DuasView() {
   const [query, setQuery] = React.useState("");
   const [selected, setSelected] = React.useState<Dua | null>(null);
   const [copied, setCopied] = React.useState(false);
-  const tts = useTTS();
-
-  const filtered = DUAS.filter((d) => {
+  const filtered = DUAS.map(localizeDua).filter((d) => {
     const inCat = activeCategory === "all" || categoryOf(d) === activeCategory;
     const inSearch =
       !query ||
@@ -231,21 +250,6 @@ export function DuasView() {
               <div className="flex items-center justify-between gap-2 pt-4 border-t border-border/60">
                 <span className="text-xs text-muted-foreground italic">— {selected.reference}</span>
                 <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => {
-                      tts.speak(selected.translit, `dua-${selected.id}`);
-                      toast.success("Membaca doa");
-                    }}
-                    disabled={tts.isLoading}
-                    className="flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10 transition-colors disabled:opacity-50"
-                  >
-                    {tts.isLoading && tts.activeKey === `dua-${selected.id}` ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                    ) : (
-                      <Volume2 className="h-3.5 w-3.5" />
-                    )}
-                    Dengarkan
-                  </button>
                   <button
                     onClick={() => copyDua(selected)}
                     className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium hover:bg-muted transition-colors"

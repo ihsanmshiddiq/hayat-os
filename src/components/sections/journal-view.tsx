@@ -107,8 +107,8 @@ export function JournalView() {
                   <Lightbulb className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="text-display text-sm font-medium">Reflection Prompts</h3>
-                  <p className="text-[11px] text-muted-foreground">Tap to add to your entry</p>
+                <h3 className="text-display text-sm font-medium">Pertanyaan Renungan</h3>
+                <p className="text-[11px] text-muted-foreground">Ketuk untuk menambahkan ke jurnal</p>
                 </div>
               </div>
               <button
@@ -116,7 +116,7 @@ export function JournalView() {
                 className="flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-[11px] font-medium hover:bg-muted transition-colors"
                 title="Acak pertanyaan"
               >
-                <Shuffle className="h-3 w-3" /> Shuffle
+                <Shuffle className="h-3 w-3" /> Acak
               </button>
             </div>
             <div className="p-3 space-y-2">
@@ -171,14 +171,17 @@ export function JournalView() {
                   className="text-sm font-medium bg-transparent border-0 outline-none focus:ring-0"
                 />
               </div>
-              <span className={cn("flex items-center gap-1 text-[11px] transition-opacity", saved ? "opacity-100 text-emerald-500" : "opacity-0")}>
-                <Check className="h-3 w-3" /> Saved
-              </span>
+              <div className="flex items-center gap-2">
+                <span className={cn("flex items-center gap-1 text-[11px] transition-opacity", saved ? "opacity-100 text-emerald-500" : "opacity-0")}>
+                  <Check className="h-3 w-3" /> Tersimpan
+                </span>
+                <button onClick={() => doSave({ gratitude, reflection, lessons, dua, mood: mood ?? undefined })} disabled={save.isPending} className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50">Simpan jurnal</button>
+              </div>
             </div>
 
             {/* Mood */}
             <div className="flex items-center gap-2 mb-5">
-              <span className="text-xs text-muted-foreground mr-1">Mood:</span>
+              <span className="text-xs text-muted-foreground mr-1">Suasana hati:</span>
               {MOODS.map((m) => (
                 <button
                   key={m.value}
@@ -207,7 +210,7 @@ export function JournalView() {
             <SectionCard>
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h3 className="text-display text-sm font-medium">Mood trend</h3>
+                <h3 className="text-display text-sm font-medium">Tren suasana hati</h3>
                   <p className="text-[11px] text-muted-foreground">Last 14 entries</p>
                 </div>
                 {(() => {
@@ -268,7 +271,7 @@ export function JournalView() {
 
           <SectionCard padded={false}>
             <div className="p-4 border-b border-border/60">
-              <h3 className="text-display text-base font-medium">Recent entries</h3>
+                <h3 className="text-display text-base font-medium">Entri terbaru</h3>
               <p className="text-xs text-muted-foreground mt-0.5">{entries.length} in the last 30 days</p>
             </div>
             <div className="max-h-[560px] overflow-y-auto scroll-slim p-2">

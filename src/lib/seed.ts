@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { SURAHS } from "@/lib/islamic";
+import { createClient } from "@/lib/supabase/server";
 
 /**
  * Ensures the demo LifeOS user exists and is seeded with a rich,
@@ -7,13 +8,17 @@ import { SURAHS } from "@/lib/islamic";
  * Safe to call repeatedly (idempotent-ish: only seeds if missing).
  */
 export async function ensureSeedData() {
-  let user = await db.user.findFirst();
+  const supabase = await createClient();
+  const { data: { user: authUser } } = await supabase.auth.getUser();
+  let user = authUser?.email
+    ? await db.user.findUnique({ where: { email: authUser.email } })
+    : await db.user.findFirst();
   if (!user) {
     user = await db.user.create({
       data: {
-        email: "salam@hayat.app",
-        name: "Ahmad Rahman",
-        avatar: null,
+        email: authUser?.email ?? "salam@hayat.app",
+        name: authUser?.user_metadata?.full_name ?? authUser?.user_metadata?.name ?? "Ahmad Rahman",
+        avatar: authUser?.user_metadata?.avatar_url ?? null,
         location: "Jakarta, Indonesia",
         latitude: -6.2088,
         longitude: 106.8456,
@@ -105,12 +110,17 @@ export async function ensureSeedData() {
     Exercise: "health",
   };
   type HabitRow = { id: string; name: string; category: string | null };
-  const allHabits = await db.$queryRaw<HabitRow[]>`SELECT id, name, category FROM Habit WHERE userId = ${userId}`;
-  for (const h of allHabits) {
-    const correctCat = categoryMap[h.name] ?? "general";
-    if (h.category !== correctCat) {
-      await db.$executeRaw`UPDATE Habit SET category = ${correctCat} WHERE id = ${h.id}`;
+  try {
+    const allHabits = await db.$queryRaw<HabitRow[]>`SELECT id, name, category FROM "Habit" WHERE "userId" = ${userId}`;
+    for (const h of allHabits) {
+      const correctCat = categoryMap[h.name] ?? "general";
+      if (h.category !== correctCat) {
+        await db.$executeRaw`UPDATE "Habit" SET category = ${correctCat} WHERE id = ${h.id}`;
+      }
     }
+  } catch {
+    // Older deployments may not have the optional category column yet.
+    // Habit reads/writes remain usable; schema migration can add it later.
   }
 
   const existingHabits = await db.habit.count({ where: { userId } });

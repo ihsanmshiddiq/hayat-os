@@ -34,7 +34,7 @@ const AnalyticsView = dynamic(() => import("@/components/sections/analytics-view
 const SettingsView = dynamic(() => import("@/components/sections/settings-view").then(m => ({ default: m.SettingsView })), { ssr: false });
 
 export function AppShell() {
-  const { activeView, language } = useAppStore();
+  const { activeView } = useAppStore();
   const { data } = useDashboard();
   const [user, setUser] = React.useState<User | null>(null);
 
@@ -43,9 +43,6 @@ export function AppShell() {
     supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
   }, []);
 
-  React.useEffect(() => {
-    document.documentElement.lang = language;
-  }, [language]);
 
   // Prefer Supabase user name, fallback to database user name
   const userName = user?.user_metadata?.full_name ?? user?.user_metadata?.name ?? data?.user.name;
@@ -55,7 +52,7 @@ export function AppShell() {
   return (
     <div className="flex min-h-screen bg-background">
       <TantriTheme name={userName} email={user?.email ?? data?.user.email} />
-      <Sidebar userName={userName} userImage={userImage} />
+      <Sidebar userName={userName} userImage={userImage} userEmail={user?.email ?? data?.user.email} />
       <div className="flex-1 flex flex-col min-w-0 lg:pb-0 pb-16">
         <Topbar userName={userName} userImage={userImage} />
         <main className="flex-1 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-[1400px] w-full mx-auto">

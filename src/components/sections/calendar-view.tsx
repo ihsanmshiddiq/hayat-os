@@ -24,7 +24,7 @@ import {
 } from "@/lib/islamic";
 import { cn } from "@/lib/utils";
 
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const WEEKDAYS = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
 
 const TYPE_STYLES: Record<string, string> = {
   fasting: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
@@ -242,10 +242,10 @@ function IslamicEventsStrip() {
             </span>
             <div>
               <h3 className="text-display text-sm font-medium leading-tight">Hari Islami Mendatang</h3>
-              <p className="text-[10px] text-muted-foreground">Notable dates in the Hijri calendar</p>
+              <p className="text-[10px] text-muted-foreground">Tanggal penting dalam kalender Hijriah</p>
             </div>
           </div>
-          <span className="text-[10px] text-muted-foreground/70 hidden sm:inline">{events.length} ahead</span>
+          <span className="text-[10px] text-muted-foreground/70 hidden sm:inline">{events.length} mendatang</span>
         </div>
 
         <div className="flex gap-2 overflow-x-auto scroll-slim pb-1 -mx-1 px-1">
@@ -265,7 +265,7 @@ function IslamicEventsStrip() {
                     : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
                 )}>
                   <Sparkles className="h-2.5 w-2.5" />
-                  {ev.type === "fasting" ? "Fast" : "Day"}
+                  {ev.type === "fasting" ? "Puasa" : "Hari"}
                 </span>
                 <span className="text-[10px] font-medium text-muted-foreground tabular-nums">
                   {ev.daysUntil === 0 ? "Hari ini" : ev.daysUntil === 1 ? "1d" : `${ev.daysUntil}d`}
@@ -346,7 +346,7 @@ function DayDetail({ year, month, day, monthName, events, onDelete }: DayDetailP
         <div className="mb-4 rounded-xl border border-border/60 bg-gradient-to-br from-primary/[0.03] to-amber-500/[0.02] p-3">
           <div className="flex items-center gap-1.5 mb-2">
             <MoonStar className="h-3.5 w-3.5 text-primary" />
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Prayer Times</span>
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Waktu Shalat</span>
           </div>
           <div className="grid grid-cols-5 gap-1">
             {OBLIGATORY_PRAYERS.map((p) => (
