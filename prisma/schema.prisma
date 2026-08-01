@@ -8,12 +8,15 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  // Use a non-pooled/session connection only for Prisma migrations and DDL.
+  directUrl = env("DIRECT_URL")
 }
 
 /// A single demo user (auth is mocked for this LifeOS preview).
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
+  supabaseId String?  @unique
   name      String?
   avatar    String?
   location  String?  @default("Jakarta, Indonesia")

@@ -27,12 +27,25 @@ export async function ensureSeedData() {
       authUser = result.data.user;
     }
   }
-  let user = authUser?.email
-    ? await db.user.findUnique({ where: { email: authUser.email } })
-    : await db.user.findFirst();
+  let user = authUser?.id
+    ? await db.user.findUnique({ where: { supabaseId: authUser.id } })
+    : null;
+  if (!user && authUser?.email) {
+    user = await db.user.findUnique({ where: { email: authUser.email } });
+  }
+  if (!user && !authUser) {
+    user = await db.user.findFirst();
+  }
+  if (user && authUser?.id && user.supabaseId !== authUser.id) {
+    user = await db.user.update({
+      where: { id: user.id },
+      data: { supabaseId: authUser.id },
+    });
+  }
   if (!user) {
     user = await db.user.create({
       data: {
+        supabaseId: authUser?.id ?? null,
         email: authUser?.email ?? "salam@hayat.app",
         name: authUser?.user_metadata?.full_name ?? authUser?.user_metadata?.name ?? "Ahmad Rahman",
         avatar: authUser?.user_metadata?.avatar_url ?? null,
